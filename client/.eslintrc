@@ -1,0 +1,24 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+      "browser": true,
+      "node": true
+  },
+  "extends": "airbnb",
+  "rules": {
+    "max-len": "off",
+    "react/jsx-filename-extension": "off",
+    "react/jsx-props-no-spreading": "off",
+    "import/no-extraneous-dependencies": "off",
+    "semi": ["error", "never"]
+  },
+  "settings": {
+    "import/resolver": {
+      "babel-module": {
+        "alias": {
+          "@": "./src"
+        }
+      }
+    }
+  }
+}

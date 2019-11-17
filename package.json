@@ -1,0 +1,14 @@
+{
+  "name": "auth-template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev-db": "concurrently \"mongod\" \"npm run dev\"",
+    "dev": "concurrently \"cd ./server && npm run dev\" \"cd ./client && npm run dev\""
+  },
+  "dependencies": {
+    "concurrently": "^5.0.0",
+    "jsonwebtoken": "^8.5.1"
+  }
+}
