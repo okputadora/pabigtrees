@@ -1,5 +1,5 @@
 import express from 'express'
-import mongoose from 'mongoose'
+// import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 
@@ -12,18 +12,32 @@ import {
   signup,
 } from './routes'
 
-const { port, mongoURI, clientAddress } = config.default.core
+const { port } = config.default.core
 const app = express()
 
-mongoose.connect(
-  mongoURI,
-  { useNewUrlParser: true, useUnifiedTopology: true },
-  (err) => {
-    if (err) logger.log({ level: 'error', message: `DB CONNECTION FAILED: ${err}` })
-    else logger.log({ level: 'info', message: `DB CONNECTION SUCCESS${mongoURI}` })
-  },
-)
+const mysql = require('mysql')
 
+console.log(process.env.MYSQL_USERNAME)
+console.log(process.env.MYSQL_PW)
+console.log(process.env.DB_NAME)
+
+const connection = mysql.createConnection({
+  connectionLimit: 100,
+  host: 'localhost',
+  port: 3306,
+  user: process.env.MYSQL_USERNAME,
+  password: process.env.MYSQL_PW,
+  database: process.env.DB_NAME,
+  // connectTimeOut: 30000,
+})
+
+connection.connect((err) => {
+  if (err) {
+    console.error(`error connecting: ${err.stack}`)
+    return
+  }
+  console.log('connection success')
+})
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
