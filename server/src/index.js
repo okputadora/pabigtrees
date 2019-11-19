@@ -17,10 +17,6 @@ const app = express()
 
 const mysql = require('mysql')
 
-console.log(process.env.MYSQL_USERNAME)
-console.log(process.env.MYSQL_PW)
-console.log(process.env.DB_NAME)
-
 const connection = mysql.createConnection({
   connectionLimit: 100,
   host: 'localhost',
@@ -28,7 +24,6 @@ const connection = mysql.createConnection({
   user: process.env.MYSQL_USERNAME,
   password: process.env.MYSQL_PW,
   database: process.env.DB_NAME,
-  // connectTimeOut: 30000,
 })
 
 connection.connect((err) => {

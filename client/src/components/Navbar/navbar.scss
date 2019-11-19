@@ -1,0 +1,28 @@
+.nav-container {
+  width: 100%;
+}
+
+.navigation {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  background: #234030;
+  color: white;
+  padding-top: 2px;
+}
+
+.nav-item {
+  font-size: 12px;
+  padding: 20px;
+  letter-spacing: 0.05em;
+  color: #E8E710;
+  text-transform: uppercase;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.nav-item:hover {
+  border-bottom: 3px solid #E8E710;
+  background: #191E1A;
+}
