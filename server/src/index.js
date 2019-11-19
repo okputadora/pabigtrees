@@ -7,32 +7,14 @@ import config from './config'
 import logger from './logger'
 
 import {
-  login,
-  logout,
-  signup,
+  // login,
+  // logout,
+  trees,
 } from './routes'
 
 const { port } = config.default.core
 const app = express()
 
-const mysql = require('mysql')
-
-const connection = mysql.createConnection({
-  connectionLimit: 100,
-  host: 'localhost',
-  port: 3306,
-  user: process.env.MYSQL_USERNAME,
-  password: process.env.MYSQL_PW,
-  database: process.env.DB_NAME,
-})
-
-connection.connect((err) => {
-  if (err) {
-    console.error(`error connecting: ${err.stack}`)
-    return
-  }
-  console.log('connection success')
-})
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
@@ -41,7 +23,6 @@ const corsOptions = {
   origin: '*',
 }
 app.use(cors(corsOptions))
-console.log('does this work????!!!?')
 //   console.log({ clientAddress })
 //   res.header('Access-Control-Allow-Origin', clientAddress)
 //   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
@@ -50,9 +31,9 @@ console.log('does this work????!!!?')
 // })
 
 app.use((req, res, next) => { console.log('is the request making it here?'); next() })
-app.use('/signup', signup)
-app.use('/login', login)
-app.use('/logout', logout)
+// app.use('/login', login)
+// app.use('/logout', logout)
+app.use('/trees', trees)
 
 const server = app.listen(port, () => logger.log({ level: 'info', message: `Example app listening on port ${port}!` }))
 
