@@ -4,7 +4,6 @@
   display: flex;
   justify-content: center;
   padding: 10px;
-  border: 1px solid red;
   margin-top: 40px;
 }
 
@@ -16,6 +15,7 @@
   column-gap: 20px;
   background: #223025;
   width: 100%;
+  max-width: 900px;
 }
 
 // .children {

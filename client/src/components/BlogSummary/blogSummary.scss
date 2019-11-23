@@ -1,12 +1,12 @@
 .blogSummary-container {
   display: flex;
-  flex-direction: column;
-  border: 1px solid red;
+  flex-direction: column
 }
 
 .blogSummary-date {
   align-self: flex-end;
   font-size: 12px;
+  margin-top: 3px;
 }
 
 .blogSummary-title {
