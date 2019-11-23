@@ -1,0 +1,17 @@
+.banner-container {
+  display: flex;
+  justify-content: center;
+  background: #223025;
+  width: 100%;
+  border: 1px solid red;
+}
+
+.banner {
+  font-size: 30px;
+  font-weight: 8;
+  width: 100%;
+  max-width: 1100px;
+  color: white;
+  padding: 20px;
+  font-family: 'Open Sans', sans-serif;
+}

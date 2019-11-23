@@ -1,7 +1,11 @@
 .fullPage {
-  display: flex;
   height: 100vh;
   width: 100vw;
+  // max-width: 1100px;
+  background: #223025;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.fullPage > * {margin: auto}
+// .fullPage > * {margin: auto}
