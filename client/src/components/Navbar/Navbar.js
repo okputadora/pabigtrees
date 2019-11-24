@@ -8,7 +8,7 @@ const Navabr = () => {
   return (
     <nav className="nav-container">
       <ul className="navigation">
-        {links.map((link) => <Link className="nav-item" to={link}>{link}</Link>)}
+        {links.map((link) => <Link key={link} className="nav-item" to={link}>{link}</Link>)}
       </ul>
     </nav>
   )

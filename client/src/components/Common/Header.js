@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 
 import './header.scss'
 
-const Header = ({ children }) => <h2 className="header-container">{children}</h2>
+const Header = ({ text }) => <h2 className="header-container">{text}</h2>
 
 Header.propTypes = {
-  children: PropTypes.node.isRequired,
+  text: PropTypes.string.isRequired,
 }
 
 export default Header

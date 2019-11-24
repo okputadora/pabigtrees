@@ -1,15 +1,19 @@
 import React, { Component } from 'react'
-import { Button } from '@blueprintjs/core'
+import { Button, Popover, PopoverInteractionKind } from '@blueprintjs/core'
 import Homepage from '@/components/Homepage/Homepage'
 
 class PageEditor extends Component {
   state = {
-    previewing: false,
+    isPreviewing: false,
+  }
+
+  confirmDelete = () => {
+    console.log('DELETED!')
   }
 
   render() {
     const { name } = this.props
-    const { previewing } = this.state
+    const { isPreviewing } = this.state
     return (
       <div>
         <div>
@@ -19,12 +23,20 @@ class PageEditor extends Component {
         </div>
         <div className="pageEditor-mode">
           <Button
-            onClick={() => this.setState((prevState) => ({ previewing: !prevState.previewing }))}
-            text={!previewing ? '👁️' : '✎'}
+            onClick={() => this.setState((prevState) => ({ isPreviewing: !prevState.isPreviewing }))}
+            text={!isPreviewing ? '👁️' : '✎'}
           />
+          <Popover interactionKind={PopoverInteractionKind.CLICK} position="right">
+            <Button text="🗑️" />
+            <div className="pageEditor-deleteModal">
+              Are you sure you want to delete this page?
+              <Button className="bp3-popover-dismiss danger" text="yes" onClick={this.confirmDelete} />
+              <Button className="bp3-popover-dismiss" text="cancel" />
+            </div>
+          </Popover>
         </div>
         <div className="pageEditor-content">
-          {previewing && <Homepage />}
+          {isPreviewing && <Homepage />}
         </div>
       </div>
     )
