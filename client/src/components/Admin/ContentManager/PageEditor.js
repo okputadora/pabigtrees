@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Button, Popover, PopoverInteractionKind } from '@blueprintjs/core'
+
 import Page from '@/components/Page/Page'
 
 class PageEditor extends Component {
-  state = {
-    isPreviewing: false,
+  componentDidMount() {
+    // fetch page data and copy to state
   }
 
   confirmDelete = () => {
@@ -15,9 +17,12 @@ class PageEditor extends Component {
     console.log(val, id)
   }
 
+  confirmPageEdits = () => {
+    // send currentState to API
+  }
+
   render() {
     const { name } = this.props
-    const { isPreviewing } = this.state
     return (
       <div>
         <div>
@@ -26,10 +31,6 @@ class PageEditor extends Component {
           {name}
         </div>
         <div className="pageEditor-mode">
-          <Button
-            onClick={() => this.setState((prevState) => ({ isPreviewing: !prevState.isPreviewing }))}
-            text={!isPreviewing ? '👁️' : '✎'}
-          />
           <Popover interactionKind={PopoverInteractionKind.CLICK} position="right">
             <Button text="🗑️" />
             <div className="pageEditor-deleteModal">
@@ -40,11 +41,15 @@ class PageEditor extends Component {
           </Popover>
         </div>
         <div className="pageEditor-content">
-          {isPreviewing && <Page isAdmin handleEdit={this.handleEdit} />}
+          <Page isAdmin handleEdit={this.handleEdit} />
         </div>
       </div>
     )
   }
+}
+
+PageEditor.propTypes = {
+  name: PropTypes.string.isRequired,
 }
 
 export default PageEditor

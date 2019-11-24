@@ -6,6 +6,10 @@ import renderer from '@/utils/renderer'
 import samplePageData from '@/utils/samplePageData'
 
 class Page extends Component {
+  state = {
+    pageData: {},
+  }
+
   componentDidMount() {
     // fetch page Data
     console.log(this.props)
@@ -19,10 +23,12 @@ class Page extends Component {
 
 Page.defaultProps = {
   isAdmin: false,
+  handleEdit: null,
 }
 
 Page.propTypes = {
   isAdmin: PropTypes.bool,
+  handleEdit: PropTypes.func,
 }
 
 export default Page

@@ -6,10 +6,10 @@ import './adminNav.scss'
 const AdminNav = () => (
   <nav className="adminNav-container">
     <ul className="adminNav-nav">
-      <li><Link className="adminNav-navItem" to="/admin">Admin Summary</Link></li>
-      <li><Link className="adminNav-navItem" to="/admin/contentManager">Content Manager</Link></li>
-      <li><Link className="adminNav-navItem" to="/admin/databseManager">Database Manager</Link></li>
-      <li><Link className="adminNav-navItem" to="/admin/submissionManager">Submission Manager</Link></li>
+      <Link className="adminNav-navItem" to="/admin">Admin Summary</Link>
+      <Link className="adminNav-navItem" to="/admin/contentManager">Content Manager</Link>
+      <Link className="adminNav-navItem" to="/admin/databseManager">Database Manager</Link>
+      <Link className="adminNav-navItem" to="/admin/submissionManager">Submission Manager</Link>
     </ul>
   </nav>
 )
