@@ -1,7 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 
-const Paragraph = ({ text, className }) => (<p className={className}>{text}</p>)
+import './paragraph.scss'
+
+const Paragraph = ({ text, className }) => {
+  const pClasses = classNames({
+    paragraph: true,
+    [className]: true,
+  })
+  return (<p className={pClasses}>{text}</p>)
+}
 
 Paragraph.defaultProps = {
   className: null,

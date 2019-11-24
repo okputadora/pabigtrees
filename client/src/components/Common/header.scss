@@ -1,7 +1,13 @@
-.header-container {
+.headerContainer {
   padding: 15px;
   background: #234030;
   color: white;
   display: flex;
   justify-content: flex-start;
+  margin-bottom: 12px;
+  font-size: 18px;
+}
+
+.center {
+  justify-content: center;
 }

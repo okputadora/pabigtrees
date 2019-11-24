@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Popover, PopoverInteractionKind } from '@blueprintjs/core'
-import Homepage from '@/components/Homepage/Homepage'
+import Page from '@/components/Page/Page'
 
 class PageEditor extends Component {
   state = {
@@ -9,6 +9,10 @@ class PageEditor extends Component {
 
   confirmDelete = () => {
     console.log('DELETED!')
+  }
+
+  handleEdit = (val, id) => {
+    console.log(val, id)
   }
 
   render() {
@@ -36,7 +40,7 @@ class PageEditor extends Component {
           </Popover>
         </div>
         <div className="pageEditor-content">
-          {isPreviewing && <Homepage />}
+          {isPreviewing && <Page isAdmin handleEdit={this.handleEdit} />}
         </div>
       </div>
     )

@@ -7,7 +7,7 @@ import './blogSummary.scss'
 
 const BlogSummary = () => (
   <div>
-    <Header alignment="center">What's New</Header>
+    <Header alignment="center" text="What's New" />
     <div className="blogSummary-container">
       <div className="blogSummary-date">Friday, November 22, 2019</div>
       <div className="blogSummary-title">New Coordinator Found</div>

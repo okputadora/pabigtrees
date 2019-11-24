@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import './twoCol.scss'
 
 const TwoCol = ({ col1, col2 }) => (
-  <div className="homepage-grid-container">
+  <div className="grid-container">
     <div className="col">
       {col1.map((comp) => comp)}
     </div>
