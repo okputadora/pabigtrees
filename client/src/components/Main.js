@@ -22,6 +22,7 @@ const Main = () => (
 
           {/* <Route path="/tree-listings" component={Table} /> */}
           {/* <Route path="/measurement" component={Page} /> */}
+          <Route path="/:pageName" component={Page} />
           <Route path="/" component={Page} />
         </Switch>
       </div>

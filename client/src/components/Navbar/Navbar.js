@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import './navbar.scss'
 
 const Navabr = () => {
-  const links = ['Home', 'Tree Listings', 'Tallest Trees', 'Measurement', 'News/Updates', 'Links/Resources', 'Nomination Form', 'About']
+  const links = ['home', 'Tree Listings', 'Tallest Trees', 'measurement', 'News/Updates', 'Links/Resources', 'Nomination Form', 'About']
   return (
     <nav className="nav-container">
       <ul className="navigation">

@@ -9,6 +9,7 @@ import logger from './logger'
 import {
   // login,
   // logout,
+  pages,
   trees,
 } from './routes'
 
@@ -34,6 +35,7 @@ app.use((req, res, next) => { console.log('is the request making it here?'); nex
 // app.use('/login', login)
 // app.use('/logout', logout)
 app.use('/trees', trees)
+app.use('/pages', pages)
 
 const server = app.listen(port, () => logger.log({ level: 'info', message: `Example app listening on port ${port}!` }))
 

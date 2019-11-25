@@ -1,12 +1,21 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Button, Popover, PopoverInteractionKind } from '@blueprintjs/core'
+import * as api from '@/api/page'
 
 import Page from '@/components/Page/Page'
 
 class PageEditor extends Component {
-  componentDidMount() {
+  state =
+    {
+      pageData: null,
+    }
+
+  async componentDidMount() {
     // fetch page data and copy to state
+    const { name } = this.props
+    const { data } = await api.getPageData(name)
+    this.setState({ pageData: data })
   }
 
   confirmDelete = () => {
@@ -23,6 +32,7 @@ class PageEditor extends Component {
 
   render() {
     const { name } = this.props
+    const { pageData } = this.state
     return (
       <div>
         <div>
@@ -41,7 +51,7 @@ class PageEditor extends Component {
           </Popover>
         </div>
         <div className="pageEditor-content">
-          <Page isAdmin handleEdit={this.handleEdit} />
+          {pageData && <Page isAdmin handleEdit={this.handleEdit} data={pageData} />}
         </div>
       </div>
     )

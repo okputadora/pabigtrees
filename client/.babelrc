@@ -12,6 +12,11 @@
       "alias": {
         "@": "./src"
       }
-    }]
+    }],
+    ["@babel/plugin-transform-runtime",
+      {
+        "regenerator": true
+      }
+    ]
   ]
 }
