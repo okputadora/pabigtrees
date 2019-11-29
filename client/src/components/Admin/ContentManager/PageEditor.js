@@ -31,9 +31,9 @@ class PageEditor extends Component {
     console.log('DELETED!')
   }
 
-  handleEdit = (val, id) => {
+  handleEdit = (val, field = 'text', id) => {
     const { sections } = { ...this.state }
-    sections[id].text = val
+    sections[id][field] = val
     sections[id].isEdited = true
     this.setState({ sections })
   }

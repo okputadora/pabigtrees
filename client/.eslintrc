@@ -10,6 +10,7 @@
     "react/jsx-filename-extension": "off",
     "react/jsx-props-no-spreading": "off",
     "react/state-in-constructor": "off",
+    "eslint(jsx-a11y/click-events-have-key-events": "off",
     "import/no-extraneous-dependencies": "off",
     "no-underscore-dangle": "off",
     "semi": ["error", "never"]

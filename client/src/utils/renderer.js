@@ -16,9 +16,9 @@ export default ({
       } = section
       const Comp = Components[component]
       if (column1.includes(index)) {
-        col1.push(<Comp key={_id} {...rest} isAdmin={isAdmin} handleEdit={(newText) => { handleEdit(newText, _id) }} />)
+        col1.push(<Comp key={_id} {...rest} isAdmin={isAdmin} handleEdit={(newText, field) => { handleEdit(newText, field, _id) }} />)
       } else {
-        col2.push(<Comp key={_id} {...rest} isAdmin={isAdmin} handleEdit={(newText) => { handleEdit(newText, _id) }} />)
+        col2.push(<Comp key={_id} {...rest} isAdmin={isAdmin} handleEdit={(newText, field) => { handleEdit(newText, field, _id) }} />)
       }
     })
     return <Layout col1={col1} col2={col2} />
@@ -29,7 +29,7 @@ export default ({
         component, index, id, ...rest
       } = section
       const Comp = Components[component]
-      return <Comp key={index} {...rest} isAdmin={isAdmin} handleEdit={(newText) => { handleEdit(newText, id) }} />
+      return <Comp key={index} {...rest} isAdmin={isAdmin} handleEdit={(newText, field) => { handleEdit(newText, field, _id) }} />
     })}
     />
   )
