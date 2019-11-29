@@ -7,7 +7,7 @@ import renderer from '@/utils/renderer'
 import * as API from '@/api/page'
 
 const paths = {
-  '/': 'homepage',
+  '/': '5de12e6538a99e3154370d02',
   '/measurement': 'measurement',
 }
 class Page extends Component {
@@ -19,8 +19,10 @@ class Page extends Component {
     const { data, match } = this.props
     if (!data) {
       const { path } = match
-      const resource = paths[path]
-      const { data: pageData } = await API.getPageData(resource)
+      const id = paths[path]
+      console.log(id)
+      const { data: pageData } = await API.getPageData(id)
+      console.log({ pageData })
       this.setState({ pageData })
     } else {
       this.setState({ pageData: data })
@@ -42,6 +44,9 @@ Page.defaultProps = {
 Page.propTypes = {
   isAdmin: PropTypes.bool,
   handleEdit: PropTypes.func,
+  match: PropTypes.shape({
+    path: PropTypes.string,
+  }).isRequired,
 }
 
 export default Page

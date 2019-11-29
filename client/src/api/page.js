@@ -1,9 +1,9 @@
 import { request } from '@/utils/request'
 
-export const getPageData = (pageName) => (
+export const getPageData = (id) => (
   request({
     method: 'GET',
-    url: `/pages/${pageName}`,
+    url: `/pages/${id}`,
   })
 )
 

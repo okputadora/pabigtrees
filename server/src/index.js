@@ -1,5 +1,5 @@
 import express from 'express'
-// import mongoose from 'mongoose'
+import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 
@@ -19,6 +19,8 @@ const app = express()
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
+mongoose.connect('mongodb://localhost:27017/pabigtrees2', { useNewUrlParser: true })
+
 // CORS
 const corsOptions = {
   origin: '*',
@@ -31,24 +33,24 @@ app.use(cors(corsOptions))
 //   next()
 // })
 
-app.use((req, res, next) => { console.log('is the request making it here?'); next() })
+// app.use((req, res, next) => { console.log('is the request making it here?'); next() })
 // app.use('/login', login)
 // app.use('/logout', logout)
 app.use('/trees', trees)
 app.use('/pages', pages)
 
-const server = app.listen(port, () => logger.log({ level: 'info', message: `Example app listening on port ${port}!` }))
+app.listen(port, () => logger.log({ level: 'info', message: `Example app listening on port ${port}!` }))
 
 // For Development Only @TODO this is not working right now
-process.once('SIGUSR2', () => {
-  // gracefulShutdown(function () {
-  console.log('killing proces@!!')
-  process.kill(process.pid, 'SIGUSR2')
-  // });
-})
-process.on('SIGINT', () => {
-  console.log(process.pid); server.close(() => {
-    console.log('server closed!')
-    process.exit()
-  })
-})
+// process.once('SIGUSR2', () => {
+//   // gracefulShutdown(function () {
+//   console.log('killing proces@!!')
+//   process.kill(process.pid, 'SIGUSR2')
+//   // });
+// })
+// process.on('SIGINT', () => {
+//   console.log(process.pid); server.close(() => {
+//     console.log('server closed!')
+//     process.exit()
+//   })
+// })

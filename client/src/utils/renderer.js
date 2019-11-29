@@ -12,13 +12,13 @@ export default ({
     const col2 = []
     sections.forEach((section) => {
       const {
-        component, index, id, ...rest
+        component, index, _id, ...rest
       } = section
       const Comp = Components[component]
       if (column1.includes(index)) {
-        col1.push(<Comp key={index} {...rest} isAdmin={isAdmin} handleEdit={(newText) => { handleEdit(newText, id) }} />)
+        col1.push(<Comp key={_id} {...rest} isAdmin={isAdmin} handleEdit={(newText) => { handleEdit(newText, _id) }} />)
       } else {
-        col2.push(<Comp key={index} {...rest} isAdmin={isAdmin} handleEdit={(newText) => { handleEdit(newText, id) }} />)
+        col2.push(<Comp key={_id} {...rest} isAdmin={isAdmin} handleEdit={(newText) => { handleEdit(newText, _id) }} />)
       }
     })
     return <Layout col1={col1} col2={col2} />
