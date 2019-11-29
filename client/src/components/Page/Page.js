@@ -20,9 +20,7 @@ class Page extends Component {
     if (!data) {
       const { path } = match
       const id = paths[path]
-      console.log(id)
       const { data: pageData } = await API.getPageData(id)
-      console.log({ pageData })
       this.setState({ pageData })
     } else {
       this.setState({ pageData: data })

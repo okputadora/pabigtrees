@@ -7,4 +7,12 @@ export const getPageData = (id) => (
   })
 )
 
+export const updateSections = (sections) => (
+  request({
+    method: 'PUT',
+    url: 'pages/sections',
+    data: sections,
+  })
+)
+
 export default {}

@@ -94,19 +94,21 @@ const samplePageData = {
 router.get('/:id', async (req, res, next) => {
   const { id } = req.params
   const page = await Page.findById(id).populate('sections')
-  console.log({ page })
   res.json(page)
 })
 
-router.put('/:pageName', (req, res, next) => {
-  // edit page
-  console.log(req.body)
+router.put('/sections', async (req, res, next) => {
+  const sections = req.body
+  try {
+    await Promise.all(sections.map((s) => Section.findByIdAndUpdate(s._id, s)))
+    res.status(200)
+  } catch (err) {
+    res.status(500)
+  }
 })
 
 router.post('/', async (req, res) => {
-  console.log('creating a page: ', req.body)
   const page = await Page.create(req.body)
-  console.log(page)
   res.json(page)
 })
 
