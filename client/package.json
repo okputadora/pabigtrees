@@ -15,6 +15,7 @@
     "@babel/runtime": "^7.7.4",
     "@blueprintjs/core": "^3.21.0",
     "@blueprintjs/select": "^3.11.2",
+    "@blueprintjs/table": "^3.8.2",
     "axios": "^0.19.0",
     "babel-plugin-module-resolver": "^3.2.0",
     "classnames": "^2.2.6",

@@ -15,7 +15,6 @@ import './main.scss'
 
 const Main = () => (
   <div className="fullPage">
-
     <Router>
       <Banner />
       <Navbar />
