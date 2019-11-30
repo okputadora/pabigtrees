@@ -6,6 +6,7 @@ import Banner from './Banner'
 import Navbar from './Navbar/Navbar'
 import Login from './Login/Login'
 import Signup from './Signup/Signup'
+import PageData from '@/components/Data/PageData'
 
 import './main.scss'
 
@@ -22,8 +23,12 @@ const Main = () => (
 
           {/* <Route path="/tree-listings" component={Table} /> */}
           {/* <Route path="/measurement" component={Page} /> */}
-          <Route path="/:pageName" component={Page} />
-          <Route path="/" component={Page} />
+          <Route
+            path="/:pathName"
+            render={
+              (props) => <PageData {...props}>{(pageProps) => <Page {...props} {...pageProps} />}</PageData>
+            }
+          />
         </Switch>
       </div>
     </Router>

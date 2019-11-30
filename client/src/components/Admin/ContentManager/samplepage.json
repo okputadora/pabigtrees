@@ -1,0 +1,122 @@
+[{
+  "component" : "Paragraph",
+  "index" : 0,
+  "text" : "To measure a prospective champion, you will need some basic tools. Below, you will find the accepted methods for measuring trees. All measurements will be accepted, but they will need to be verified before champion status will be given. The latest measuring techniques can be found at the Eastern Native Tree Society website:",
+  "page" : "5de12ed038a99e3154370d03"
+},
+{
+  "component" : "Link",
+  "index" : 1,
+  "text" : "Tree Measuring Guidelines",
+  "href": "http://www.nativetreesociety.org/measure/tree_measuring_guidelines.htm",
+  "page" : "5de12ed038a99e3154370d03"
+},
+{
+  "component" : "Image",
+  "index" : 2,
+  "text" : "Valley Forge Park HackBerry",
+  "src": "http://www.pabigtrees.com/images/00136%20Celtis%20occidentalis%20C%20Trunk%20sm.JPG",
+  "page" : "5de12ed038a99e3154370d03"
+},
+{
+  "component" : "Image",
+  "index" : 3,
+  "text" : "State Champion Southern Catalpa, Wycombe",
+  "src": "http://www.pabigtrees.com/images/00055-Catalpa-bignonioides-C-small.jpg",
+  "page" : "5de12ed038a99e3154370d03"
+},
+{
+  "component" : "Header",
+  "index" : 4,
+  "text" : "Big Tree Formula",
+  "page" : "5de12ed038a99e3154370d03"
+},
+{
+  "component" : "Paragraph",
+  "index" : 5,
+  "title": "Circumference at breast height",
+  "text" : "-  Also known as CBH, this measurement is made in inches at a point on the tree trunk,  4 1/2 feet above the ground.  If the tree is growing on a slope, the 4 1/2 feet is determined at mid slope.  This is the point halfway between the high and low points where the trunk meets the soil.  If the tree branches under 4 1/2 feet (single pith at ground level), has abnormal swelling, or a burl, the measurement is to be taken at the narrowest point below 4 1/2 feet, and the height of measurement is to be noted. If a tree is multiple stemmed, and they originate at ground level (several separate piths at ground level) the largest stem is to be measured at 4 1/2 feet, or above the co joined stems.  One point is given for each inch of circumference.",
+  "src": "http://www.pabigtrees.com/images/00055-Catalpa-bignonioides-C-small.jpg",
+  "page" : "5de12ed038a99e3154370d03"
+},
+{
+  "component" : "Paragraph",
+  "index" : 6,
+  "title": "Height",
+  "text" : "The height of a tree is the distance from the ground line at mid-slope of the tree trunk to the tallest part of the tree.  Height is often the measurement that is calculated incorrectly.  The most common errors come from not being able to see the top of the tree, mistaking the visible edge of the canopy as the top, and the top not being directly over the base of the tree .  Each can lead to height measurement errors.  For detailed information on this subject, please visit the Eastern Native Tree Society website at:  Tree_Measuring_Guidelines-revised.pdf  The ENTS methodology uses a laser range finder and clinometer to measure tree height.   Both of these most common problems are avoided using the Eastern Native Tree Society laser/clinometer methods.  There are other less technological ways to get an estimate close to the actual height of the tree.  One method and requires only a straight stick or yardstick and a tape.",
+  "src": "http://www.pabigtrees.com/images/00055-Catalpa-bignonioides-C-small.jpg",
+  "page" : "5de12ed038a99e3154370d03"
+},
+{
+  "component" : "Link",
+  "index" : 7,
+  "text" : "Tree_Measuring_Guidelines-revised.pdf",
+  "href": "http://www.nativetreesociety.org/measure/Tree_Measuring_Guidelines-revised.pdf",
+  "page" : "5de12ed038a99e3154370d03"
+},
+{
+  "component" : "Paragraph",
+  "index" : 8,
+  "text" : "The ENTS methodology uses a laser range finder and clinometer to measure tree height.   Both of these most common problems are avoided using the Eastern Native Tree Society laser/clinometer methods.  There are other less technological ways to get an estimate close to the actual height of the tree.  One method and requires only a straight stick or yardstick and a tape.",
+  "page" : "5de12ed038a99e3154370d03"
+},
+{
+  "component" : "Image",
+  "index" : 9,
+  "src" : "http://www.pabigtrees.com/images/measure300.jpg",
+  "page" : "5de12ed038a99e3154370d03"
+},
+{
+  "component" : "Paragraph",
+  "index" : 10,
+  "text": "First, measure the distance from your eye to the joint of your thumb and index finger (arm is stretched out). Next, hold the stick straight up and down at arm's length in front of you and make sure the portion above your hand is the same as what you measured from your eye to your hand. Step backwards until the tree's base appears to rest on the top of your fist, while the top of the stick appears to touch the top of the tree. At this exact point, the height of the tree is equal to the distance from the base of the tree to you. Place a stake in the ground and measure (in feet) from the trunk of the tree to the stake to find the height!  Another method involves the use of a clinometer.  If you can see the top of the tree at 100', a clinometer will tell you the height of the tree on the right side of the instrument.   A longer explanation of various tree measurement procedures is provided here.   One point is given for each foot of height.",
+  "page" : "5de12ed038a99e3154370d03"
+},
+{
+  "component" : "Header",
+  "index" : 11,
+  "text": "Crown Spread",
+  "page" : "5de12ed038a99e3154370d03"
+},
+{
+  "component" : "Paragraph",
+  "index" : 12,
+  "text": "The last two measurements needed are for average crown spread.  This is a horizontal measurement, from leaf tip to leaf tip, of the shortest spread, and the longest spread of the tree.  Adding the two numbers together, and then dividing by two will give you the average crown spread.",
+  "page" : "5de12ed038a99e3154370d03"
+},
+{
+  "component" : "Image",
+  "index" : 13,
+  "src": "http://www.pabigtrees.com/images/measure4.gif",
+  "page" : "5de12ed038a99e3154370d03"
+},
+{
+  "component" : "Paragraph",
+  "index" : 14,
+  "text": "The Pennsylvania Big Tree program collects both average crown spread information for use in the American Forests Big Tree Program and maximum crown spread for the Pennsylvania big tree list.  Maximum crown spread receives  a quarter point for every foot of average spread.  You can obtain the points by multiplying the average spread by .25.",
+  "page" : "5de12ed038a99e3154370d03"
+},
+{
+  "component" : "Paragraph",
+  "index" : 15,
+  "text": "Pennsylvania Big Tree Points  = Height (feet) + Circumference Breast Height (inches) + 1/4 Maximum Crown Spread   Adding these three measurements together will give you your total points.",
+  "page" : "5de12ed038a99e3154370d03"
+}
+]
+
+ObjectId("5de16eb2b75f68aedb2500dd"),
+ObjectId("5de16eb2b75f68aedb2500de"),
+ObjectId("5de16eb2b75f68aedb2500df"),
+ObjectId("5de16eb2b75f68aedb2500e0"),
+ObjectId("5de16eb2b75f68aedb2500e1"),
+ObjectId("5de16eb2b75f68aedb2500e2"),
+ObjectId("5de16eb2b75f68aedb2500e3"),
+ObjectId("5de16eb2b75f68aedb2500e4"),
+ObjectId("5de16eb2b75f68aedb2500e5"),
+ObjectId("5de16eb2b75f68aedb2500e6"),
+ObjectId("5de16eb2b75f68aedb2500e7"),
+ObjectId("5de16eb2b75f68aedb2500e8"),
+ObjectId("5de16eb2b75f68aedb2500e9"),
+ObjectId("5de16eb2b75f68aedb2500ea"),
+ObjectId("5de16eb2b75f68aedb2500eb"),
+ObjectId("5de16eb2b75f68aedb2500ec")

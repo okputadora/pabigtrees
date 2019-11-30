@@ -3,28 +3,49 @@ import PropTypes from 'prop-types'
 import { Button, Popover, PopoverInteractionKind } from '@blueprintjs/core'
 import * as API from '@/api/page'
 
+import './pageEditor.scss'
 import Page from '@/components/Page/Page'
 
 const paths = {
   homepage: '5de12e6538a99e3154370d02',
+  measurement: '5de12ed038a99e3154370d03',
 }
 class PageEditor extends Component {
   state =
     {
       pageData: null,
       sections: null,
+      isUnsaved: false,
+      isEdited: false,
     }
 
-  async componentDidMount() {
-    // fetch page data and copy to state
+  componentDidMount() {
+    this.fetchPageData()
+  }
+
+  componentDidUpdate(prevProps) {
     const { name } = this.props
-    const { data } = await API.getPageData(paths[name])
-    const sections = data.sections.reduce((acc, s) => {
-      const id = s._id
-      acc[id] = s
-      return acc
-    }, {})
-    this.setState({ sections, pageData: data })
+    const { name: prevName } = prevProps
+    if (name !== prevName) {
+      this.fetchPageData()
+    }
+  }
+
+  fetchPageData = async () => {
+    const { name } = this.props
+    try {
+      const { data } = await API.getPageData(paths[name])
+      const sections = data.sections.reduce((acc, s) => {
+        const id = s._id
+        acc[id] = s
+        return acc
+      }, {})
+      this.setState({
+        sections, pageData: data, isEdited: false, isUnsaved: false,
+      })
+    } catch (err) {
+      console.log('something went wrong', err)
+    }
   }
 
   confirmDelete = () => {
@@ -33,12 +54,14 @@ class PageEditor extends Component {
 
   handleEdit = (val, field = 'text', id) => {
     const { sections } = { ...this.state }
-    sections[id][field] = val
-    sections[id].isEdited = true
-    this.setState({ sections })
+    if (sections[id][field] !== val) {
+      sections[id][field] = val
+      sections[id].isEdited = true
+      this.setState({ sections, isUnsaved: true, isEdited: true })
+    }
   }
 
-  confirmPageEdits = async () => {
+  publish = async () => {
     // send currentState to API
     const { sections } = { ...this.state }
     const sectionsToUpdate = Object.keys(sections).filter((key) => sections[key].isEdited).map((key) => {
@@ -48,6 +71,7 @@ class PageEditor extends Component {
     try {
       await API.updateSections(sectionsToUpdate)
       console.log('saved!')
+      this.setState({ isUnsaved: false })
       // @ TODO Alert
     } catch (err) {
       // @TODO ALert
@@ -55,17 +79,11 @@ class PageEditor extends Component {
   }
 
   render() {
-    const { name } = this.props
-    const { pageData } = this.state
+    const { pageData, isUnsaved, isEdited } = this.state
     return (
       <div>
-        <div>
-          current page:
-          {' '}
-          {name}
-        </div>
         <div className="pageEditor-mode">
-          <Button text="save" onClick={this.confirmPageEdits} />
+          <Button text="Publish" onClick={this.publish} />
           <Popover interactionKind={PopoverInteractionKind.CLICK} position="right">
             <Button text="🗑️" />
             <div className="pageEditor-deleteModal">
@@ -74,6 +92,9 @@ class PageEditor extends Component {
               <Button className="bp3-popover-dismiss" text="cancel" />
             </div>
           </Popover>
+          {isUnsaved
+            ? <div className="pageEditor-unsaved">You have unsaved work!</div>
+            : <div className="pageEditor-saved">{isEdited && 'Saved!'}</div>}
         </div>
         <div className="pageEditor-content">
           {pageData && <Page isAdmin handleEdit={this.handleEdit} data={pageData} />}

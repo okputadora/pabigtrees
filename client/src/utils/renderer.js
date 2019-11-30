@@ -6,6 +6,8 @@ import Components from '@/components/Common'
 export default ({
   layout, sections, column1,
 }, isAdmin = false, handleEdit) => {
+  console.log({ layout })
+  console.log('rendering sections: ', sections)
   const Layout = Layouts[layout]
   if (layout === 'TwoCol') {
     const col1 = []
@@ -23,7 +25,9 @@ export default ({
     })
     return <Layout col1={col1} col2={col2} />
   }
+  console.log('returingn new layout!')
   return (
+
     <Layout content={sections.map((section) => {
       const {
         component, index, id, ...rest
