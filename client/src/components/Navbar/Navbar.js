@@ -4,11 +4,20 @@ import { Link } from 'react-router-dom'
 import './navbar.scss'
 
 const Navabr = () => {
-  const links = ['home', 'Tree Listings', 'Tallest Trees', 'measurement', 'News/Updates', 'Links/Resources', 'Nomination Form', 'About']
+  const links = [
+    { name: 'home', path: '/' },
+    { name: 'tree listings', path: '/tree-listings' },
+    { name: 'tallest trees', path: '/tallest-trees' },
+    { name: 'measurement', path: '/measurement' },
+    { name: 'News/Updates', path: '/news-updates' },
+    { name: 'Links/Resources', path: '/links-resource' },
+    { anme: 'Nomination Form', path: 'nomination-form' },
+    { name: 'About', path: '/about' },
+  ]
   return (
     <nav className="nav-container">
       <ul className="navigation">
-        {links.map((link) => <Link key={link} className="nav-item" to={link}>{link}</Link>)}
+        {links.map((link) => <Link key={link.name} className="nav-item" to={link.path}>{link.name}</Link>)}
       </ul>
     </nav>
   )

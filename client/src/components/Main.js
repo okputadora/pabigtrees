@@ -6,6 +6,9 @@ import Banner from './Banner'
 import Navbar from './Navbar/Navbar'
 import Login from './Login/Login'
 import Signup from './Signup/Signup'
+import Trees from './Trees/Trees'
+
+import TreeData from '@/components/Data/TreeData'
 import PageData from '@/components/Data/PageData'
 
 import './main.scss'
@@ -21,7 +24,12 @@ const Main = () => (
           <Route path="/login" component={Login} />
           <Route path="/signup" component={Signup} />
 
-          {/* <Route path="/tree-listings" component={Table} /> */}
+          <Route
+            path="/tree-listings"
+            render={(props) => (
+              <TreeData {...props}>{(treeData) => <Trees {...treeData} {...props} />}</TreeData>
+            )}
+          />
           {/* <Route path="/measurement" component={Page} /> */}
           <Route
             path="/:pathName"
