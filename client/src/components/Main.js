@@ -25,7 +25,7 @@ const Main = () => (
 
           <Route
             path="/tree-listings"
-component={Trees}
+            component={Trees}
           />
           {/* <Route path="/measurement" component={Page} /> */}
           <Route

@@ -1,29 +1,24 @@
 import React from 'react'
-import { Column, Table, Cell } from '@blueprintjs/table'
 
 import TreeData from '@/components/Data/TreeData'
 
-import '@blueprintjs/table/lib/css/table.css'
 import './trees.scss'
 
 
-const Trees = () => {
-  const cellRenderer = (data) => <Cell className="cell">{data}</Cell>
-  return (
-    <TreeData>
-      {({ data }) => {
-        console.log('trees: ', data)
-        return data
-          ? (
-            <Table numRows={10} className="table">
-              {data.columns.map((col) => (
-                <Column name={col} cellRenderer={(rowIndex, colIndex) => cellRenderer(data.data[rowIndex][col])} />
-              ))}
-            </Table>
-          )
-          : <div>loading</div>
-      }}
-    </TreeData>
-  )
-}
+const Trees = () => (
+  <TreeData>
+    {({ data }) => (data
+      ? (
+        <table className="table">
+          <thead>{data.columns.map((col) => <th className="table-header">{col}</th>)}</thead>
+          {data.data.map((row, i) => (
+            <tr className={`row ${i % 2 === 0 ? 'even' : 'odd'}`}>
+              {Object.keys(row).map((key) => <td className="cell">{row[key]}</td>)}
+            </tr>
+          ))}
+        </table>
+      )
+      : <div>loading</div>)}
+  </TreeData>
+)
 export default Trees

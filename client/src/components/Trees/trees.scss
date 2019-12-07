@@ -1,11 +1,26 @@
 .table {
-  border: 1px solid red;
-  flex: 1;
-  height: 90%;
+  // background-color: white
+}
+
+.table-header {
+  background-color: #D2B48C;
+  padding: 6px;
+  text-transform: uppercase;
+}
+
+.row { 
+  border-bottom: 1px solid black;
 }
 
 .cell {
-  border: 1px solid red;
-  // padding: 6px;
-  height: 20px !important;
+  padding: 5px;
+}
+
+
+.even {
+  background-color: #EEE8AA;
+}
+
+.odd {
+  background-color: #FAFAD2
 }
