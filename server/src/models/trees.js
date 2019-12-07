@@ -1,10 +1,10 @@
 import Sequelize from 'sequelize'
 
 export default (sequelize) => {
-  const Tree = sequelize.define('Tree', {
+  const Tree = sequelize.define('tree', {
     // attributes
-    id: { type: Sequelize.STRING, primaryKey: true },
-    k_species: { type: Sequelize.STRING },
+    id: { type: Sequelize.UUID, primaryKey: true },
+    species: { type: Sequelize.UUID },
     k_county: { type: Sequelize.INTEGER },
     k_technique: { type: Sequelize.INTEGER },
     d_nominated: { type: Sequelize.STRING },

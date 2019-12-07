@@ -1,4 +1,11 @@
 .table {
   border: 1px solid red;
   flex: 1;
+  height: 90%;
+}
+
+.cell {
+  border: 1px solid red;
+  // padding: 6px;
+  height: 20px !important;
 }

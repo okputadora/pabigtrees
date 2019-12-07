@@ -4,7 +4,7 @@ import * as API from '@/api/page'
 
 // @TODO FETCH THIS INFORMATION
 const paths = {
-  '': '5de12e6538a99e3154370d02',
+  '/': '5de12e6538a99e3154370d02',
   measurement: '5de12ed038a99e3154370d03',
 }
 
@@ -19,14 +19,15 @@ class PageData extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { match: { params: { pathName } } } = this.props
-    if (prevProps.match.params.pathName !== pathName) {
+    const { match: { params: { pathName: prevPathName = '/' } } } = prevProps
+    const { match: { params: { pathName = '/' } } } = this.props
+    if (prevPathName !== pathName) {
       this.fetchPage()
     }
   }
 
   async fetchPage() {
-    const { match: { params: { pathName } } } = this.props
+    const { match: { params: { pathName = '/' } } } = this.props
     const id = paths[pathName]
     const { data } = await API.getPageData(id)
     this.setState({ data })

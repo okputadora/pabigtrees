@@ -25,13 +25,17 @@ const Main = () => (
 
           <Route
             path="/tree-listings"
-            render={(props) => (
-              <TreeData {...props}>{(treeData) => <Trees {...treeData} {...props} />}</TreeData>
-            )}
+component={Trees}
           />
           {/* <Route path="/measurement" component={Page} /> */}
           <Route
             path="/:pathName"
+            render={
+              (props) => <PageData {...props}>{(pageProps) => <Page {...props} {...pageProps} />}</PageData>
+            }
+          />
+          <Route
+            path="/"
             render={
               (props) => <PageData {...props}>{(pageProps) => <Page {...props} {...pageProps} />}</PageData>
             }
