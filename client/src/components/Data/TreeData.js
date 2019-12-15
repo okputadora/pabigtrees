@@ -37,15 +37,16 @@ class TreeData extends Component {
     this.fetchPage()
   }
 
-  componentDidUpdate(prevProps) {
-    // const { match: { params: { pathName } } } = this.props
-    // if (prevProps.match.params.pathName !== pathName) {
-    //   this.fetchPage()
-    // }
+  componentDidUpdate({ sortBy: prevSortBy }) {
+    const { sortBy } = this.props
+    if (sortBy !== prevSortBy) {
+      console.log({ sortBy })
+      this.fetchPage(sortBy)
+    }
   }
 
-  async fetchPage() {
-    const { data } = await API.getTrees()
+  async fetchPage(sortBy) {
+    const { data } = await API.getTrees(sortBy)
     // format data
     const formattedData = formatData(data.trees)
     this.setState({ data: formattedData })

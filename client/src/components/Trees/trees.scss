@@ -1,5 +1,13 @@
+.tree-data-container {
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+}
+
 .table {
   // background-color: white
+  height: 600px;
+  width: 100%;
 }
 
 .table-header {
@@ -10,6 +18,7 @@
 
 .row { 
   border-bottom: 1px solid black;
+  height: calc(600 / 20)
 }
 
 .cell {

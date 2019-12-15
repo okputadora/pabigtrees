@@ -11,6 +11,7 @@ export const getTrees = (filters) => (
   request({
     method: 'get',
     url: '/trees',
+    params: filters,
   })
 )
 

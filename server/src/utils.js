@@ -21,3 +21,13 @@ export const issueToken = (user, res) => {
     maxAge: 1000 * 60 * 60 * 24 * 2,
   })
 }
+
+export const keyMap = {
+  genus: 'k_genus',
+  species: 't_species',
+  points: 'i_points',
+  county: 'k_county',
+  commonName: 't_common',
+  address: 't_address',
+  // 'Common Name', 'Address',
+}
