@@ -7,11 +7,11 @@ export const getTreeData = (id) => (
   })
 )
 
-export const getTrees = (filters) => (
+export const getTrees = (filters, keyword) => (
   request({
     method: 'get',
     url: '/trees',
-    params: filters,
+    params: { ...filters, keyword },
   })
 )
 
