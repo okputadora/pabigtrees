@@ -19,14 +19,21 @@ router.get('/', (req, res, next) => {
   models.trees.findAll({
     limit: 20,
     include: [
-      { model: models.species, where: { t_species: keyword }, include: [{ model: models.genus }] },
+      { model: models.species, include: [{ model: models.genus }] },
       { model: models.counties },
     ],
     order: [order],
   }).then(trees => {
-    console.log('finding trees')
-    console.log(Object.keys(trees[0].Species))
     res.json({ trees })
+  })
+})
+
+router.get('/filters', (req, res) => {
+  models.species.findAll({ include: models.genus }).then(data => {
+    const species = data.map(d => d.t_species)
+    const genera = data.map(d => d.Genus.t_genus)
+    const uniqueGenera = [...new Set(genera)]
+    res.json({ species, genera: uniqueGenera })
   })
 })
 

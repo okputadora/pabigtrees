@@ -15,4 +15,11 @@ export const getTrees = (filters, keyword) => (
   })
 )
 
+export const getFilterLists = () => (
+  request({
+    method: 'get',
+    url: '/trees/filters',
+  })
+)
+
 export default {}
