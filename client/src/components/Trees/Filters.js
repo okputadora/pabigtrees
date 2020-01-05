@@ -39,6 +39,8 @@ class Filters extends Component {
 
   selectGenus = (activeGenus) => this.setState(({ filters: prevFilters }) => ({ filters: { ...prevFilters, activeGenus } }))
 
+  selectSpecies = (activeSpecies) => this.setState(({ filters: prevFilters }) => ({ filters: { ...prevFilters, activeSpecies } }))
+
   render() {
     const { children } = this.props
     const {
@@ -71,7 +73,7 @@ class Filters extends Component {
                 <Select
                   items={species}
                   itemRenderer={this.renderItem}
-                  onItemSelect={this.selectItem}
+                  onItemSelect={this.selectSpecies}
                 >
                   <div className="filter-item">{activeSpecies}</div>
                 </Select>

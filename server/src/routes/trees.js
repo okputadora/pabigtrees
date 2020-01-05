@@ -8,9 +8,14 @@ const router = Router()
 
 router.get('/', (req, res, next) => {
   const {
-    sortField = 'points', sortOrder = 'DESC', keyword, activeGenus,
+    sortField = 'points',
+    sortOrder = 'DESC',
+    activeGenus = 'All',
+    activeSpecies = 'All',
+    keyword,
   } = req.query
   let order = [keyMap[sortField], sortOrder]
+  console.log({ activeSpecies })
   if (sortField === 'genus') {
     order = [models.species, { model: models.genus, as: 't_genus' }, 't_genus', sortOrder]
   } else if (sortField === 'species') {
@@ -18,9 +23,21 @@ router.get('/', (req, res, next) => {
   } else if (sortField === 'commonName') {
     order = [models.species, keyMap[sortField], sortOrder]
   }
+  console.log({ activeGenus })
+  // const speciesFilter = activeSpecies === 'All' ? null : { where: { t_species: activeSpecies } },
   models.trees.findAll({
     include: [
-      { model: models.species, required: true, include: [{ model: models.genus, where: { t_genus: activeGenus === 'All' ? '*' : activeGenus } }] },
+      {
+        model: models.species,
+        where: { t_species: activeSpecies },
+        required: true,
+        include: [{
+          model: models.genus,
+          // where: {
+          //   t_genus: '*',
+          // },
+        }],
+      },
       { model: models.counties },
     ],
     order: [order],
