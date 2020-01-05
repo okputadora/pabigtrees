@@ -37,24 +37,23 @@ class TreeData extends Component {
     this.fetchPage()
   }
 
-  componentDidUpdate({ sortBy: prevSortBy, keyword: prevKeyword }) {
-    const { sortBy, keyword } = this.props
-    if ((sortBy !== prevSortBy) || keyword !== prevKeyword) {
-      console.log('updated')
-      this.fetchPage(sortBy, keyword)
+  componentDidUpdate({ filters: prevFilters }) {
+    const { filters } = this.props
+    const updatedFilters = Object.keys(prevFilters).filter((key) => prevFilters[key] !== filters[key])
+    if (updatedFilters.length > 0) {
+      this.fetchPage(filters)
     }
   }
 
-  async fetchPage(sortBy, keyword) {
-    console.log(' fetching new data')
-    const { data } = await API.getTrees(sortBy, keyword)
+  async fetchPage(filters) {
+    const { data } = await API.getTrees(filters)
     // format data
+    console.log(data)
     const formattedData = formatData(data.trees)
     this.setState({ data: formattedData })
   }
 
   render() {
-    console.log('re rendering')
     const { children } = this.props
     const { data } = this.state
     return children({ data })

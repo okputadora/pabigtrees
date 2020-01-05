@@ -28,8 +28,8 @@ class Trees extends Component {
     return (
       <div className="tree-data-container">
         <Filters>
-          {({ keyword }) => (
-            <TreeData sortBy={{ sortField, sortOrder }} keyword={keyword}>
+          {(filters) => (
+            <TreeData sortBy={{ sortField, sortOrder }} filters={{ ...filters, sortField, sortOrder }}>
               {({ data }) => (data
                 ? (
                   <table className="table">

@@ -48,7 +48,6 @@ class Filters extends Component {
       filters,
       filters: { activeGenus, activeSpecies },
     } = this.state
-    console.log({ activeGenus })
     return (
       <>
         <div className=" filters">
@@ -92,7 +91,7 @@ class Filters extends Component {
             )}
           </Formik>
         </div>
-        {children({ filters })}
+        {children(filters)}
       </>
     )
   }
