@@ -1,0 +1,31 @@
+.inputField-input:focus ~ .inputField-label{
+  top: 8px;
+  bottom: 10px;
+  left: 20px;
+  font-size: 11px;
+  opacity: 1;
+}
+
+.inputField-container {
+  display: flex;
+  // width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inputField-input {
+  font-size: 14px;
+  padding: 3px;
+  width: 200px;
+  height: 35px;
+}
+
+.inputField-label {
+  border-color: yellow;
+  color: white
+  // pointer-events: none;
+  // left: 20px;
+  // top: 1px;
+  // border: '1px solid red';
+  // transition: 0.2s ease all;
+}

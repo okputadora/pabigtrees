@@ -11,7 +11,7 @@ const Navabr = () => {
     { name: 'measurement', path: '/measurement' },
     { name: 'News/Updates', path: '/news-updates' },
     { name: 'Links/Resources', path: '/links-resource' },
-    { anme: 'Nomination Form', path: 'nomination-form' },
+    { name: 'Nomination Form', path: '/nomination-form' },
     { name: 'About', path: '/about' },
   ]
   return (
