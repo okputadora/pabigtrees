@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { Op } from 'sequelize'
 
 import models from '../models'
+import Nomination from '../mongoModels/Nomination'
 import { keyMap } from '../utils'
 
 const router = Router()
@@ -58,6 +59,16 @@ router.get('/filters', (req, res) => {
     const uniqueGenera = [...new Set(genera)]
     res.json({ species, genera: uniqueGenera })
   })
+})
+
+router.post('/nominate', async (req, res) => {
+  try {
+    const nomination = await Nomination.create(req.body)
+    console.log({ nomination })
+    res.json({ success: true })
+  } catch (err) {
+    res.json({ error: err })
+  }
 })
 
 export default router
