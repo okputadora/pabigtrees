@@ -24,21 +24,25 @@ router.get('/', (req, res, next) => {
     order = [models.species, keyMap[sortField], sortOrder]
   }
   console.log({ activeGenus })
+  const genusQuery = { model: models.genus }
+  if (activeGenus !== 'All') {
+    genusQuery.where = { t_genus: activeGenus }
+  }
+  const speciesQuery = {
+    model: models.species,
+    required: true,
+    include: [genusQuery],
+  }
+  if (speciesQuery !== 'All') {
+    speciesQuery.where = { t_species: activeSpecies }
+  }
+
+  const countyQuery = { model: models.counties }
   // const speciesFilter = activeSpecies === 'All' ? null : { where: { t_species: activeSpecies } },
   models.trees.findAll({
     include: [
-      {
-        model: models.species,
-        where: { t_species: activeSpecies },
-        required: true,
-        include: [{
-          model: models.genus,
-          // where: {
-          //   t_genus: '*',
-          // },
-        }],
-      },
-      { model: models.counties },
+      speciesQuery,
+      countyQuery,
     ],
     order: [order],
     limit: 20,
