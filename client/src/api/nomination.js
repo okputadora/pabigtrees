@@ -1,11 +1,16 @@
 import { request } from '@/utils/request'
 
-export const nominateTree = (data) => (
+export const getNominations = () => (
   request({
-    method: 'POST',
-    url: '/trees/nominate',
-    data,
+    method: 'GET',
+    url: '/nominations',
   })
 )
 
-export default {}
+export const nominateTree = (data) => (
+  request({
+    method: 'POST',
+    url: '/nominations',
+    data,
+  })
+)

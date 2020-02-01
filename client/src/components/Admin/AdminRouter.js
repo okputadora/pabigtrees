@@ -6,7 +6,7 @@ import AdminNav from './AdminNav'
 import AdminSummary from './AdminSummary'
 import ContentManager from './ContentManager/ContentManager'
 import DatabaseManager from './DatabaseManager'
-import SubmissionManager from './SubmissionManager'
+import NominationManager from './NominationManager/NominationManager'
 
 import './admin.scss'
 
@@ -19,7 +19,7 @@ const Admin = () => (
         <Switch>
           <Route path="/admin/contentManager" component={ContentManager} />
           <Route path="/admin/databaseManager" component={DatabaseManager} />
-          <Route path="/admin/submissionManager" component={SubmissionManager} />
+          <Route path="/admin/nominationManager" component={NominationManager} />
           <Route path="/admin" component={AdminSummary} />
         </Switch>
       </div>

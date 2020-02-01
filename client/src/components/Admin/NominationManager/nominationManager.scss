@@ -1,0 +1,20 @@
+.nominationManager-container {
+  width: 90%;
+  max-width: 1100px;
+}
+
+.nominationManager-title {
+  color: white;
+  font-size: 20px;
+}
+
+.nominationPreview-container {
+  display: flex;
+  background-color: #ddd;
+  padding: 12px;
+  margin-top: 12px;
+}
+
+.nominationPreview-container > * {
+  width: 200px;
+}

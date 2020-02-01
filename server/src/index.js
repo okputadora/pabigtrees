@@ -9,6 +9,7 @@ import logger from './logger'
 import {
   // login,
   // logout,
+  nominations,
   pages,
   trees,
 } from './routes'
@@ -38,6 +39,7 @@ app.use(cors(corsOptions))
 // app.use('/logout', logout)
 app.use('/trees', trees)
 app.use('/pages', pages)
+app.use('/nominations', nominations)
 
 app.listen(port, () => logger.log({ level: 'info', message: `Example app listening on port ${port}!` }))
 

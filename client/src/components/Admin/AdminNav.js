@@ -9,7 +9,7 @@ const AdminNav = () => (
       <Link className="adminNav-navItem" to="/admin">Admin Summary</Link>
       <Link className="adminNav-navItem" to="/admin/contentManager">Content Manager</Link>
       <Link className="adminNav-navItem" to="/admin/databseManager">Database Manager</Link>
-      <Link className="adminNav-navItem" to="/admin/submissionManager">Submission Manager</Link>
+      <Link className="adminNav-navItem" to="/admin/nominationManager">Nomination Manager</Link>
     </ul>
   </nav>
 )
