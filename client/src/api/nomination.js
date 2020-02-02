@@ -15,10 +15,18 @@ export const nominateTree = (data) => (
   })
 )
 
-export const uploadFiles = (files) => (
-  request({
-    method: 'POST',
-    url: '/nominations/upload',
-    data: files,
-  })
-)
+export const uploadFiles = (files) => {
+  const formData = new FormData()
+  files.forEach((file, i) => formData.append('photo', file))
+  console.log({ formData })
+  return (
+    request({
+      method: 'POST',
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+      url: '/nominations/upload',
+      data: formData,
+    })
+  )
+}

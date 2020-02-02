@@ -3,7 +3,7 @@ import { Formik } from 'formik'
 import { useDropzone } from 'react-dropzone'
 import classNames from 'classnames'
 
-import { nominateTree } from '@/api/nomination'
+import { nominateTree, uploadFiles } from '@/api/nomination'
 import Form from '@/components/Forms/Form'
 import InputField from '@/components/Forms/InputField'
 import { initialValues } from './formData'
@@ -11,8 +11,11 @@ import { initialValues } from './formData'
 import './nomination.scss'
 
 const Nomination = () => {
-  const handleDrop = useCallback((files) => {
+  const handleDrop = useCallback(async (files) => {
+    console.log(files)
+    const uploadedFiles = await uploadFiles(files)
     // upload files
+    console.log({ uploadedFiles })
     console.log('handling drop')
     console.log(files)
   }, [])

@@ -17,6 +17,10 @@ const NominationPreview = ({
     </div>
   )
 
+NominationPreview.propTypes = {
+
+}
+
 const NominationManager = () => {
   const [nominations, setNominations] = useState([])
   useEffect(() => {
