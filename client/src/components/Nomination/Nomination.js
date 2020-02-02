@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Formik } from 'formik'
 import { useDropzone } from 'react-dropzone'
 import classNames from 'classnames'
@@ -11,14 +11,20 @@ import { initialValues } from './formData'
 import './nomination.scss'
 
 const Nomination = () => {
+  const [images, setImages] = useState([])
+  const [isUploading, setUploading] = useState(false)
+
   const handleDrop = useCallback(async (files) => {
-    console.log(files)
-    const uploadedFiles = await uploadFiles(files)
+    setUploading(true)
+    const { data: uploadedFiles } = await uploadFiles(files)
     // upload files
     console.log({ uploadedFiles })
-    console.log('handling drop')
-    console.log(files)
-  }, [])
+    setImages(images.concat(files.map((file, i) => Object.assign(file, {
+      preview: URL.createObjectURL(file),
+      imagePath: uploadedFiles[i],
+    }))))
+    setUploading(false)
+  }, [images])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop: handleDrop })
 
@@ -27,9 +33,11 @@ const Nomination = () => {
     'fileDrop-active': isDragActive,
   })
   const handleSubmit = useCallback(async (values) => {
-    const result = await nominateTree(values)
+    const formValues = { ...values, imagePaths: images.map((img) => img.imagePath) }
+    const result = await nominateTree(formValues)
     console.log(result)
-  }, [])
+  }, [images])
+  console.log({ images })
   return (
     <div className="nomination-container">
       <Formik
@@ -131,6 +139,16 @@ const Nomination = () => {
             />
             {/* @TODO picture upload */}
             <div className={fileDropClasses} {...getRootProps()}>
+              {isUploading && (
+                <div className="loading">
+                  <div className="loader">Loading...</div>
+                </div>
+              )}
+              {images.length > 0 && (
+                <div className="nomination-previewImages">
+                  {images.map((img) => <img className="nomination-previewImage" key={img.fileName} src={img.preview} alt="preview" />)}
+                </div>
+              )}
               <input {...getInputProps()} />
               {
                 isDragActive

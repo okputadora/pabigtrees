@@ -23,6 +23,7 @@ const Nomination = new mongoose.Schema({
   spread1: { type: Number },
   spread2: { type: Number },
   comments: { type: String },
+  imagePaths: [{ type: String }],
 }, { timestamps: true })
 
 export default mongoose.model('Nomination', Nomination)

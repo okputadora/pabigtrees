@@ -49,6 +49,7 @@ router.post('/upload', upload.array('photo', 5), async (req, res) => {
   try {
     console.log(req.files)
     console.log(req.body)
+    res.json(req.files.map(f => f.filename))
   } catch (err) {
     res.json({ error: err })
   }

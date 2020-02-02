@@ -17,7 +17,7 @@ export const nominateTree = (data) => (
 
 export const uploadFiles = (files) => {
   const formData = new FormData()
-  files.forEach((file, i) => formData.append('photo', file))
+  files.forEach((file) => formData.append('photo', file))
   console.log({ formData })
   return (
     request({
