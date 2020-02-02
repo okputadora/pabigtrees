@@ -14,19 +14,36 @@ const Nomination = () => {
   const [images, setImages] = useState([])
   const [isUploading, setUploading] = useState(false)
 
-  const handleDrop = useCallback(async (files) => {
-    setUploading(true)
-    const { data: uploadedFiles } = await uploadFiles(files)
-    // upload files
-    console.log({ uploadedFiles })
-    setImages(images.concat(files.map((file, i) => Object.assign(file, {
-      preview: URL.createObjectURL(file),
-      imagePath: uploadedFiles[i],
-    }))))
-    setUploading(false)
+  const handleDrop = useCallback(async (files, rejectedFiles) => {
+    console.log(rejectedFiles)
+    if (rejectedFiles.length > 0) {
+      alert('some files were rejected')
+    }
+    if (files) {
+      if (files.length > 5) {
+        return alert('You\'re attempting to upload too many files. The limit is 5')
+      }
+      try {
+        setUploading(true)
+        const { data: uploadedFiles } = await uploadFiles(files)
+        setImages(images.concat(files.map((file, i) => Object.assign(file, {
+          preview: URL.createObjectURL(file),
+          imagePath: uploadedFiles[i],
+        }))))
+      } catch (err) {
+        console.log(err)
+        alert(err.message)
+      } finally {
+        setUploading(false)
+      }
+    }
   }, [images])
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop: handleDrop })
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+  } = useDropzone({ onDrop: handleDrop, accept: 'image/*' })
 
   const fileDropClasses = classNames({
     'nomination-fileDrop': true,
@@ -35,9 +52,7 @@ const Nomination = () => {
   const handleSubmit = useCallback(async (values) => {
     const formValues = { ...values, imagePaths: images.map((img) => img.imagePath) }
     const result = await nominateTree(formValues)
-    console.log(result)
   }, [images])
-  console.log({ images })
   return (
     <div className="nomination-container">
       <Formik
@@ -146,14 +161,14 @@ const Nomination = () => {
               )}
               {images.length > 0 && (
                 <div className="nomination-previewImages">
-                  {images.map((img) => <img className="nomination-previewImage" key={img.fileName} src={img.preview} alt="preview" />)}
+                  {images.map((img) => <img className="nomination-previewImage" key={img.preview} src={img.preview} alt="preview" />)}
                 </div>
               )}
               <input {...getInputProps()} />
               {
                 isDragActive
                   ? <p>Drop the images here ...</p>
-                  : <p>Drag n drop some images here, or click to select from your file system</p>
+                  : <p>Drag up to 5 images here, or click to select from your file system</p>
               }
             </div>
             <button className="nomination-submit" type="button" onClick={handleFormikSubmit}>submit</button>

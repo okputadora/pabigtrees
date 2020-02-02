@@ -45,6 +45,8 @@
   opacity: 0.5;
   z-index: -1;
   display: flex;
+  justify-content: space-evenly;
+  align-items: center;
   flex-wrap: wrap;
   overflow: hidden;
 }
