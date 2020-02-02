@@ -11,18 +11,21 @@
   // width: 100%;
   justify-content: space-between;
   align-items: center;
+  margin-top: 10px;
+  // flex-grow: 1;
 }
 
 .inputField-input {
   font-size: 14px;
   padding: 3px;
-  width: 200px;
+  flex-grow: 1;
   height: 35px;
 }
 
 .inputField-label {
-  border-color: yellow;
-  color: white
+  color: white;
+  font-size: 16px;
+  flex-basis: 240px;
   // pointer-events: none;
   // left: 20px;
   // top: 1px;

@@ -14,3 +14,11 @@ export const nominateTree = (data) => (
     data,
   })
 )
+
+export const uploadFiles = (files) => (
+  request({
+    method: 'POST',
+    url: '/nominations/upload',
+    data: files,
+  })
+)

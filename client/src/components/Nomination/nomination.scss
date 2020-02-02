@@ -1,0 +1,31 @@
+.nomination-container {
+  width: 50%;
+  margin-bottom: 50px;
+}
+
+.nomination-fileDrop {
+  border: 2px dashed white;
+  border-radius: 5px;
+  color: white;
+  height: 200px;
+  margin: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 20px;
+}
+
+.fileDrop-active {
+  background-color: #234030;
+  border: 2px dashed #E8E710;
+}
+
+.nomination-submit {
+  width: 100%;
+  padding: 12px;
+  text-transform: uppercase;
+  background-color: #234030;
+  color: #E8E710;
+  border: 1px solid #E8E710;
+}
