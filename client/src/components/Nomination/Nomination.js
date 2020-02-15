@@ -15,7 +15,6 @@ const Nomination = () => {
   const [isUploading, setUploading] = useState(false)
 
   const handleDrop = useCallback(async (files, rejectedFiles) => {
-    console.log(rejectedFiles)
     if (rejectedFiles.length > 0) {
       alert('some files were rejected')
     }
@@ -31,7 +30,6 @@ const Nomination = () => {
           imagePath: uploadedFiles[i],
         }))))
       } catch (err) {
-        console.log(err)
         alert(err.message)
       } finally {
         setUploading(false)

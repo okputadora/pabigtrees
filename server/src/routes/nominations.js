@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import multer from 'multer'
-import path from 'path'
+// import path from 'path'
 
 import Nomination from '../mongoModels/Nomination'
 
@@ -31,9 +31,22 @@ const upload = multer({ storage, fileFilter: imageFilter })
 
 // @TODO getting nominations should be restricted to admins
 router.get('/', async (req, res) => {
+  console.log('in the wrong route?')
   try {
     const nominations = await Nomination.find({})
     res.json({ nominations })
+  } catch (err) {
+    res.json({ error: err })
+  }
+})
+
+router.get('/:id', async (req, res) => {
+  try {
+    console.log('fetching')
+    console.log(req.params.id)
+    const nomination = await Nomination.findById(req.params.id)
+    console.log(nomination)
+    res.json({ nomination })
   } catch (err) {
     res.json({ error: err })
   }

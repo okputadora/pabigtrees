@@ -7,6 +7,13 @@ export const getNominations = () => (
   })
 )
 
+export const getNomination = (id) => (
+  request({
+    method: 'GET',
+    url: `/nominations/${id}`,
+  })
+)
+
 export const nominateTree = (data) => (
   request({
     method: 'POST',
@@ -18,7 +25,6 @@ export const nominateTree = (data) => (
 export const uploadFiles = (files) => {
   const formData = new FormData()
   files.forEach((file) => formData.append('photo', file))
-  console.log({ formData })
   return (
     request({
       method: 'POST',
