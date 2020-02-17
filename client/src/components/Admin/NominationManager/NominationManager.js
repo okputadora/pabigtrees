@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+
 import { getNominations } from '@/api/nomination'
 
 import './nominationManager.scss'
@@ -11,7 +13,7 @@ const NominationPreview = ({
   return (
     <Link to={`nomination/${_id}`}>
       <div className="nominationPreview-container">
-        <img className="nominationPreview-image" src={imagePaths[0] ? `localhost:4000/uploads/${imagePaths[0]}` : ''} alt="preview" />
+        <img className="nominationPreview-image" src={imagePaths[0] ? `http://localhost:4000/uploads/${imagePaths[0]}` : ''} alt="preview" />
         <div className="nominationPreview-title">
           {commonName || species || genus}
         </div>
@@ -23,9 +25,21 @@ const NominationPreview = ({
   )
 }
 
+NominationPreview.defaultProps = {
+  commonName: null,
+  species: null,
+  genus: null,
+  imagePaths: null,
+  nominator: null,
+}
 
 NominationPreview.propTypes = {
-
+  commonName: PropTypes.string,
+  species: PropTypes.string,
+  genus: PropTypes.string,
+  imagePaths: PropTypes.string,
+  nominator: PropTypes.string,
+  _id: PropTypes.string.isRequired,
 }
 
 const NominationManager = () => {

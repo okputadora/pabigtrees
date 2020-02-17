@@ -2,6 +2,7 @@ import express from 'express'
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 import cors from 'cors'
+import path from 'path'
 
 import config from './config'
 import logger from './logger'
@@ -37,6 +38,9 @@ app.use(cors(corsOptions))
 // app.use((req, res, next) => { console.log('is the request making it here?'); next() })
 // app.use('/login', login)
 // app.use('/logout', logout)
+console.log(__dirname)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+
 app.use('/trees', trees)
 app.use('/pages', pages)
 app.use('/nominations', nominations)
