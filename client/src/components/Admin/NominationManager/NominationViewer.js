@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import EditableText from '@/components/Common/EditableText'
 import { getNomination } from '@/api/nomination'
+import NominationForm from '@/components/Nomination/Nomination'
 import './nominationViewer.scss'
 
 const NominationViewer = ({ match: { params: { id } } }) => {
@@ -13,7 +13,6 @@ const NominationViewer = ({ match: { params: { id } } }) => {
         const { data: { nomination: dataNom } } = await getNomination(id)
         setNomination(dataNom)
       } catch (err) {
-        console.log(err)
         alert(err)
       }
     }
@@ -22,7 +21,8 @@ const NominationViewer = ({ match: { params: { id } } }) => {
   return nomination ? (
     <div className="nominationViewer-container">
       <div className="nominationViewer-title">
-        <EditableText text={nomination.commonName} />
+        <NominationForm initValues={nomination} isAdminReview />
+
       </div>
     </div>
   ) : <div>loading</div>

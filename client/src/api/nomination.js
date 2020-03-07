@@ -22,6 +22,21 @@ export const nominateTree = (data) => (
   })
 )
 
+export const confirmNomination = (data) => (
+  request({
+    method: 'PUT',
+    url: `/nominations/${data._id}`,
+    data,
+  })
+)
+
+export const removeImage = (imagePath) => (
+  request({
+    method: 'DELETE',
+    url: `/nominations/image/${imagePath}`,
+  })
+)
+
 export const uploadFiles = (files) => {
   const formData = new FormData()
   files.forEach((file) => formData.append('photo', file))

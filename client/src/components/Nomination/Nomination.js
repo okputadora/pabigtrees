@@ -1,26 +1,65 @@
 import React, { useCallback, useState } from 'react'
-import { Formik } from 'formik'
+import PropTypes from 'prop-types'
+import { Formik, useFormikContext } from 'formik'
 import { useDropzone } from 'react-dropzone'
 import classNames from 'classnames'
 
-import { nominateTree, uploadFiles } from '@/api/nomination'
+import {
+  nominateTree, uploadFiles, confirmNomination, removeImage,
+} from '@/api/nomination'
 import Form from '@/components/Forms/Form'
 import InputField from '@/components/Forms/InputField'
 import { initialValues } from './formData'
 
 import './nomination.scss'
 
-const Nomination = () => {
-  const [images, setImages] = useState([])
-  const [isUploading, setUploading] = useState(false)
+const AdminReview = () => {
+  const { values } = useFormikContext()
+  const handleSubmit = useCallback(async () => {
+    console.log('submitting values', { values })
+    try {
+      await confirmNomination({ ...values, approved: true })
+    } catch (e) {
+      alert('something went wrong!')
+    }
+  }, [values])
 
+  const deleteImage = useCallback(async (imagePath) => {
+    const shouldDelete = window.confirm('Are you sure you want to remove this image? This action cannot be undone, the image will be lost forever')
+    if (shouldDelete) {
+      try {
+        await removeImage(imagePath)
+      } catch (e) {
+        alert('something went wrong!')
+      }
+    }
+  }, [])
+  return (
+    <>
+      <div className="nomination-review-previewImages">
+        {values.imagePaths.map((img) => (
+          <div className="nomination-previewContainer">
+            <a href={`http://localhost:4000/uploads/${img}`} target="_blank" rel="noopener noreferrer">
+              <img className="nomination-previewImage" key={img} src={`http://localhost:4000/uploads/${img}`} alt="preview" />
+            </a>
+            <button type="button" className="nomination-deleteImage" onClick={deleteImage}>X</button>
+          </div>
+        ))}
+      </div>
+      <button className="nomination-submit" type="button" onClick={handleSubmit}>Approve Nomination</button>
+    </>
+  )
+}
+const UserNomination = ({ images, setImages }) => {
+  const [isUploading, setUploading] = useState(false)
+  const { submitForm } = useFormikContext()
   const handleDrop = useCallback(async (files, rejectedFiles) => {
     if (rejectedFiles.length > 0) {
       alert('some files were rejected')
     }
     if (files) {
       if (files.length > 5) {
-        return alert('You\'re attempting to upload too many files. The limit is 5')
+        alert('You\'re attempting to upload too many files. The limit is 5')
       }
       try {
         setUploading(true)
@@ -42,22 +81,54 @@ const Nomination = () => {
     getInputProps,
     isDragActive,
   } = useDropzone({ onDrop: handleDrop, accept: 'image/*' })
-
   const fileDropClasses = classNames({
     'nomination-fileDrop': true,
     'fileDrop-active': isDragActive,
   })
-  const handleSubmit = useCallback(async (values) => {
-    const formValues = { ...values, imagePaths: images.map((img) => img.imagePath) }
-    const result = await nominateTree(formValues)
+  return (
+    <>
+      <div className={fileDropClasses} {...getRootProps()}>
+        {isUploading && (
+          <div className="loading">
+            <div className="loader">Loading...</div>
+          </div>
+        )}
+        {images.length > 0 && (
+          <div className="nomination-previewImages">
+            {images.map((img) => <img className="nomination-previewImage" key={img.preview} src={img.preview} alt="preview" />)}
+          </div>
+        )}
+        <input {...getInputProps()} />
+        {
+          isDragActive
+            ? <p>Drop the images here ...</p>
+            : <p>Drag up to 5 images here, or click to select from your file system</p>
+        }
+      </div>
+      <button className="nomination-submit" type="button" onClick={submitForm}>submit</button>
+    </>
+  )
+}
+
+const Nomination = ({ initValues, isAdminReview }) => {
+  const [images, setImages] = useState([])
+  const handleSubmit = useCallback(async (values, { resetForm }) => {
+    try {
+      const formValues = { ...values, imagePaths: images.map((img) => img.imagePath) }
+      await nominateTree(formValues)
+      alert('Your nomination has been submitted!')
+      resetForm()
+    } catch (err) {
+      alert(err)
+    }
   }, [images])
   return (
     <div className="nomination-container">
       <Formik
         onSubmit={handleSubmit}
-        initialValues={initialValues}
+        initialValues={initValues}
       >
-        {({ handleSubmit: handleFormikSubmit, dirty }) => (
+        {() => (
           <Form>
             <InputField
               name="commonName"
@@ -150,31 +221,37 @@ const Nomination = () => {
               name="comments"
               labelProps={{ label: 'Comments' }}
             />
-            {/* @TODO picture upload */}
-            <div className={fileDropClasses} {...getRootProps()}>
-              {isUploading && (
-                <div className="loading">
-                  <div className="loader">Loading...</div>
-                </div>
-              )}
-              {images.length > 0 && (
-                <div className="nomination-previewImages">
-                  {images.map((img) => <img className="nomination-previewImage" key={img.preview} src={img.preview} alt="preview" />)}
-                </div>
-              )}
-              <input {...getInputProps()} />
-              {
-                isDragActive
-                  ? <p>Drop the images here ...</p>
-                  : <p>Drag up to 5 images here, or click to select from your file system</p>
-              }
-            </div>
-            <button className="nomination-submit" type="button" onClick={handleFormikSubmit}>submit</button>
+            {isAdminReview ? <AdminReview images={images} setImages={setImages} /> : <UserNomination images={images} setImages={setImages} />}
           </Form>
         )}
       </Formik>
     </div>
   )
+}
+
+// AdminReview.propTypes = {
+//   initValues: PropTypes.shape({
+//     imagePaths: PropTypes.arrayOf(PropTypes.string),
+//   }).isRequired,
+// }
+
+UserNomination.defaultProps = {
+  images: [],
+}
+
+UserNomination.propTypes = {
+  images: PropTypes.arrayOf(PropTypes.string),
+  setImages: PropTypes.func.isRequired,
+}
+
+Nomination.defaultProps = {
+  initValues: initialValues,
+  isAdminReview: false,
+}
+
+Nomination.propTypes = {
+  initValues: PropTypes.shape({}),
+  isAdminReview: PropTypes.bool,
 }
 
 export default Nomination

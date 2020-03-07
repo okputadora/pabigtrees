@@ -13,7 +13,8 @@
     "eslint(jsx-a11y/click-events-have-key-events": "off",
     "import/no-extraneous-dependencies": "off",
     "no-underscore-dangle": "off",
-    "semi": ["error", "never"]
+    "semi": ["error", "never"],
+    "no-alert": "off"
   },
   "settings": {
     "import/resolver": {

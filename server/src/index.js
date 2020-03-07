@@ -39,7 +39,7 @@ app.use(cors(corsOptions))
 // app.use('/login', login)
 // app.use('/logout', logout)
 console.log(__dirname)
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
 
 app.use('/trees', trees)
 app.use('/pages', pages)
