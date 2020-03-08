@@ -3,7 +3,7 @@ import Sequelize from 'sequelize'
 export default (sequelize) => {
   const Tree = sequelize.define('tree', {
     // attributes
-    id: { type: Sequelize.UUID, primaryKey: true },
+    id: { type: Sequelize.UUID, primaryKey: true, autoIncrement: true },
     species: { type: Sequelize.UUID },
     k_county: { type: Sequelize.INTEGER },
     k_technique: { type: Sequelize.INTEGER },

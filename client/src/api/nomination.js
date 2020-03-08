@@ -25,7 +25,7 @@ export const nominateTree = (data) => (
 export const confirmNomination = (data) => (
   request({
     method: 'PUT',
-    url: `/nominations/${data._id}`,
+    url: `/nominations/approval/${data._id}`,
     data,
   })
 )

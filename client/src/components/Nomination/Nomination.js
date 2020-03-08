@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Formik, useFormikContext } from 'formik'
 import { useDropzone } from 'react-dropzone'
+import { Checkbox } from '@blueprintjs/core'
 import classNames from 'classnames'
 
 import {
@@ -15,10 +16,10 @@ import './nomination.scss'
 
 const AdminReview = () => {
   const { values } = useFormikContext()
+  const [isPublic, setIsPublic] = useState(false)
   const handleSubmit = useCallback(async () => {
-    console.log('submitting values', { values })
     try {
-      await confirmNomination({ ...values, approved: true })
+      await confirmNomination({ ...values, isPublic, isApproved: true })
     } catch (e) {
       alert('something went wrong!')
     }
@@ -36,6 +37,7 @@ const AdminReview = () => {
   }, [])
   return (
     <>
+      <div className="nomination-checkbox"><Checkbox labelElement={<span className="white">public</span>} checked={isPublic} onChange={() => setIsPublic(!isPublic)} /></div>
       <div className="nomination-review-previewImages">
         {values.imagePaths.map((img) => (
           <div className="nomination-previewContainer">

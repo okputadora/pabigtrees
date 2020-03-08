@@ -54,8 +54,6 @@ db.trees.belongsTo(db.species, { foreignKey: 'species' })
 db.trees.belongsTo(db.counties, { foreignKey: 'k_county' })
 db.species.belongsTo(db.genus, { foreignKey: 'k_genus' })
 
-module.exports = db
-
 db.sequelize = sequelize
 db.Sequelize = Sequelize
 

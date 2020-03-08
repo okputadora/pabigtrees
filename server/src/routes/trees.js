@@ -15,7 +15,6 @@ router.get('/', (req, res, next) => {
     keyword,
   } = req.query
   let order = [keyMap[sortField], sortOrder]
-  console.log({ activeSpecies })
   if (sortField === 'genus') {
     order = [models.species, { model: models.genus, as: 't_genus' }, 't_genus', sortOrder]
   } else if (sortField === 'species') {
@@ -23,7 +22,6 @@ router.get('/', (req, res, next) => {
   } else if (sortField === 'commonName') {
     order = [models.species, keyMap[sortField], sortOrder]
   }
-  console.log({ activeGenus })
   const genusQuery = { model: models.genus }
   if (activeGenus !== 'All') {
     genusQuery.where = { t_genus: activeGenus }
@@ -38,7 +36,6 @@ router.get('/', (req, res, next) => {
   }
 
   const countyQuery = { model: models.counties }
-  // const speciesFilter = activeSpecies === 'All' ? null : { where: { t_species: activeSpecies } },
   models.trees.findAll({
     include: [
       speciesQuery,
