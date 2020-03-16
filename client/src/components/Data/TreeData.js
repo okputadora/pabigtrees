@@ -2,14 +2,8 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 import * as API from '@/api/tree'
 
-// @TODO FETCH THIS INFORMATION
-const paths = {
-  '': '5de12e6538a99e3154370d02',
-  measurement: '5de12ed038a99e3154370d03',
-}
-
 const formatData = (rawData) => {
-  const data = rawData.map((row) => {
+  const formattedData = rawData.map((row) => {
     const formattedRow = {
       county: row.County ? row.County.county : null,
       genus: row.Species && row.Species.Genus && row.Species.Genus.t_genus,
@@ -21,10 +15,10 @@ const formatData = (rawData) => {
     }
     return formattedRow
   })
-  const columns = Object.keys(data[0])
-  const formattedData = { columns, data }
+  const columns = Object.keys(formattedData[0]).filter((key) => key !== 'id')
+  const data = { columns, formattedData }
 
-  return formattedData
+  return data
 }
 
 class TreeData extends Component {
@@ -46,10 +40,7 @@ class TreeData extends Component {
   }
 
   async fetchPage(filters) {
-    console.log({ filters })
     const { data } = await API.getTrees(filters)
-    // format data
-    console.log(data)
     const formattedData = formatData(data.trees)
     this.setState({ data: formattedData })
   }
@@ -57,13 +48,17 @@ class TreeData extends Component {
   render() {
     const { children } = this.props
     const { data } = this.state
-    console.log(data)
     return children({ data })
   }
 }
 
+TreeData.defaultProps = {
+  filters: {},
+}
+
 TreeData.propTypes = {
   children: PropTypes.func.isRequired,
+  filters: PropTypes.shape({}),
 }
 
 export default TreeData

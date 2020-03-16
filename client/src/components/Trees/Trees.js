@@ -33,11 +33,11 @@ class Trees extends Component {
               {({ data }) => (data
                 ? (
                   <table className="table">
-                    <thead><tr>{data.columns.map((col) => <th onClick={this.setSortBy} id={col} className="table-header">{col}</th>)}</tr></thead>
+                    <thead><tr>{data.columns.map((col) => <th onClick={this.setSortBy} id={col} key={col} className="table-header">{col}</th>)}</tr></thead>
                     <tbody>
-                      {data.data.map((row, i) => (
-                        <tr className={`row ${i % 2 === 0 ? 'even' : 'odd'}`}>
-                          {Object.keys(row).map((key) => <td className="cell">{row[key]}</td>)}
+                      {data.formattedData.map((row, i) => (
+                        <tr className={`row ${i % 2 === 0 ? 'even' : 'odd'}`} key={row.id}>
+                          {Object.keys(row).filter((k) => k !== 'id').map((key) => <td className="cell">{row[key]}</td>)}
                         </tr>
                       ))}
                     </tbody>
