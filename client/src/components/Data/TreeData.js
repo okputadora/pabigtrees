@@ -11,10 +11,10 @@ const paths = {
 const formatData = (rawData) => {
   const data = rawData.map((row) => {
     const formattedRow = {
-      county: row.County.county,
-      genus: row.Species.Genus.t_genus,
-      species: row.Species.t_species,
-      commonName: row.Species.t_common,
+      county: row.County ? row.County.county : null,
+      genus: row.Species && row.Species.Genus && row.Species.Genus.t_genus,
+      species: row.Species && row.Species.t_species,
+      commonName: row.Species && row.Species.t_common,
       points: row.i_points,
       address: row.t_address,
       id: row.id,
@@ -46,6 +46,7 @@ class TreeData extends Component {
   }
 
   async fetchPage(filters) {
+    console.log({ filters })
     const { data } = await API.getTrees(filters)
     // format data
     console.log(data)
@@ -56,6 +57,7 @@ class TreeData extends Component {
   render() {
     const { children } = this.props
     const { data } = this.state
+    console.log(data)
     return children({ data })
   }
 }

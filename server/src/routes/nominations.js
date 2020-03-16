@@ -74,6 +74,8 @@ router.put('/approval/:id', async (req, res) => {
     console.log({ nomination })
     // create new tree entry
     const tree = db.trees.build(nominationToTreeMap(nomination))
+    // create tree images
+
     await tree.save()
     res.json({ success: true, tree })
   } catch (err) {

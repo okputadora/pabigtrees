@@ -35,7 +35,7 @@ export const keyMap = {
 export const nominationToTreeMap = (nomination) => {
   console.log(nomination)
   return {
-    species: nomination.species,
+    species: nomination.species, // Look up species code from species table might need nomination.genera to do this too
     k_county: null, // nomination.county @TODO need to lookup county code first,
     k_technique: null, // @TODO Ask aaron where this data comes from
     d_nominated: nomination.createdAt.toString(),

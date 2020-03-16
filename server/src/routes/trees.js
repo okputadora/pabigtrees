@@ -31,11 +31,12 @@ router.get('/', (req, res, next) => {
     required: true,
     include: [genusQuery],
   }
-  if (speciesQuery !== 'All') {
+  if (activeSpecies !== 'All') {
     speciesQuery.where = { t_species: activeSpecies }
   }
 
   const countyQuery = { model: models.counties }
+  console.log({ countyQuery, speciesQuery, genusQuery })
   models.trees.findAll({
     include: [
       speciesQuery,
