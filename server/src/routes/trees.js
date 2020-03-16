@@ -22,21 +22,25 @@ router.get('/', (req, res, next) => {
   } else if (sortField === 'commonName') {
     order = [models.species, keyMap[sortField], sortOrder]
   }
+  console.log({ activeGenus })
+  console.log({ activeSpecies })
   const genusQuery = { model: models.genus }
-  if (activeGenus !== 'All') {
-    genusQuery.where = { t_genus: activeGenus }
-  }
   const speciesQuery = {
     model: models.species,
     required: true,
     include: [genusQuery],
   }
-  if (activeSpecies !== 'All') {
-    speciesQuery.where = { t_species: activeSpecies }
+  if (activeGenus !== 'All') {
+    speciesQuery.where = { k_genus: activeGenus }
   }
-
+  if (activeSpecies !== 'All') {
+    if (!speciesQuery.where) {
+      speciesQuery.where = {}
+    }
+    speciesQuery.where.id = activeSpecies
+  }
   const countyQuery = { model: models.counties }
-  console.log({ countyQuery, speciesQuery, genusQuery })
+  console.log(speciesQuery)
   models.trees.findAll({
     include: [
       speciesQuery,
@@ -45,15 +49,30 @@ router.get('/', (req, res, next) => {
     order: [order],
     limit: 20,
   }).then(trees => {
+    console.log({ trees })
     res.json({ trees })
+  }).catch(e => {
+    console.log({ efetching: e })
   })
 })
 
 router.get('/filters', (req, res) => {
   models.species.findAll({ include: models.genus }).then(data => {
-    const species = data.map(d => d.t_species)
-    const genera = data.map(d => d.Genus.t_genus)
-    const uniqueGenera = [...new Set(genera)]
+    const species = data.map(d => ({ name: d.t_species, id: d.id }))
+
+    // get unique genera list
+    const genera = data.map(d => ({ name: d.Genus.t_genus, id: d.k_genus }))
+    const uniqueGenera = []
+    const map = new Map()
+    genera.forEach(item => {
+      if (!map.has(item.id)) {
+        map.set(item.id, true) // set any value to Map
+        uniqueGenera.push({
+          id: item.id,
+          name: item.name,
+        })
+      }
+    })
     res.json({ species, genera: uniqueGenera })
   })
 })

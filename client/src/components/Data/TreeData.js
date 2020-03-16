@@ -48,6 +48,7 @@ class TreeData extends Component {
   render() {
     const { children } = this.props
     const { data } = this.state
+    console.log({ data })
     return children({ data })
   }
 }

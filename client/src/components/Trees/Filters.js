@@ -6,13 +6,15 @@ import * as API from '@/api/tree'
 import SearchField from '@/components/Forms/SearchField'
 import './filters.scss'
 
+const initialActiveGenera = { name: 'All', id: 'All' }
+const initialActiveSpecies = { name: 'All', id: 'All' }
 class Filters extends Component {
   state = {
     species: [],
     genera: [],
     filters: {
-      activeSpecies: 'All',
-      activeGenus: 'All',
+      activeSpecies: initialActiveSpecies,
+      activeGenus: initialActiveGenera,
       keyword: '',
     },
 
@@ -22,8 +24,8 @@ class Filters extends Component {
     // get filters
     try {
       const { data: { species, genera } } = await API.getFilterLists()
-      species.unshift('All')
-      genera.unshift('All')
+      species.unshift(initialActiveSpecies)
+      genera.unshift(initialActiveGenera)
       this.setState({
         species, genera, filters: { keyword: '', activeGenus: genera[0], activeSpecies: species[0] },
       })
@@ -34,8 +36,19 @@ class Filters extends Component {
 
   handleSubmit = ({ keyword }) => this.setState({ keyword })
 
+  renderItem = ({ name, id }, { handleClick, modifiers }) => {
+    if (!modifiers.matchesPredicate) {
+      return null
+    }
+    return <div key={id} id={id} onClick={handleClick} tabIndex={0} onKeyPress={handleClick} role="button">{name}</div>
+  }
 
-  renderItem = (name, { handleClick }) => <div key={name} onClick={handleClick} tabIndex={0} onKeyPress={handleClick} role="button">{name}</div>
+  // Just so you dont get confused later...we're filtering the list of filters here...not the actual tree data.
+  // This is when the user types in the search box in one of the dropdown filters
+  filterItems = (query, { name }) => {
+    console.log({ query, name })
+    return name.toLowerCase().indexOf(query.toLowerCase()) >= 0
+  }
 
   selectGenus = (activeGenus) => this.setState(({ filters: prevFilters }) => ({ filters: { ...prevFilters, activeGenus } }))
 
@@ -50,6 +63,7 @@ class Filters extends Component {
       filters,
       filters: { activeGenus, activeSpecies },
     } = this.state
+    console.log(activeGenus)
     return (
       <>
         <div className=" filters">
@@ -60,10 +74,11 @@ class Filters extends Component {
               <div className="filter-dropdown">
                 <Select
                   items={genera}
+                  itemPredicate={this.filterGenus}
                   itemRenderer={this.renderItem}
                   onItemSelect={this.selectGenus}
                 >
-                  <div className="filter-item">{activeGenus}</div>
+                  <div className="filter-item">{activeGenus.name}</div>
                 </Select>
               </div>
             </div>
@@ -75,7 +90,7 @@ class Filters extends Component {
                   itemRenderer={this.renderItem}
                   onItemSelect={this.selectSpecies}
                 >
-                  <div className="filter-item">{activeSpecies}</div>
+                  <div className="filter-item">{activeSpecies.name}</div>
                 </Select>
               </div>
             </div>
@@ -93,7 +108,7 @@ class Filters extends Component {
             )}
           </Formik>
         </div>
-        {children(filters)}
+        {children({ ...filters, activeGenus: activeGenus.id || 'All', activeSpecies: activeSpecies.id || 'All' })}
       </>
     )
   }
