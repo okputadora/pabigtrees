@@ -66,15 +66,21 @@ class Trees extends Component {
     })
   }
 
-  setFilter = (key, value) => {
-    console.log('setting filter')
-    this.setState((prevState) => ({ filters: { ...prevState.filters, [key]: value } }))
-    this.fetchTrees()
+  setFilter = (updatedFilter) => {
+    let shouldUpdateSpeciesGenusLists = false
+    if (updatedFilter.activeSpecies || updatedFilter.activeGenus) {
+      shouldUpdateSpeciesGenusLists = true
+    }
+    this.setState((prevState) => ({ filters: { ...prevState.filters, ...updatedFilter } }), () => {
+      // this.fetchTrees()
+      if (shouldUpdateSpeciesGenusLists) this.fetchSpeciesAndGenusLists()
+    })
   }
 
   fetchSpeciesAndGenusLists = async () => {
     try {
-      const { data: { species, genera } } = await API.getSpeciesAndGenera()
+      const { filters } = this.state
+      const { data: { species, genera } } = await API.getSpeciesAndGenera(filters)
       this.setState({ genera: [initialFilters.activeGenus, ...genera], species: [initialFilters.activeSpecies, ...species] })
     } catch (e) {
       // dosplay error
@@ -85,7 +91,6 @@ class Trees extends Component {
     const {
       data, species, genera, filters, columns,
     } = this.state
-    console.log(data)
     return (
       <div className="tree-data-page">
         <Filters species={species} genera={genera} setFilter={this.setFilter} filters={filters} />

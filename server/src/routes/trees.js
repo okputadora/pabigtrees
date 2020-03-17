@@ -54,10 +54,16 @@ router.get('/', (req, res, next) => {
   })
 })
 
-router.get('/filters', (req, res) => {
-  models.species.findAll({ include: models.genus }).then(data => {
+router.get('/filter-lists', (req, res) => {
+  const { activeSpecies, activeGenus } = req.query
+  const speciesQuery = { include: models.genus }
+  if (activeSpecies && activeSpecies !== 'All') {
+    // speciesQuery.where = { id: activeSpecies }
+  } else if (activeGenus && activeGenus !== 'All') {
+    speciesQuery.where = { k_genus: activeGenus }
+  }
+  models.species.findAll(speciesQuery).then(data => {
     const species = data.map(d => ({ name: d.t_species, id: d.id }))
-
     // get unique genera list
     const genera = data.map(d => ({ name: d.Genus.t_genus, id: d.k_genus }))
     const uniqueGenera = []

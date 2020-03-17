@@ -15,13 +15,13 @@ class Filters extends PureComponent {
     return <div key={id} id={id} onClick={handleClick} tabIndex={0} onKeyPress={handleClick} role="button">{name}</div>
   }
 
-  // Just so you dont get confused later...we're filtering the list of filters here...not the actual tree data.
+  // Just so you dont get confused later...we're filtering the list of species/genus here...not the actual tree data.
   // This is when the user types in the search box in one of the dropdown filters
   filterItems = (query, { name }) => name.toLowerCase().indexOf(query.toLowerCase()) >= 0
 
-  selectGenus = (activeGenus) => this.props.setFilter(({ filters: prevFilters }) => ({ filters: { ...prevFilters, activeGenus } }))
+  selectGenus = (activeGenus) => this.props.setFilter({ activeGenus })
 
-  selectSpecies = (activeSpecies) => this.props.setFilter(({ filters: prevFilters }) => ({ filters: { ...prevFilters, activeSpecies } }))
+  selectSpecies = (activeSpecies) => this.props.setFilter({ activeSpecies })
 
   render() {
     const {
@@ -31,7 +31,7 @@ class Filters extends PureComponent {
     } = this.props
     return (
       <>
-        <div className=" filters">
+        <div className="filters">
           <div>filters</div>
           <div className="dropdowns">
             <div className="filter-dropdown-container">
