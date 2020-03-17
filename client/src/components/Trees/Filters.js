@@ -1,41 +1,13 @@
-import React, { Component } from 'react'
+/* eslint-disable react/destructuring-assignment */
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
 import { Formik, Form } from 'formik'
 import { Select } from '@blueprintjs/select'
 
-import * as API from '@/api/tree'
 import SearchField from '@/components/Forms/SearchField'
 import './filters.scss'
 
-const initialActiveGenera = { name: 'All', id: 'All' }
-const initialActiveSpecies = { name: 'All', id: 'All' }
-class Filters extends Component {
-  state = {
-    species: [],
-    genera: [],
-    filters: {
-      activeSpecies: initialActiveSpecies,
-      activeGenus: initialActiveGenera,
-      keyword: '',
-    },
-
-  }
-
-  async componentDidMount() {
-    // get filters
-    try {
-      const { data: { species, genera } } = await API.getFilterLists()
-      species.unshift(initialActiveSpecies)
-      genera.unshift(initialActiveGenera)
-      this.setState({
-        species, genera, filters: { keyword: '', activeGenus: genera[0], activeSpecies: species[0] },
-      })
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
-  handleSubmit = ({ keyword }) => this.setState({ keyword })
-
+class Filters extends PureComponent {
   renderItem = ({ name, id }, { handleClick, modifiers }) => {
     if (!modifiers.matchesPredicate) {
       return null
@@ -45,25 +17,18 @@ class Filters extends Component {
 
   // Just so you dont get confused later...we're filtering the list of filters here...not the actual tree data.
   // This is when the user types in the search box in one of the dropdown filters
-  filterItems = (query, { name }) => {
-    console.log({ query, name })
-    return name.toLowerCase().indexOf(query.toLowerCase()) >= 0
-  }
+  filterItems = (query, { name }) => name.toLowerCase().indexOf(query.toLowerCase()) >= 0
 
-  selectGenus = (activeGenus) => this.setState(({ filters: prevFilters }) => ({ filters: { ...prevFilters, activeGenus } }))
+  selectGenus = (activeGenus) => this.props.setFilter(({ filters: prevFilters }) => ({ filters: { ...prevFilters, activeGenus } }))
 
-  selectSpecies = (activeSpecies) => this.setState(({ filters: prevFilters }) => ({ filters: { ...prevFilters, activeSpecies } }))
+  selectSpecies = (activeSpecies) => this.props.setFilter(({ filters: prevFilters }) => ({ filters: { ...prevFilters, activeSpecies } }))
 
   render() {
-    const { children } = this.props
     const {
-      keyword,
       genera,
       species,
-      filters,
-      filters: { activeGenus, activeSpecies },
-    } = this.state
-    console.log(activeGenus)
+      filters: { activeGenus, activeSpecies, keyword },
+    } = this.props
     return (
       <>
         <div className=" filters">
@@ -74,7 +39,7 @@ class Filters extends Component {
               <div className="filter-dropdown">
                 <Select
                   items={genera}
-                  itemPredicate={this.filterGenus}
+                  itemPredicate={this.filterItems}
                   itemRenderer={this.renderItem}
                   onItemSelect={this.selectGenus}
                 >
@@ -87,6 +52,7 @@ class Filters extends Component {
               <div className="filter-dropdown">
                 <Select
                   items={species}
+                  itemPredicate={this.filterItems}
                   itemRenderer={this.renderItem}
                   onItemSelect={this.selectSpecies}
                 >
@@ -108,10 +74,25 @@ class Filters extends Component {
             )}
           </Formik>
         </div>
-        {children({ ...filters, activeGenus: activeGenus.id || 'All', activeSpecies: activeSpecies.id || 'All' })}
       </>
     )
   }
+}
+
+const listItemPropType = PropTypes.shape({
+  name: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+}).isRequired
+
+Filters.propTypes = {
+  filters: PropTypes.shape({
+    keyword: PropTypes.string,
+    activeSpecies: listItemPropType,
+    activeGenus: listItemPropType,
+  }).isRequired,
+  species: PropTypes.arrayOf(listItemPropType).isRequired,
+  genera: PropTypes.arrayOf(listItemPropType).isRequired,
+  setFilter: PropTypes.func.isRequired,
 }
 
 export default Filters

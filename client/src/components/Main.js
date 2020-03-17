@@ -7,7 +7,7 @@ import Banner from './Banner'
 import Navbar from './Navbar/Navbar'
 import Login from './Login/Login'
 import Signup from './Signup/Signup'
-import Trees from './Trees/Trees'
+import Trees from './Trees/TreesTable'
 import Nomination from './Nomination/Nomination'
 
 import './main.scss'

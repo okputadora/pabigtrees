@@ -40,7 +40,6 @@ router.get('/', (req, res, next) => {
     speciesQuery.where.id = activeSpecies
   }
   const countyQuery = { model: models.counties }
-  console.log(speciesQuery)
   models.trees.findAll({
     include: [
       speciesQuery,
@@ -49,7 +48,6 @@ router.get('/', (req, res, next) => {
     order: [order],
     limit: 20,
   }).then(trees => {
-    console.log({ trees })
     res.json({ trees })
   }).catch(e => {
     console.log({ efetching: e })
