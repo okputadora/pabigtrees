@@ -6,4 +6,16 @@ export const request = axios.create({
   // @TODO set headers
 })
 
+export const buildTreeQuery = ({
+  activeSpecies,
+  activeGenus,
+  keyword,
+  sortBy,
+  sortOrder,
+}) => {
+  const { id: speciesId } = activeSpecies
+  const { id: genusId } = activeGenus
+  return `/trees?activeSpecies=${speciesId}&activeGenus=${genusId}&sortBy=${sortBy}&sortOrder=${sortOrder}`
+}
+
 export default {}

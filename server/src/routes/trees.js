@@ -55,16 +55,20 @@ router.get('/', (req, res, next) => {
 })
 
 router.get('/filter-lists', (req, res) => {
-  const { activeSpecies, activeGenus } = req.query
+  // const { activeSpecies, activeGenus } = req.query
+  console.log('are we in here???')
   const speciesQuery = { include: models.genus }
-  if (activeSpecies && activeSpecies !== 'All') {
-    // speciesQuery.where = { id: activeSpecies }
-  } else if (activeGenus && activeGenus !== 'All') {
-    speciesQuery.where = { k_genus: activeGenus }
-  }
+  // if (activeGenus && activeGenus !== 'All') {
+  //   speciesQuery.where = { k_genus: activeGenus }
+  // } else if (activeSpecies && activeSpecies !== 'All') {
+  //   speciesQuery.where = { id: activeSpecies }
+  // }
   models.species.findAll(speciesQuery).then(data => {
-    const species = data.map(d => ({ name: d.t_species, id: d.id }))
+    console.log('found all the spcies')
+    const species = data.map(d => ({ name: d.t_species, id: d.id, genusId: d.k_genus }))
     // get unique genera list
+    console.log(species)
+    console.log(species[0])
     const genera = data.map(d => ({ name: d.Genus.t_genus, id: d.k_genus }))
     const uniqueGenera = []
     const map = new Map()

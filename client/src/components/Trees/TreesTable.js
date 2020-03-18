@@ -23,11 +23,11 @@ const initialFilters = {
   activeGenus: { name: 'All', id: 'All' },
   activeSpecies: { name: 'All', id: 'All' },
   keyword: '',
+  sortField: 'points',
+  sortOrder: 'DESC',
 }
 class Trees extends Component {
   state = {
-    sortField: 'points',
-    sortOrder: 'DESC',
     species: [initialFilters.activeSpecies],
     genera: [initialFilters.activeGenus],
     columns: ['county', 'genus', 'species', 'common name', 'points', 'address'],
@@ -43,6 +43,7 @@ class Trees extends Component {
   fetchTrees = async () => {
     const { filters } = this.state
     try {
+      console.log(filters)
       const { data: { trees, filters: newFilters = initialFilters } } = await API.getTrees(filters)
       const formattedData = formatData(trees)
       console.log(formattedData)
@@ -59,21 +60,18 @@ class Trees extends Component {
       const sameField = prevState.sortField === e.target.id
       const sortOrder = sameField && prevState.sortOrder === 'DESC' ? 'ASC' : 'DESC'
       return {
-        ...prevState,
-        sortField: e.target.id,
-        sortOrder,
+        filters: {
+          ...prevState.filters,
+          sortField: e.target.id,
+          sortOrder,
+        },
       }
     })
   }
 
   setFilter = (updatedFilter) => {
-    let shouldUpdateSpeciesGenusLists = false
-    if (updatedFilter.activeSpecies || updatedFilter.activeGenus) {
-      shouldUpdateSpeciesGenusLists = true
-    }
     this.setState((prevState) => ({ filters: { ...prevState.filters, ...updatedFilter } }), () => {
-      // this.fetchTrees()
-      if (shouldUpdateSpeciesGenusLists) this.fetchSpeciesAndGenusLists()
+      this.fetchTrees()
     })
   }
 
@@ -93,7 +91,7 @@ class Trees extends Component {
     } = this.state
     return (
       <div className="tree-data-page">
-        <Filters species={species} genera={genera} setFilter={this.setFilter} filters={filters} />
+        {species.length > 1 && <Filters species={species} genera={genera} setFilter={this.setFilter} filters={filters} />}
         <div className="tree-data-container">
           <table className="table">
             <thead><tr>{columns.map((col) => <th onClick={this.setSortBy} id={col} key={col} className="table-header">{col}</th>)}</tr></thead>

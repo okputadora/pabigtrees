@@ -1,5 +1,6 @@
+/* eslint-disable react/no-did-update-set-state */
 /* eslint-disable react/destructuring-assignment */
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Formik, Form } from 'formik'
 import { Select } from '@blueprintjs/select'
@@ -7,13 +8,31 @@ import { Select } from '@blueprintjs/select'
 import SearchField from '@/components/Forms/SearchField'
 import './filters.scss'
 
-class Filters extends PureComponent {
+class Filters extends Component {
+  state = {
+    filteredSpecies: this.props.species || [],
+  }
+
+  componentDidUpdate({ filters: { activeGenus: prevActiveGenus }, species: prevSpecies }) {
+    const { filters: { activeGenus }, species, setFilter } = this.props
+    if (prevActiveGenus.id !== activeGenus.id) {
+      setFilter({ activeSpecies: { id: 'All', name: 'All' } })
+      if (activeGenus === 'All') {
+        this.setState({ filteredSpecies: species })
+      } else {
+        const updatedSpecies = species.filter((s) => s.genusId === activeGenus.id)
+        this.setState({ filteredSpecies: updatedSpecies })
+      }
+    }
+  }
+
   renderItem = ({ name, id }, { handleClick, modifiers }) => {
     if (!modifiers.matchesPredicate) {
       return null
     }
     return <div key={id} id={id} onClick={handleClick} tabIndex={0} onKeyPress={handleClick} role="button">{name}</div>
   }
+
 
   // Just so you dont get confused later...we're filtering the list of species/genus here...not the actual tree data.
   // This is when the user types in the search box in one of the dropdown filters
@@ -29,6 +48,8 @@ class Filters extends PureComponent {
       species,
       filters: { activeGenus, activeSpecies, keyword },
     } = this.props
+    console.log(species)
+    const { filteredSpecies } = this.state
     return (
       <>
         <div className="filters">
@@ -51,7 +72,7 @@ class Filters extends PureComponent {
               <div>Species</div>
               <div className="filter-dropdown">
                 <Select
-                  items={species}
+                  items={filteredSpecies || species}
                   itemPredicate={this.filterItems}
                   itemRenderer={this.renderItem}
                   onItemSelect={this.selectSpecies}

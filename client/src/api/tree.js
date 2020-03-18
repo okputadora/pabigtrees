@@ -1,28 +1,22 @@
-import { request } from '@/utils/request'
+import { request, buildTreeQuery } from '@/utils/request'
 
 export const getTreeData = (id) => (
   request({
     method: 'GET',
     url: `/trees/${id}`,
-
   })
 )
 
 export const getTrees = (filters) => (
   request({
-    method: 'get',
-    url: '/trees',
-    // params: filters,
+    method: 'GET',
+    url: buildTreeQuery(filters),
   })
 )
 
-export const getSpeciesAndGenera = ({ activeSpecies = {}, activeGenus = {} }) => {
-  const { id: genusId } = activeGenus
-  const { id: speciesId } = activeSpecies
-  return request({
+export const getSpeciesAndGenera = () => (
+  request({
     method: 'GET',
-    url: `/trees/filter-lists/?activeSpecies=${speciesId}&activeGenus=${genusId}`,
+    url: '/trees/filter-lists',
   })
-}
-
-export default {}
+)
