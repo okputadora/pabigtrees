@@ -29,8 +29,6 @@ router.get('/', (req, res, next) => {
   const speciesQuery = {
     model: models.species,
     required: true,
-    // limit: pageSize,
-    // offset: parseInt(page, 10) * parseInt(pageSize, 10),
     include: [genusQuery],
   }
   if (activeGenus !== 'All') {
@@ -49,7 +47,8 @@ router.get('/', (req, res, next) => {
       countyQuery,
     ],
     order: [order],
-    limit: 20,
+    limit: parseInt(pageSize, 10),
+    offset: (parseInt(page) - 1) * parseInt(pageSize, 10),
   }).then(trees => {
     res.json({ trees })
   }).catch(e => {
