@@ -1,5 +1,4 @@
 import { Router } from 'express'
-import { Op } from 'sequelize'
 
 import models from '../models'
 import { keyMap } from '../utils'
@@ -12,8 +11,11 @@ router.get('/', (req, res, next) => {
     sortOrder = 'DESC',
     activeGenus = 'All',
     activeSpecies = 'All',
+    page = 1,
+    pageSize = 20,
     keyword,
   } = req.query
+  console.log({ sortField, sortOrder })
   let order = [keyMap[sortField], sortOrder]
   if (sortField === 'genus') {
     order = [models.species, { model: models.genus, as: 't_genus' }, 't_genus', sortOrder]
@@ -22,12 +24,13 @@ router.get('/', (req, res, next) => {
   } else if (sortField === 'commonName') {
     order = [models.species, keyMap[sortField], sortOrder]
   }
-  console.log({ activeGenus })
-  console.log({ activeSpecies })
   const genusQuery = { model: models.genus }
+  console.log(page, pageSize)
   const speciesQuery = {
     model: models.species,
     required: true,
+    // limit: pageSize,
+    // offset: parseInt(page, 10) * parseInt(pageSize, 10),
     include: [genusQuery],
   }
   if (activeGenus !== 'All') {
@@ -55,20 +58,10 @@ router.get('/', (req, res, next) => {
 })
 
 router.get('/filter-lists', (req, res) => {
-  // const { activeSpecies, activeGenus } = req.query
-  console.log('are we in here???')
   const speciesQuery = { include: models.genus }
-  // if (activeGenus && activeGenus !== 'All') {
-  //   speciesQuery.where = { k_genus: activeGenus }
-  // } else if (activeSpecies && activeSpecies !== 'All') {
-  //   speciesQuery.where = { id: activeSpecies }
-  // }
   models.species.findAll(speciesQuery).then(data => {
-    console.log('found all the spcies')
     const species = data.map(d => ({ name: d.t_species, id: d.id, genusId: d.k_genus }))
     // get unique genera list
-    console.log(species)
-    console.log(species[0])
     const genera = data.map(d => ({ name: d.Genus.t_genus, id: d.k_genus }))
     const uniqueGenera = []
     const map = new Map()

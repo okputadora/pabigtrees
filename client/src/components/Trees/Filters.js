@@ -13,7 +13,7 @@ class Filters extends Component {
     filteredSpecies: this.props.species || [],
   }
 
-  componentDidUpdate({ filters: { activeGenus: prevActiveGenus }, species: prevSpecies }) {
+  componentDidUpdate({ filters: { activeGenus: prevActiveGenus } }) {
     const { filters: { activeGenus }, species, setFilter } = this.props
     if (prevActiveGenus.id !== activeGenus.id) {
       setFilter({ activeSpecies: { id: 'All', name: 'All' } })
@@ -48,7 +48,6 @@ class Filters extends Component {
       species,
       filters: { activeGenus, activeSpecies, keyword },
     } = this.props
-    console.log(species)
     const { filteredSpecies } = this.state
     return (
       <>

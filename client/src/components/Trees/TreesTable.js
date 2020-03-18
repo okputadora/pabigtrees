@@ -25,6 +25,8 @@ const initialFilters = {
   keyword: '',
   sortField: 'points',
   sortOrder: 'DESC',
+  page: 1,
+  pageSize: 20,
 }
 class Trees extends Component {
   state = {
@@ -43,11 +45,8 @@ class Trees extends Component {
   fetchTrees = async () => {
     const { filters } = this.state
     try {
-      console.log(filters)
       const { data: { trees, filters: newFilters = initialFilters } } = await API.getTrees(filters)
       const formattedData = formatData(trees)
-      console.log(formattedData)
-      console.log(Array.isArray(formattedData))
       this.setState({ data: formattedData })
     } catch (e) {
       console.log(e)
@@ -57,8 +56,8 @@ class Trees extends Component {
   setSortBy = (e) => {
     e.persist()
     this.setState((prevState) => {
-      const sameField = prevState.sortField === e.target.id
-      const sortOrder = sameField && prevState.sortOrder === 'DESC' ? 'ASC' : 'DESC'
+      const sameField = prevState.filters.sortField.toLowerCase() === e.target.id.toLowerCase()
+      const sortOrder = sameField && prevState.filters.sortOrder === 'DESC' ? 'ASC' : 'DESC'
       return {
         filters: {
           ...prevState.filters,
@@ -66,7 +65,7 @@ class Trees extends Component {
           sortOrder,
         },
       }
-    })
+    }, () => this.fetchTrees())
   }
 
   setFilter = (updatedFilter) => {
@@ -83,6 +82,10 @@ class Trees extends Component {
     } catch (e) {
       // dosplay error
     }
+  }
+
+  getNextPage = () => {
+    this.setState((prevState) => ({ filters: { ...prevState.filters, page: prevState.filters.page + 1 } }), this.fetchTrees)
   }
 
   render() {
@@ -108,6 +111,7 @@ class Trees extends Component {
             </tbody>
           </table>
         </div>
+        <button onClick={this.getNextPage}>Next</button>
       </div>
     )
   }
