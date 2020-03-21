@@ -35,7 +35,7 @@ const formatData = (rawData) => rawData.map((tree) => (
     measuringCrew: tree.t_measuring_crew,
     originalNominator: tree.t_original_nominator,
     comments: tree.t_comments,
-    measuringTechnique: tree.k_techniques,
+    measuringTechnique: tree.k_technique,
     yearNominated: tree.d_nominated,
     yearLastMeasured: tree.d_last_measured,
   }
@@ -112,7 +112,10 @@ class Trees extends Component {
   }
 
   goToTreePage = (id) => {
-    this.setState({ selectedTreeId: id })
+    const { history, location } = this.props
+    console.log({ location })
+    history.push(`${location.pathname}/${id}`)
+    // this.setState({ selectedTreeId: id })
   }
 
   render() {
@@ -120,8 +123,10 @@ class Trees extends Component {
       tableData,
       data, species, genera, filters, columns, selectedTreeId,
     } = this.state
+    const { match: { params: { id } } } = this.props
+    console.log(this.props)
     return (
-      !selectedTreeId ? (
+      !id ? (
         <div className="tree-data-page">
           {species.length > 1 && <Filters species={species} genera={genera} setFilter={this.setFilter} filters={filters} />}
           <div className="tree-data-container">
@@ -154,7 +159,7 @@ class Trees extends Component {
             <button onClick={this.getNextPage}>Next</button>
           </div>
         </div>
-      ) : <Tree tree={data.filter((t) => t.id === selectedTreeId)[0]} />
+      ) : <Tree tree={data.filter((t) => t.id === id)[0]} />
     )
   }
 }

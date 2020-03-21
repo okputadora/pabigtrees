@@ -24,12 +24,12 @@ const Main = () => (
           <Route path="/signup" component={Signup} />
 
           <Route
-            path="/tree-listings"
+            path="/tree-listings/:id"
             component={Trees}
           />
           <Route
-            path="/tree/:id"
-            component={Tree}
+            path="/tree-listings"
+            component={Trees}
           />
           {/* <Route path="/measurement" component={Page} /> */}
           <Route
