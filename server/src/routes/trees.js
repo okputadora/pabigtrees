@@ -57,7 +57,7 @@ router.get('/', (req, res, next) => {
 
 router.get('/image/:id', (req, res) => {
   const { id } = req.params
-  models.treeImages.findAll({ where: { k_tree: id } }).then((treeImages) => {
+  models.treeImages.findAll({ where: { k_tree: id, f_active: 1 } }).then((treeImages) => {
     console.log(treeImages)
     res.json(treeImages)
   }).catch(e => {

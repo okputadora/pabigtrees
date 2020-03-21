@@ -7,7 +7,7 @@ import Filters from './Filters'
 import './trees.scss'
 
 // @TODO Move this to utils
-const formatData = (rawData) => rawData.map((row) => (
+const formatTableData = (rawData) => rawData.map((row) => (
   {
     county: row.County ? row.County.county : null,
     genus: row.Species && row.Species.Genus && row.Species.Genus.t_genus,
@@ -16,6 +16,28 @@ const formatData = (rawData) => rawData.map((row) => (
     points: row.i_points,
     address: row.t_address,
     id: row.id,
+  }
+))
+
+const formatData = (rawData) => rawData.map((tree) => (
+  {
+    county: tree.County ? tree.County.county : null,
+    genus: tree.Species && tree.Species.Genus && tree.Species.Genus.t_genus,
+    species: tree.Species && tree.Species.t_species,
+    commonName: tree.Species && tree.Species.t_common,
+    points: tree.i_points,
+    address: tree.t_address,
+    id: tree.id,
+    circumference: tree.i_circum_inchs,
+    isMultiStemmed: tree.f_multistemmed === 1,
+    spread: tree.i_spread_feet,
+    height: tree.i_height_feet,
+    measuringCrew: tree.t_measuring_crew,
+    originalNominator: tree.t_original_nominator,
+    comments: tree.t_comments,
+    measuringTechnique: tree.k_techniques,
+    yearNominated: tree.d_nominated,
+    yearLastMeasured: tree.d_last_measured,
   }
 ))
 
@@ -34,6 +56,7 @@ class Trees extends Component {
     genera: [initialFilters.activeGenus],
     columns: ['county', 'genus', 'species', 'common name', 'points', 'address'],
     data: null,
+    tableData: null,
     filters: initialFilters,
     selectedTreeId: null,
   }
@@ -47,8 +70,7 @@ class Trees extends Component {
     const { filters } = this.state
     try {
       const { data: { trees } } = await API.getTrees(filters)
-      const formattedData = formatData(trees)
-      this.setState({ data: formattedData })
+      this.setState({ tableData: formatTableData(trees), data: formatData(trees) })
     } catch (e) {
       alert('Something went wrong! Try again in a few seconds')
     }
@@ -95,6 +117,7 @@ class Trees extends Component {
 
   render() {
     const {
+      tableData,
       data, species, genera, filters, columns, selectedTreeId,
     } = this.state
     return (
@@ -105,7 +128,7 @@ class Trees extends Component {
             <table className="table">
               <thead><tr>{columns.map((col) => <th onClick={this.setSortBy} id={col} key={col} className="table-header">{col}</th>)}</tr></thead>
               <tbody>
-                {data ? data.map((row, i) => (
+                {tableData ? tableData.map((row, i) => (
                   <tr onClick={() => this.goToTreePage(row.id)} className={`row ${i % 2 === 0 ? 'even' : 'odd'}`} key={row.id}>
                     {Object.keys(row).filter((k) => k !== 'id').map((key) => <td key={`${row.id}=${row[key]}`} className="cell">{row[key]}</td>)}
                   </tr>
