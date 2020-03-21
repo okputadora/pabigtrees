@@ -1,9 +1,9 @@
 import { request, buildTreeQuery } from '@/utils/request'
 
-export const getTreeData = (id) => (
+export const getTreeImages = (id) => (
   request({
     method: 'GET',
-    url: `/trees/${id}`,
+    url: `/trees/image/${id}`,
   })
 )
 

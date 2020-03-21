@@ -15,7 +15,6 @@ router.get('/', (req, res, next) => {
     pageSize = 20,
     keyword,
   } = req.query
-  console.log({ sortField, sortOrder })
   let order = [keyMap[sortField], sortOrder]
   if (sortField === 'genus') {
     order = [models.species, { model: models.genus, as: 't_genus' }, 't_genus', sortOrder]
@@ -25,7 +24,6 @@ router.get('/', (req, res, next) => {
     order = [models.species, keyMap[sortField], sortOrder]
   }
   const genusQuery = { model: models.genus }
-  console.log(page, pageSize)
   const speciesQuery = {
     model: models.species,
     required: true,
@@ -41,6 +39,7 @@ router.get('/', (req, res, next) => {
     speciesQuery.where.id = activeSpecies
   }
   const countyQuery = { model: models.counties }
+  // @TODO validate there requests
   models.trees.findAll({
     include: [
       speciesQuery,
@@ -48,11 +47,22 @@ router.get('/', (req, res, next) => {
     ],
     order: [order],
     limit: parseInt(pageSize, 10),
-    offset: (parseInt(page) - 1) * parseInt(pageSize, 10),
+    offset: (parseInt(page, 10) - 1) * parseInt(pageSize, 10),
   }).then(trees => {
     res.json({ trees })
   }).catch(e => {
     console.log({ efetching: e })
+  })
+})
+
+router.get('/image/:id', (req, res) => {
+  const { id } = req.params
+  models.treeImages.findAll({ where: { k_tree: id } }).then((treeImages) => {
+    console.log(treeImages)
+    res.json(treeImages)
+  }).catch(e => {
+    console.log(e)
+    res.status(500).send()
   })
 })
 

@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react'
 
-// import TreeData from '@/components/Data/TreeData'
+import Tree from './Tree'
 import * as API from '@/api/tree'
 import Filters from './Filters'
 import './trees.scss'
@@ -35,6 +35,7 @@ class Trees extends Component {
     columns: ['county', 'genus', 'species', 'common name', 'points', 'address'],
     data: null,
     filters: initialFilters,
+    selectedTreeId: null,
   }
 
   componentDidMount() {
@@ -45,11 +46,11 @@ class Trees extends Component {
   fetchTrees = async () => {
     const { filters } = this.state
     try {
-      const { data: { trees, filters: newFilters = initialFilters } } = await API.getTrees(filters)
+      const { data: { trees } } = await API.getTrees(filters)
       const formattedData = formatData(trees)
       this.setState({ data: formattedData })
     } catch (e) {
-      console.log(e)
+      alert('Something went wrong! Try again in a few seconds')
     }
   }
 
@@ -69,7 +70,7 @@ class Trees extends Component {
   }
 
   setFilter = (updatedFilter) => {
-    this.setState((prevState) => ({ filters: { ...prevState.filters, ...updatedFilter } }), () => {
+    this.setState((prevState) => ({ filters: { ...prevState.filters, ...updatedFilter, page: 1 } }), () => {
       this.fetchTrees()
     })
   }
@@ -88,31 +89,49 @@ class Trees extends Component {
     this.setState((prevState) => ({ filters: { ...prevState.filters, page: prevState.filters.page + 1 } }), this.fetchTrees)
   }
 
+  goToTreePage = (id) => {
+    this.setState({ selectedTreeId: id })
+  }
+
   render() {
     const {
-      data, species, genera, filters, columns,
+      data, species, genera, filters, columns, selectedTreeId,
     } = this.state
     return (
-      <div className="tree-data-page">
-        {species.length > 1 && <Filters species={species} genera={genera} setFilter={this.setFilter} filters={filters} />}
-        <div className="tree-data-container">
-          <table className="table">
-            <thead><tr>{columns.map((col) => <th onClick={this.setSortBy} id={col} key={col} className="table-header">{col}</th>)}</tr></thead>
-            <tbody>
-              {data ? data.map((row, i) => (
-                <tr className={`row ${i % 2 === 0 ? 'even' : 'odd'}`} key={row.id}>
-                  {Object.keys(row).filter((k) => k !== 'id').map((key) => <td key={`${row.id}=${row[key]}`} className="cell">{row[key]}</td>)}
-                </tr>
-              )) : new Array(20).fill('ROW').map((row, i) => (
-                <tr key={i} className={`row ${i % 2 === 0 ? 'even' : 'odd'}`}>
-                  {new Array(7).fill('CELL').map((key, x) => <td key={`${i}${x}`} className="cell">{row[key]}</td>)}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      !selectedTreeId ? (
+        <div className="tree-data-page">
+          {species.length > 1 && <Filters species={species} genera={genera} setFilter={this.setFilter} filters={filters} />}
+          <div className="tree-data-container">
+            <table className="table">
+              <thead><tr>{columns.map((col) => <th onClick={this.setSortBy} id={col} key={col} className="table-header">{col}</th>)}</tr></thead>
+              <tbody>
+                {data ? data.map((row, i) => (
+                  <tr onClick={() => this.goToTreePage(row.id)} className={`row ${i % 2 === 0 ? 'even' : 'odd'}`} key={row.id}>
+                    {Object.keys(row).filter((k) => k !== 'id').map((key) => <td key={`${row.id}=${row[key]}`} className="cell">{row[key]}</td>)}
+                  </tr>
+                )) : new Array(20).fill('ROW').map((row, i) => (
+                  <tr key={i} className={`row ${i % 2 === 0 ? 'even' : 'odd'}`}>
+                    {new Array(7).fill('CELL').map((key, x) => <td key={`${i}${x}`} className="cell">{row[key]}</td>)}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="tree-data-pagination">
+            {filters.page > 1 && <button onClick={this.getPrevPage}>Prev</button>}
+            {new Array(10).fill().map((_, i) => (
+              <button
+                key={filters.page + i}
+                onClick={this.getPage}
+                id={filters.page + i}
+              >
+                {filters.page + i}
+              </button>
+            ))}
+            <button onClick={this.getNextPage}>Next</button>
+          </div>
         </div>
-        <button onClick={this.getNextPage}>Next</button>
-      </div>
+      ) : <Tree tree={data.filter((t) => t.id === selectedTreeId)[0]} />
     )
   }
 }

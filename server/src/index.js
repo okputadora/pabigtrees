@@ -38,7 +38,6 @@ app.use(cors(corsOptions))
 // app.use((req, res, next) => { console.log('is the request making it here?'); next() })
 // app.use('/login', login)
 // app.use('/logout', logout)
-console.log(__dirname)
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
 
 app.use('/trees', trees)

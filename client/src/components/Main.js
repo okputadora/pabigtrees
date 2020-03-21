@@ -8,6 +8,7 @@ import Navbar from './Navbar/Navbar'
 import Login from './Login/Login'
 import Signup from './Signup/Signup'
 import Trees from './Trees/TreesTable'
+import Tree from './Trees/Tree'
 import Nomination from './Nomination/Nomination'
 
 import './main.scss'
@@ -25,6 +26,10 @@ const Main = () => (
           <Route
             path="/tree-listings"
             component={Trees}
+          />
+          <Route
+            path="/tree/:id"
+            component={Tree}
           />
           {/* <Route path="/measurement" component={Page} /> */}
           <Route
