@@ -25,7 +25,12 @@
 
 .row { 
   border-bottom: 1px solid black;
-  height: calc(600 / 20)
+  height: calc(600 / 20);
+  cursor: pointer;
+}
+
+.row:hover {
+  color: rgb(22, 187, 22);
 }
 
 .cell {

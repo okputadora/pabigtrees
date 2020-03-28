@@ -60,7 +60,7 @@ class Trees extends Component {
     data: null,
     tableData: null,
     filters: initialFilters,
-    isShowingMap: true,
+    isShowingMap: false,
   }
 
   componentDidMount() {
@@ -152,7 +152,18 @@ class Trees extends Component {
               <iframe title="map" src="https://www.google.com/maps/d/u/0/embed?mid=1YN9lv0OQQKbhT4QQEG2kiV7L0rHjsU6j&z=7" width="100%" height="600" />
             </div>
           )
-            : <Table columns={columns} tableData={tableData} filters={filters} setPage={this.setPage} setNextPage={this.setNextPage} setPrevPage={this.setPrevPage} />}
+            : (
+              <Table
+                columns={columns}
+                tableData={tableData}
+                filters={filters}
+                setPage={this.setPage}
+                setNextPage={this.setNextPage}
+                setPrevPage={this.setPrevPage}
+                goToTreePage={this.goToTreePage}
+                setSortBy={this.setSortBy}
+              />
+            )}
         </div>
       ) : <Tree tree={data.filter((t) => t.id === id)[0]} isAdmin={isAdmin} />
     )
