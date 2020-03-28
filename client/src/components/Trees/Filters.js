@@ -47,6 +47,8 @@ class Filters extends Component {
       genera,
       species,
       filters: { activeGenus, activeSpecies, keyword },
+      isShowingMap,
+      toggleShowMap,
     } = this.props
     const { filteredSpecies } = this.state
     return (
@@ -86,11 +88,7 @@ class Filters extends Component {
             enableReinitialize
             onSubmit={this.handleSubmit}
           >
-            {() => (
-              <Form>
-                <SearchField name="keyword" />
-                <button type="submit">Search</button>
-              </Form>
+            {() => (<button type="button" onClick={toggleShowMap}>{isShowingMap ? <i className="fas fa-table" /> : <i className="fas fa-map-marked-alt" />}</button>
             )}
           </Formik>
         </div>

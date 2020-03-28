@@ -1,9 +1,11 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 import Tree from './Tree'
 import * as API from '@/api/tree'
 import Filters from './Filters'
+import Table from './Table'
 import './trees.scss'
 
 // @TODO Move this to utils
@@ -58,7 +60,7 @@ class Trees extends Component {
     data: null,
     tableData: null,
     filters: initialFilters,
-    selectedTreeId: null,
+    isShowingMap: true,
   }
 
   componentDidMount() {
@@ -118,50 +120,51 @@ class Trees extends Component {
     // this.setState({ selectedTreeId: id })
   }
 
+  toggleShowMap = () => this.setState((prevState) => ({ isShowingMap: !prevState.isShowingMap }))
+
   render() {
     const {
       tableData,
-      data, species, genera, filters, columns, selectedTreeId,
+      isAdmin,
+      data,
+      species,
+      genera,
+      filters,
+      columns,
+      isShowingMap,
     } = this.state
     const { match: { params: { id } } } = this.props
-    console.log(this.props)
     return (
       !id ? (
         <div className="tree-data-page">
-          {species.length > 1 && <Filters species={species} genera={genera} setFilter={this.setFilter} filters={filters} />}
-          <div className="tree-data-container">
-            <table className="table">
-              <thead><tr>{columns.map((col) => <th onClick={this.setSortBy} id={col} key={col} className="table-header">{col}</th>)}</tr></thead>
-              <tbody>
-                {tableData ? tableData.map((row, i) => (
-                  <tr onClick={() => this.goToTreePage(row.id)} className={`row ${i % 2 === 0 ? 'even' : 'odd'}`} key={row.id}>
-                    {Object.keys(row).filter((k) => k !== 'id').map((key) => <td key={`${row.id}=${row[key]}`} className="cell">{row[key]}</td>)}
-                  </tr>
-                )) : new Array(20).fill('ROW').map((row, i) => (
-                  <tr key={i} className={`row ${i % 2 === 0 ? 'even' : 'odd'}`}>
-                    {new Array(7).fill('CELL').map((key, x) => <td key={`${i}${x}`} className="cell">{row[key]}</td>)}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="tree-data-pagination">
-            {filters.page > 1 && <button onClick={this.getPrevPage}>Prev</button>}
-            {new Array(10).fill().map((_, i) => (
-              <button
-                key={filters.page + i}
-                onClick={this.getPage}
-                id={filters.page + i}
-              >
-                {filters.page + i}
-              </button>
-            ))}
-            <button onClick={this.getNextPage}>Next</button>
-          </div>
+          {species.length > 1 && (
+            <Filters
+              species={species}
+              genera={genera}
+              setFilter={this.setFilter}
+              filters={filters}
+              toggleShowMap={this.toggleShowMap}
+              isShowingMap={isShowingMap}
+            />
+          )}
+          {isShowingMap ? (
+            <div className="map-container">
+              <iframe title="map" src="https://www.google.com/maps/d/u/0/embed?mid=1YN9lv0OQQKbhT4QQEG2kiV7L0rHjsU6j&z=7" width="100%" height="600" />
+            </div>
+          )
+            : <Table columns={columns} tableData={tableData} filters={filters} setPage={this.setPage} setNextPage={this.setNextPage} setPrevPage={this.setPrevPage} />}
         </div>
-      ) : <Tree tree={data.filter((t) => t.id === id)[0]} />
+      ) : <Tree tree={data.filter((t) => t.id === id)[0]} isAdmin={isAdmin} />
     )
   }
+}
+
+Trees.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
 }
 
 export default Trees

@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import TreesTable from '@/components/Trees/TreesTable'
 
 class DatabaseManager extends Component {
   render() {
     return (
-      <div>Database manager</div>
+      <TreesTable isAdmin {...this.props} />
     )
   }
 }

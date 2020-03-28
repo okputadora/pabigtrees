@@ -87,4 +87,22 @@ router.get('/filter-lists', (req, res) => {
   })
 })
 
+router.get('/admin/:id', (req, res) => {
+  console.log('we in here!!!, ', req.params.id)
+  const genusQuery = { model: models.genus }
+  const speciesQuery = {
+    model: models.species,
+    required: true,
+    include: [genusQuery],
+  }
+  const countyQuery = { model: models.counties }
+  models.trees.findByPk(req.params.id, { include: [speciesQuery, countyQuery] }).then(tree => {
+    console.log(tree)
+    res.json(tree)
+  }).catch(e => {
+    console.log({ e })
+    res.status(500).send()
+  })
+})
+
 export default router

@@ -20,3 +20,10 @@ export const getSpeciesAndGenera = () => (
     url: '/trees/filter-lists',
   })
 )
+
+export const getTreeForAdmin = (id) => (
+  request({
+    method: 'GET',
+    url: `/trees/admin/${id}`,
+  })
+)
