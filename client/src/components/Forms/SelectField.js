@@ -6,9 +6,13 @@ import { useFormikContext } from 'formik'
 import './inputField.scss'
 
 const SelectField = ({
-  name: fieldName, items, handleSelect, labelProps,
+  activeItem,
+  name: fieldName,
+  items,
+  handleSelect,
+  labelProps,
 }) => {
-  const [activeItem, setActiveItem] = useState({})
+  // const [activeItem, setActiveItem] = useState(activeItemProp)
   const { setFieldValue } = useFormikContext()
   const renderItem = useCallback(({ name, id }, { handleClick, modifiers }) => {
     if (!modifiers.matchesPredicate) {
@@ -22,11 +26,11 @@ const SelectField = ({
   const filterItems = (query, { name }) => name.toLowerCase().indexOf(query.toLowerCase()) >= 0
 
   const selectItem = (item) => {
-    setActiveItem(item)
-    setFieldValue(fieldName)(item.id)
+    // setActiveItem(item)
+    // console.log(setFieldValue(fieldName).toString())
+    setFieldValue(fieldName, item.id)
     if (handleSelect) handleSelect(item)
   }
-  console.log(items)
   return (
     <div className="inputField-container">
       <div className="inputField-label">{labelProps.label}</div>
@@ -37,7 +41,7 @@ const SelectField = ({
         onItemSelect={selectItem}
         className="inputField-input select-field"
       >
-        <div className="select-activeItem">{activeItem.name || `Click to select a ${fieldName}`}</div>
+        <div className="select-activeItem">{activeItem.name || `Click to select a ${labelProps.label}`}</div>
       </Select>
     </div>
   )
@@ -45,14 +49,22 @@ const SelectField = ({
 
 SelectField.defaultProps = {
   handleSelect: null,
+  activeItem: {},
 }
 
 SelectField.propTypes = {
+  activeItem: PropTypes.shape({
+    name: PropTypes.string,
+    id: PropTypes.string,
+  }),
   items: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
   })).isRequired,
   handleSelect: PropTypes.func,
+  labelProps: PropTypes.shape({
+    label: PropTypes.string.isRequired,
+  }).isRequired,
   name: PropTypes.string.isRequired,
 }
 

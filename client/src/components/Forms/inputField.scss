@@ -21,6 +21,7 @@
   flex-grow: 1;
   height: 35px;
   background-color: white;
+  width: auto;
 }
 
 .inputField-label {
@@ -40,12 +41,12 @@
 }
 
 .select-activeItem {
-  
+  width: auto;
 }
 
 /// blueprint override
 .bp3-popover-wrapper {
-  width: auto;
+  // width: 100%;
 }
 
 .bp3-popover-target {
@@ -54,6 +55,7 @@
   align-items: center;
   justify-content: center;
   height: 100%;
+  width: 100%;
 }
 
 .bp3-popover-target > div {

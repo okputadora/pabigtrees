@@ -117,12 +117,17 @@ const UserNomination = ({ images, setImages }) => {
 
 const Nomination = ({ initValues, isAdminReview }) => {
   const [images, setImages] = useState([])
-  const [{ species, genera }, setTreeLists] = useState({})
+  const [{ species, genera, commonNames }, setTreeLists] = useState({})
+  const [{ filteredSpecies, filteredCommonNames }, setFilteredTreeLists] = useState({})
+  const [activeSpecies, setActiveSpecies] = useState({})
+  const [activeGenus, setActiveGenus] = useState({})
+  const [activeCommonName, setActiveCommonName] = useState({})
 
   useEffect(() => {
     (async () => {
-      const { data: { species: speciesList, genera: generaList, commonNames } } = await getSpeciesAndGenera()
-      setTreeLists({ species: speciesList, genera: generaList })
+      const { data: { species: speciesList, genera: generaList, commonNames: commonList } } = await getSpeciesAndGenera()
+      setTreeLists({ species: speciesList, genera: generaList, commonNames: commonList })
+      setFilteredTreeLists({ filteredSpecies: speciesList, filteredCommonNames: commonList })
     })()
   }, [])
 
@@ -136,7 +141,29 @@ const Nomination = ({ initValues, isAdminReview }) => {
       alert(err)
     }
   }, [images])
-  console.log({ species })
+
+  const handleSelect = useCallback((itemType) => (itemSelected) => {
+    if (itemType === 'commonName') {
+      const newActiveSpecies = species.filter((s) => s.id === itemSelected.id)[0]
+      const newActiveGenus = genera.filter((g) => g.id === itemSelected.genusId)[0]
+      setActiveSpecies(newActiveSpecies)
+      setActiveGenus(newActiveGenus)
+      setActiveCommonName(itemSelected)
+    } else if (itemType === 'genus') {
+      setFilteredTreeLists({
+        filteredSpecies: species.filter((s) => s.genusId === itemSelected.id),
+        filteredCommonNames: commonNames.filter((c) => c.genusId === itemSelected.id),
+      })
+      setActiveGenus(itemSelected)
+    } else if (itemType === 'species') {
+      const newActiveCommonName = commonNames.filter((s) => s.id === itemSelected.id)[0]
+      const newActiveGenus = genera.filter((g) => g.id === itemSelected.genusId)[0]
+      setActiveSpecies(itemSelected)
+      setActiveGenus(newActiveGenus)
+      setActiveCommonName(newActiveCommonName)
+    }
+  }, [species, genera, commonNames])
+  console.log(activeSpecies)
   return (
     <div className="nomination-container">
       <Formik
@@ -145,18 +172,30 @@ const Nomination = ({ initValues, isAdminReview }) => {
       >
         {() => (
           <Form>
-            <InputField
-              name="commonName"
-              labelProps={{ label: 'Common Name' }}
-            />
-            <InputField
-              name="genus"
-              labelProps={{ label: 'Genus' }}
-            />
-            {species && (
+            {filteredCommonNames && (
+              <SelectField
+                items={filteredCommonNames}
+                handleSelect={handleSelect('commonName')}
+                activeItem={activeCommonName}
+                name="commonName"
+                labelProps={{ label: 'Common Name' }}
+              />
+            )}
+            {genera && (
+              <SelectField
+                name="genus"
+                handleSelect={handleSelect('genus')}
+                activeItem={activeGenus}
+                items={genera}
+                labelProps={{ label: 'Genus' }}
+              />
+            )}
+            {filteredSpecies && (
               <SelectField
                 name="species"
-                items={species}
+                handleSelect={handleSelect('species')}
+                activeItem={activeSpecies}
+                items={filteredSpecies}
                 labelProps={{ label: 'Species' }}
               />
             )}
