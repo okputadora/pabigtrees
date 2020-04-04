@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Formik, useFormikContext } from 'formik'
 import { useDropzone } from 'react-dropzone'
@@ -8,8 +8,11 @@ import classNames from 'classnames'
 import {
   nominateTree, uploadFiles, confirmNomination, removeImage,
 } from '@/api/nomination'
+
+import { getSpeciesAndGenera } from '@/api/tree'
 import Form from '@/components/Forms/Form'
 import InputField from '@/components/Forms/InputField'
+import SelectField from '@/components/Forms/SelectField'
 import { initialValues } from './formData'
 
 import './nomination.scss'
@@ -114,6 +117,15 @@ const UserNomination = ({ images, setImages }) => {
 
 const Nomination = ({ initValues, isAdminReview }) => {
   const [images, setImages] = useState([])
+  const [{ species, genera }, setTreeLists] = useState({})
+
+  useEffect(() => {
+    (async () => {
+      const { data: { species: speciesList, genera: generaList, commonNames } } = await getSpeciesAndGenera()
+      setTreeLists({ species: speciesList, genera: generaList })
+    })()
+  }, [])
+
   const handleSubmit = useCallback(async (values, { resetForm }) => {
     try {
       const formValues = { ...values, imagePaths: images.map((img) => img.imagePath) }
@@ -124,6 +136,7 @@ const Nomination = ({ initValues, isAdminReview }) => {
       alert(err)
     }
   }, [images])
+  console.log({ species })
   return (
     <div className="nomination-container">
       <Formik
@@ -140,10 +153,13 @@ const Nomination = ({ initValues, isAdminReview }) => {
               name="genus"
               labelProps={{ label: 'Genus' }}
             />
-            <InputField
-              name="species"
-              labelProps={{ label: 'Species' }}
-            />
+            {species && (
+              <SelectField
+                name="species"
+                items={species}
+                labelProps={{ label: 'Species' }}
+              />
+            )}
             <InputField
               name="county"
               labelProps={{ label: 'County' }}

@@ -70,14 +70,24 @@ router.post('/', async (req, res) => {
 // nomination approval
 router.put('/approval/:id', async (req, res) => {
   try {
-    const nomination = await Nomination.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true })
-    console.log({ nomination })
+    // const nomination = await Nomination.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true })
+    // console.log({ nomination })
     // create new tree entry
-    const tree = db.trees.build(nominationToTreeMap(nomination))
-    // create tree images
+    // look up species and and genus ids ... if they dont exist create a new one
+    const { species, genus } = req.body
+    console.log(species, genus)
+    const spec = await db.species.findAll({ where: { t_species: species.toLowerCase() }, include: { model: db.genus } })
+    if (spec.length === 0) {
+      // we have to create a new species
+    }
 
-    await tree.save()
-    res.json({ success: true, tree })
+    // format nomination
+    // const tree = db.trees.build(nominationToTreeMap(nomination))
+    // create tree images
+    // tree.points = 600
+    // tree.id = `TR${Date.now()}` // not a great way to generate ids I know but this matches the dataset we inherited
+    // await tree.save()
+    res.json({ success: true, spec })
   } catch (err) {
     console.log(err)
     res.status(500).json({ error: err })

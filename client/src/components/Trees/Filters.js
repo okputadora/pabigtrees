@@ -111,6 +111,8 @@ Filters.propTypes = {
   species: PropTypes.arrayOf(listItemPropType).isRequired,
   genera: PropTypes.arrayOf(listItemPropType).isRequired,
   setFilter: PropTypes.func.isRequired,
+  isShowingMap: PropTypes.bool.isRequired,
+  toggleShowMap: PropTypes.func.isRequired,
 }
 
 export default Filters

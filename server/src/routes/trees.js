@@ -88,7 +88,6 @@ router.get('/filter-lists', (req, res) => {
 })
 
 router.get('/admin/:id', (req, res) => {
-  console.log('we in here!!!, ', req.params.id)
   const genusQuery = { model: models.genus }
   const speciesQuery = {
     model: models.species,

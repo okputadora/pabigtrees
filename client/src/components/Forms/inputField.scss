@@ -20,6 +20,7 @@
   padding: 3px;
   flex-grow: 1;
   height: 35px;
+  background-color: white;
 }
 
 .inputField-label {
@@ -31,4 +32,34 @@
   // top: 1px;
   // border: '1px solid red';
   // transition: 0.2s ease all;
+}
+
+.select-field {
+  padding: 0;
+  margin: 0;
+}
+
+.select-activeItem {
+  
+}
+
+/// blueprint override
+.bp3-popover-wrapper {
+  width: auto;
+}
+
+.bp3-popover-target {
+  // height: 100% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.bp3-popover-target > div {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 3px;
+  width: 100%;
 }
