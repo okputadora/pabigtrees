@@ -1,4 +1,6 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, {
+  useCallback, useState, useEffect,
+} from 'react'
 import PropTypes from 'prop-types'
 import { Formik, useFormikContext } from 'formik'
 import { useDropzone } from 'react-dropzone'
@@ -123,6 +125,7 @@ const Nomination = ({ initValues, isAdminReview }) => {
   const [activeSpecies, setActiveSpecies] = useState({})
   const [activeGenus, setActiveGenus] = useState({})
   const [activeCommonName, setActiveCommonName] = useState({})
+  const [isNew, setIsNew] = useState({ commonName: false, species: false, genus: false })
 
   useEffect(() => {
     (async () => {
@@ -135,15 +138,20 @@ const Nomination = ({ initValues, isAdminReview }) => {
   const handleSubmit = useCallback(async (values, { resetForm }) => {
     try {
       const formValues = { ...values, imagePaths: images.map((img) => img.imagePath) }
-      await nominateTree(formValues)
+      await nominateTree({ ...formValues, isNew: { ...isNew } })
       alert('Your nomination has been submitted!')
       resetForm()
     } catch (err) {
       alert(err)
     }
-  }, [images])
+  }, [images, isNew])
 
   const handleSelect = useCallback((itemType) => (itemSelected) => {
+    console.log({ itemSelected })
+    if (itemSelected.id === 'NEW') {
+      console.log('setting is new')
+      setIsNew({ ...isNew, [itemType]: true })
+    }
     if (itemType === 'commonName') {
       const newActiveSpecies = species.filter((s) => s.id === itemSelected.id)[0]
       const newActiveGenus = genera.filter((g) => g.id === itemSelected.genusId)[0]
@@ -163,7 +171,7 @@ const Nomination = ({ initValues, isAdminReview }) => {
       setActiveGenus(newActiveGenus)
       setActiveCommonName(newActiveCommonName)
     }
-  }, [species, genera, commonNames])
+  }, [species, genera, commonNames, isNew])
   return (
     <div className="nomination-container">
       <Formik

@@ -11,6 +11,7 @@ const SelectField = ({
   items,
   handleSelect,
   labelProps,
+  canAdd,
 }) => {
   const [activeItem, setActiveItem] = useState(activeItemProp)
   const { setFieldValue } = useFormikContext()
@@ -28,24 +29,21 @@ const SelectField = ({
   const selectItem = (item) => {
     setActiveItem(item)
     // console.log(setFieldValue(fieldName).toString())
-    setFieldValue(fieldName, item.id)
+    console.log('selected item: ', item.id)
+    setFieldValue(fieldName, item.id === 'NEW' ? item.name : item.id)
     if (handleSelect) handleSelect(item)
   }
 
-  const createItem = (query) => {
-    console.log(query)
-    return { name: query }
-  }
+  const createItem = (query) => ({ name: query, id: 'NEW' })
 
-  const createNewItemRenderer = (newItem, active, handleClick) => {
-    console.log({ newItem, active, handleClick })
-    return (
-      <button onClick={handleClick} type="button">
-        <i className="fas fa-plus select-field-icon" />
-        <span>{newItem}</span>
-      </button>
-    )
-  }
+
+  const createNewItemRenderer = (newItem, active, handleClick) => (
+    <button onClick={handleClick} type="button">
+      <i className="fas fa-plus select-field-icon" />
+      <span>{newItem}</span>
+    </button>
+  )
+
   return (
     <div className="inputField-container">
       <div className="inputField-label">{labelProps.label}</div>
@@ -55,7 +53,7 @@ const SelectField = ({
         itemRenderer={renderItem}
         onItemSelect={selectItem}
         createNewItemFromQuery={createItem}
-        createNewItemRenderer={createNewItemRenderer}
+        createNewItemRenderer={canAdd && createNewItemRenderer}
         className="inputField-input select-field"
       >
         <div className="select-activeItem">{activeItem.name || `Click to select a ${labelProps.label}`}</div>
@@ -67,6 +65,7 @@ const SelectField = ({
 SelectField.defaultProps = {
   handleSelect: null,
   activeItem: {},
+  canAdd: false,
 }
 
 SelectField.propTypes = {
@@ -74,6 +73,7 @@ SelectField.propTypes = {
     name: PropTypes.string,
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }),
+  canAdd: PropTypes.bool,
   items: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,

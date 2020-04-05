@@ -59,7 +59,15 @@ router.post('/upload', upload.array('photo', 5), async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    await Nomination.create(req.body)
+    const {
+      isNew: {
+        commonName: newCommon,
+        sepcies: newSpecies,
+        genus: newGenus,
+      },
+    } = req.body
+
+    // await Nomination.create(req.body)
     res.json({ success: true })
   } catch (err) {
     res.json({ error: err })
