@@ -6,13 +6,13 @@ import { useFormikContext } from 'formik'
 import './inputField.scss'
 
 const SelectField = ({
-  activeItem,
+  activeItem: activeItemProp,
   name: fieldName,
   items,
   handleSelect,
   labelProps,
 }) => {
-  // const [activeItem, setActiveItem] = useState(activeItemProp)
+  const [activeItem, setActiveItem] = useState(activeItemProp)
   const { setFieldValue } = useFormikContext()
   const renderItem = useCallback(({ name, id }, { handleClick, modifiers }) => {
     if (!modifiers.matchesPredicate) {
@@ -26,10 +26,25 @@ const SelectField = ({
   const filterItems = (query, { name }) => name.toLowerCase().indexOf(query.toLowerCase()) >= 0
 
   const selectItem = (item) => {
-    // setActiveItem(item)
+    setActiveItem(item)
     // console.log(setFieldValue(fieldName).toString())
     setFieldValue(fieldName, item.id)
     if (handleSelect) handleSelect(item)
+  }
+
+  const createItem = (query) => {
+    console.log(query)
+    return { name: query }
+  }
+
+  const createNewItemRenderer = (newItem, active, handleClick) => {
+    console.log({ newItem, active, handleClick })
+    return (
+      <button onClick={handleClick} type="button">
+        <i className="fas fa-plus select-field-icon" />
+        <span>{newItem}</span>
+      </button>
+    )
   }
   return (
     <div className="inputField-container">
@@ -39,6 +54,8 @@ const SelectField = ({
         itemPredicate={filterItems}
         itemRenderer={renderItem}
         onItemSelect={selectItem}
+        createNewItemFromQuery={createItem}
+        createNewItemRenderer={createNewItemRenderer}
         className="inputField-input select-field"
       >
         <div className="select-activeItem">{activeItem.name || `Click to select a ${labelProps.label}`}</div>
@@ -55,11 +72,11 @@ SelectField.defaultProps = {
 SelectField.propTypes = {
   activeItem: PropTypes.shape({
     name: PropTypes.string,
-    id: PropTypes.string,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }),
   items: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   })).isRequired,
   handleSelect: PropTypes.func,
   labelProps: PropTypes.shape({

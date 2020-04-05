@@ -14,6 +14,7 @@ import Form from '@/components/Forms/Form'
 import InputField from '@/components/Forms/InputField'
 import SelectField from '@/components/Forms/SelectField'
 import { initialValues } from './formData'
+import { counties, measuringTechniques } from '@/utils/nomination'
 
 import './nomination.scss'
 
@@ -163,7 +164,6 @@ const Nomination = ({ initValues, isAdminReview }) => {
       setActiveCommonName(newActiveCommonName)
     }
   }, [species, genera, commonNames])
-  console.log(activeSpecies)
   return (
     <div className="nomination-container">
       <Formik
@@ -175,6 +175,7 @@ const Nomination = ({ initValues, isAdminReview }) => {
             {filteredCommonNames && (
               <SelectField
                 items={filteredCommonNames}
+                canAdd
                 handleSelect={handleSelect('commonName')}
                 activeItem={activeCommonName}
                 name="commonName"
@@ -184,6 +185,7 @@ const Nomination = ({ initValues, isAdminReview }) => {
             {genera && (
               <SelectField
                 name="genus"
+                canAdd
                 handleSelect={handleSelect('genus')}
                 activeItem={activeGenus}
                 items={genera}
@@ -193,14 +195,16 @@ const Nomination = ({ initValues, isAdminReview }) => {
             {filteredSpecies && (
               <SelectField
                 name="species"
+                canAdd
                 handleSelect={handleSelect('species')}
                 activeItem={activeSpecies}
                 items={filteredSpecies}
                 labelProps={{ label: 'Species' }}
               />
             )}
-            <InputField
+            <SelectField
               name="county"
+              items={counties}
               labelProps={{ label: 'County' }}
             />
             <InputField
