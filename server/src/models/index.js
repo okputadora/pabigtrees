@@ -5,6 +5,7 @@ import species from './species'
 import counties from './counties'
 import genus from './genus'
 import treeImages from './treeImages'
+import nominations from './nominations'
 // const env = process.env.NODE_ENV || 'development'
 // const config = require(`${__dirname}/../config/config.js`)[env]
 const db = {}
@@ -28,20 +29,6 @@ sequelize
     console.error('Unable to connect to the database:', err)
   })
 
-
-// fs
-//   .readdirSync(__dirname)
-//   .filter(file => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
-//   .forEach(file => {
-//     const model = sequelize.import(path.join(__dirname, file))
-//     db[model.name] = model
-//   })
-
-// Object.keys(db).forEach(modelName => {
-//   if (db[modelName].associate) {
-//     db[modelName].associate(db)
-//   }
-// })
 db.Sequelize = Sequelize
 db.sequelize = sequelize
 
@@ -50,11 +37,13 @@ db.trees = trees(sequelize, Sequelize)
 db.counties = counties(sequelize, Sequelize)
 db.genus = genus(sequelize, Sequelize)
 db.treeImages = treeImages(sequelize, Sequelize)
+db.nominations = nominations(sequelize, Sequelize)
 // Relations
 db.trees.belongsTo(db.species, { foreignKey: 'species' })
 db.trees.belongsTo(db.counties, { foreignKey: 'k_county' })
 db.species.belongsTo(db.genus, { foreignKey: 'k_genus' })
 db.treeImages.belongsTo(db.trees, { foreignKey: 'k_tree' })
+db.nominations.belongsTo(db.species, { foreignKey: 'speciesId' })
 
 db.sequelize = sequelize
 db.Sequelize = Sequelize
