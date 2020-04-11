@@ -32,13 +32,15 @@ exports.imageFilter = imageFilter
 const upload = multer({ storage, fileFilter: imageFilter })
 
 // @TODO getting nominations should be restricted to admins
-router.get('/', async (req, res) => {
-  try {
-    const nominations = await Nomination.find({})
+router.get('/', (req, res) => {
+  const countyQuery = { model: db.counties }
+  const speciesQuery = { model: db.species }
+  const genusQuery = { model: db.genus }
+  db.nominations.findAll({ include: [countyQuery, genusQuery, speciesQuery] }).then(nominations => {
     res.json({ nominations })
-  } catch (err) {
-    res.json({ error: err })
-  }
+  }).catch(err => {
+    res.status(500).json({ error: err })
+  })
 })
 
 router.get('/:id', async (req, res) => {
@@ -61,10 +63,8 @@ router.post('/', (req, res) => {
   try {
     const formattedNomination = formatAndValidateNomination(req.body)
     db.nominations.create(formattedNomination).then(nom => {
-      console.log({ nom })
       res.json({ success: true })
     }).catch(e => {
-      console.log(e)
       res.status(500).send(e)
     })
   } catch (e) {

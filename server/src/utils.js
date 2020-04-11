@@ -89,7 +89,6 @@ const nominationSchema = Joi.object({
 
 export const formatAndValidateNomination = nomination => {
   const validated = nominationSchema.validate(nomination)
-  console.log(validated)
   if (!validated.error) {
     const validatedNom = {
       ...nomination,

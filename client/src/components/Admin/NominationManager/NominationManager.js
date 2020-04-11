@@ -7,11 +7,20 @@ import { getNominations } from '@/api/nomination'
 import './nominationManager.scss'
 
 const NominationPreview = ({
-  commonName, species, genus, imagePaths, nominator, _id,
+  Species: {
+    t_species: species,
+    t_common: commonName,
+  },
+  Genus: {
+    t_genus: genus,
+  },
+  imagePaths,
+  nominator,
+  id,
 }) => {
   console.log(imagePaths)
   return (
-    <Link to={`nomination/${_id}`}>
+    <Link to={`nomination/${id}`} key={id}>
       <div className="nominationPreview-container">
         <img className="nominationPreview-image" src={imagePaths[0] ? `http://localhost:4000/uploads/${imagePaths[0]}` : ''} alt="preview" />
         <div className="nominationPreview-title">
@@ -28,8 +37,8 @@ const NominationPreview = ({
 NominationPreview.defaultProps = {
   commonName: null,
   species: null,
-  genus: null,
-  imagePaths: null,
+  Sp: null,
+  imagePaths: [],
   nominator: null,
 }
 
@@ -37,9 +46,9 @@ NominationPreview.propTypes = {
   commonName: PropTypes.string,
   species: PropTypes.string,
   genus: PropTypes.string,
-  imagePaths: PropTypes.string,
+  imagePaths: PropTypes.arrayOf(PropTypes.string),
   nominator: PropTypes.string,
-  _id: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
 }
 
 const NominationManager = () => {
@@ -51,6 +60,7 @@ const NominationManager = () => {
     }
     fetchNominations()
   }, [])
+  console.log({ nominations })
   return (
     <div className="nominationManager-container">
       <h1 className="nominationManager-title">Nomination manager</h1>

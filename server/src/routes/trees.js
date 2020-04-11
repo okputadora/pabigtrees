@@ -5,7 +5,7 @@ import { keyMap } from '../utils'
 
 const router = Router()
 
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
   const {
     sortField = 'points',
     sortOrder = 'DESC',
@@ -13,7 +13,6 @@ router.get('/', (req, res, next) => {
     activeSpecies = 'All',
     page = 1,
     pageSize = 20,
-    keyword,
   } = req.query
   let order = [keyMap[sortField], sortOrder]
   if (sortField === 'genus') {
