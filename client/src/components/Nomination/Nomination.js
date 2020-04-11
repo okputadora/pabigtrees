@@ -6,6 +6,7 @@ import { Formik, useFormikContext } from 'formik'
 import { useDropzone } from 'react-dropzone'
 import { Checkbox } from '@blueprintjs/core'
 import classNames from 'classnames'
+import * as Yup from 'yup'
 
 import {
   nominateTree, uploadFiles, confirmNomination, removeImage,
@@ -19,6 +20,31 @@ import { initialValues } from './formData'
 import { counties, measuringTechniques } from '@/utils/nomination'
 
 import './nomination.scss'
+
+const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+
+const nominationSchema = Yup.object().shape({
+  commonName: Yup.string().required(),
+  genus: Yup.string().required(),
+  species: Yup.string().required(),
+  county: Yup.number().required(),
+  nominator: Yup.string().required(),
+  address: Yup.string().required(),
+  phone: Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
+  email: Yup.string().email().required(),
+  locationOfTree: Yup.string(),
+  lat: Yup.number(),
+  lon: Yup.number(),
+  measuringCrew: Yup.string().required(),
+  dateMeasured: Yup.string().required(),
+  landOwnder: Yup.string().required(),
+  circumference: Yup.number().required(),
+  height: Yup.number().required(),
+  spread1: Yup.number().required(),
+  spread2: Yup.number().required(),
+  comments: Yup.string(),
+
+})
 
 const AdminReview = () => {
   const { values } = useFormikContext()
@@ -137,6 +163,7 @@ const Nomination = ({ initValues, isAdminReview }) => {
   }, [])
 
   const handleSubmit = useCallback(async (values, { resetForm }) => {
+    console.log('handling submit!')
     try {
       const formValues = { ...values, imagePaths: images.map((img) => img.imagePath) }
       await nominateTree({ ...formValues })
@@ -149,8 +176,6 @@ const Nomination = ({ initValues, isAdminReview }) => {
 
   const handleSelect = useCallback((itemType) => (itemSelected) => {
     if (!itemSelected.id) {
-      console.log('we in here')
-      console.log({ commonNames })
       setFilteredTreeLists({
         filteredSpecies: species,
         filteredCommonNames: commonNames,
@@ -163,7 +188,6 @@ const Nomination = ({ initValues, isAdminReview }) => {
     if (itemType === 'commonName') {
       const newActiveSpecies = species.filter((s) => s.id === itemSelected.id)[0]
       const newActiveGenus = genera.filter((g) => g.id === itemSelected.genusId)[0]
-      console.log(newActiveGenus)
       setActiveSpecies(newActiveSpecies)
       setActiveGenus(newActiveGenus)
       setActiveCommonName(itemSelected)
@@ -188,14 +212,14 @@ const Nomination = ({ initValues, isAdminReview }) => {
     }
   }, [species, genera, commonNames, isNew, activeSpecies, activeCommonName])
 
-  console.log({ filteredCommonNames })
   return (
     <div className="nomination-container">
       <Formik
+        validationSchema={nominationSchema}
         onSubmit={handleSubmit}
         initialValues={initValues}
       >
-        {() => (
+        {({}) => (
           <Form>
             {filteredCommonNames && (
               <SelectField
@@ -314,12 +338,6 @@ const Nomination = ({ initValues, isAdminReview }) => {
     </div>
   )
 }
-
-// AdminReview.propTypes = {
-//   initValues: PropTypes.shape({
-//     imagePaths: PropTypes.arrayOf(PropTypes.string),
-//   }).isRequired,
-// }
 
 UserNomination.defaultProps = {
   images: [],

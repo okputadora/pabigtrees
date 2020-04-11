@@ -14,12 +14,14 @@ const SelectField = ({
   canAdd,
 }) => {
   const [activeItem, setActiveItem] = useState(activeItemProp)
-
+  const { setFieldValue, errors, touched } = useFormikContext()
+  const error = errors[fieldName]
+  const isTouched = touched[fieldName]
   useEffect(() => {
     setActiveItem(activeItemProp)
-  }, [activeItemProp.id])
+    if (activeItemProp.id) setFieldValue(fieldName, activeItemProp.id)
+  }, [activeItemProp.id, fieldName])
 
-  const { setFieldValue } = useFormikContext()
   const renderItem = useCallback(({ name, id }, { handleClick, modifiers }) => {
     if (!modifiers.matchesPredicate) {
       return null
@@ -37,33 +39,31 @@ const SelectField = ({
 
   const createItem = (query) => ({ name: query, id: 'NEW' })
 
-
   const createNewItemRenderer = (newItem, active, handleClick) => (
     <button onClick={handleClick} type="button">
       <i className="fas fa-plus select-field-icon" />
       <span>{newItem}</span>
     </button>
   )
-  if (fieldName === 'commonName') {
-    console.log({ items })
-  }
   return (
-    <div className="inputField-container">
-      <div className="inputField-label">{labelProps.label}</div>
-      <div className="inputField-input select-field">
-        <Select
-          items={items}
-          itemPredicate={filterItems}
-          itemRenderer={renderItem}
-          onItemSelect={selectItem}
-          createNewItemFromQuery={createItem}
-          createNewItemRenderer={canAdd && createNewItemRenderer}
-
-        >
-          <div className="select-activeItem">{activeItem.name || `Click to select a ${labelProps.label}`}</div>
-        </Select>
-        {activeItem.id && <i className="fas fa-times" role="button" onClick={() => selectItem({})} />}
+    <div>
+      <div className="inputField-container">
+        <div className="inputField-label">{labelProps.label}</div>
+        <div className="inputField-input select-field">
+          <Select
+            items={items}
+            itemPredicate={filterItems}
+            itemRenderer={renderItem}
+            onItemSelect={selectItem}
+            createNewItemFromQuery={createItem}
+            createNewItemRenderer={canAdd && createNewItemRenderer}
+          >
+            <div className="select-activeItem">{activeItem.name || `Click to select a ${labelProps.label}`}</div>
+          </Select>
+          {activeItem.id && <i className="fas fa-times" role="button" onClick={() => selectItem({})} />}
+        </div>
       </div>
+      {isTouched && error && <div className="form-error">{error}</div>}
     </div>
   )
 }

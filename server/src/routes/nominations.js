@@ -57,16 +57,19 @@ router.post('/upload', upload.array('photo', 5), async (req, res) => {
   return res.json(req.files.map(f => f.filename))
 })
 
-router.post('/', async (req, res) => {
-  try {
-    console.log(req.body)
-    const nomination = await Nomination.create(req.body)
-    console.log(nomination)
-
-    res.json({ success: true })
-  } catch (err) {
-    res.json({ error: err })
+router.post('/', (req, res) => {
+  // validate and format nomination
+  const formattedNomination = {
+    ...req.body, speciesId: req.body.species, genusId: req.body.genus,
   }
+  delete formattedNomination.species
+  delete formattedNomination.genus
+  delete formattedNomination.commonName
+  db.nominations.create(formattedNomination).then(() => {
+    res.json({ success: true })
+  }).catch(e => {
+    res.json({ error: err })
+  })
 })
 
 

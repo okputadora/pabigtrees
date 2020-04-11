@@ -5,11 +5,14 @@ import { useField } from 'formik'
 import './inputField.scss'
 
 const InputField = ({ name, labelProps }) => {
-  const [field] = useField(name)
+  const [field, { error, touched }] = useField(name)
   return (
-    <div className="inputField-container">
-      <div className="inputField-label">{labelProps.label}</div>
-      <input className="inputField-input" {...field} />
+    <div>
+      <div className="inputField-container">
+        <div className="inputField-label">{labelProps.label}</div>
+        <input className="inputField-input" {...field} />
+      </div>
+      {error && touched && <div className="form-error">{error}</div>}
     </div>
   )
 }

@@ -58,3 +58,6 @@ export const nominationToTreeMap = (nomination) => {
     d_added: Date.now(),
   }
 }
+
+export const formatNomination = nomination => ({
+})

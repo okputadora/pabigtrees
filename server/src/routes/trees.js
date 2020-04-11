@@ -97,10 +97,8 @@ router.get('/admin/:id', (req, res) => {
   }
   const countyQuery = { model: models.counties }
   models.trees.findByPk(req.params.id, { include: [speciesQuery, countyQuery] }).then(tree => {
-    console.log(tree)
     res.json(tree)
   }).catch(e => {
-    console.log({ e })
     res.status(500).send()
   })
 })
