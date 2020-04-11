@@ -38,10 +38,15 @@
 .select-field {
   padding: 0;
   margin: 0;
+  border: 1px solid red;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .select-activeItem {
-  width: auto;
+  border: 1px solid green;
+  // width: auto;
 }
 
 /// blueprint override
@@ -67,5 +72,11 @@
 }
 
 .select-field-icon {
+  margin-right: 3px;
+}
+
+.fa-times {
+  border: 1px solid blue;
+  font-size: 22px;
   margin-right: 3px;
 }

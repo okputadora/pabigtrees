@@ -58,6 +58,7 @@ const AdminReview = () => {
     </>
   )
 }
+
 const UserNomination = ({ images, setImages }) => {
   const [isUploading, setUploading] = useState(false)
   const { submitForm } = useFormikContext()
@@ -138,7 +139,7 @@ const Nomination = ({ initValues, isAdminReview }) => {
   const handleSubmit = useCallback(async (values, { resetForm }) => {
     try {
       const formValues = { ...values, imagePaths: images.map((img) => img.imagePath) }
-      await nominateTree({ ...formValues, isNew: { ...isNew } })
+      await nominateTree({ ...formValues })
       alert('Your nomination has been submitted!')
       resetForm()
     } catch (err) {
@@ -147,14 +148,22 @@ const Nomination = ({ initValues, isAdminReview }) => {
   }, [images, isNew])
 
   const handleSelect = useCallback((itemType) => (itemSelected) => {
-    console.log({ itemSelected })
+    if (!itemSelected.id) {
+      console.log('we in here')
+      console.log({ commonNames })
+      setFilteredTreeLists({
+        filteredSpecies: species,
+        filteredCommonNames: commonNames,
+      })
+      return
+    }
     if (itemSelected.id === 'NEW') {
-      console.log('setting is new')
       setIsNew({ ...isNew, [itemType]: true })
     }
     if (itemType === 'commonName') {
       const newActiveSpecies = species.filter((s) => s.id === itemSelected.id)[0]
       const newActiveGenus = genera.filter((g) => g.id === itemSelected.genusId)[0]
+      console.log(newActiveGenus)
       setActiveSpecies(newActiveSpecies)
       setActiveGenus(newActiveGenus)
       setActiveCommonName(itemSelected)
@@ -163,6 +172,12 @@ const Nomination = ({ initValues, isAdminReview }) => {
         filteredSpecies: species.filter((s) => s.genusId === itemSelected.id),
         filteredCommonNames: commonNames.filter((c) => c.genusId === itemSelected.id),
       })
+      if (activeSpecies.id) {
+        setActiveSpecies({})
+      }
+      if (activeCommonName.id) {
+        setActiveCommonName({})
+      }
       setActiveGenus(itemSelected)
     } else if (itemType === 'species') {
       const newActiveCommonName = commonNames.filter((s) => s.id === itemSelected.id)[0]
@@ -171,7 +186,9 @@ const Nomination = ({ initValues, isAdminReview }) => {
       setActiveGenus(newActiveGenus)
       setActiveCommonName(newActiveCommonName)
     }
-  }, [species, genera, commonNames, isNew])
+  }, [species, genera, commonNames, isNew, activeSpecies, activeCommonName])
+
+  console.log({ filteredCommonNames })
   return (
     <div className="nomination-container">
       <Formik
