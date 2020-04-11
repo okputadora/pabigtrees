@@ -4,7 +4,7 @@ import multer from 'multer'
 
 import db from '../models'
 import Nomination from '../mongoModels/Nomination'
-import { nominationToTreeMap } from '../utils'
+import { formatAndValidateNomination, nominationToTreeMap } from '../utils'
 
 const router = Router()
 const storage = multer.diskStorage({
@@ -58,18 +58,18 @@ router.post('/upload', upload.array('photo', 5), async (req, res) => {
 })
 
 router.post('/', (req, res) => {
-  // validate and format nomination
-  const formattedNomination = {
-    ...req.body, speciesId: req.body.species, genusId: req.body.genus,
+  try {
+    const formattedNomination = formatAndValidateNomination(req.body)
+    db.nominations.create(formattedNomination).then(nom => {
+      console.log({ nom })
+      res.json({ success: true })
+    }).catch(e => {
+      console.log(e)
+      res.status(500).send(e)
+    })
+  } catch (e) {
+    res.status(400).send(e)
   }
-  delete formattedNomination.species
-  delete formattedNomination.genus
-  delete formattedNomination.commonName
-  db.nominations.create(formattedNomination).then(() => {
-    res.json({ success: true })
-  }).catch(e => {
-    res.json({ error: err })
-  })
 })
 
 

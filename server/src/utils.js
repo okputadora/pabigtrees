@@ -59,5 +59,51 @@ export const nominationToTreeMap = (nomination) => {
   }
 }
 
-export const formatNomination = nomination => ({
+const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+
+const nominationSchema = Joi.object({
+  commonName: Joi.string().required(),
+  genus: Joi.string().required(),
+  species: Joi.string().required(),
+  county: Joi.number().required(),
+  nominator: Joi.string().required(),
+  address: Joi.string().required(),
+  phone: Joi.string().allow(''),
+  email: Joi.string().email().required(),
+  locationOfTree: Joi.string().allow(''),
+  lat: Joi.number().empty(''),
+  lon: Joi.number().empty(''),
+  measuringCrew: Joi.string().required(),
+  dateMeasured: Joi.string().required(),
+  landOwner: Joi.string().allow(''),
+  ownerAddress: Joi.string().allow(''),
+  ownerPhone: Joi.string().allow(''),
+  ownerEmail: Joi.string().allow(''),
+  circumference: Joi.number().required(),
+  height: Joi.number().required(),
+  spread1: Joi.number().required(),
+  spread2: Joi.number().required(),
+  comments: Joi.string().allow(''),
+  imagePaths: Joi.array().items(Joi.string()).optional(),
 })
+
+export const formatAndValidateNomination = nomination => {
+  const validated = nominationSchema.validate(nomination)
+  console.log(validated)
+  if (!validated.error) {
+    const validatedNom = {
+      ...nomination,
+      speciesId: nomination.species,
+      genusId: nomination.genus,
+    }
+    delete validatedNom.species
+    delete validatedNom.commonName
+    delete validatedNom.genus
+    const formattedNom = {}
+    Object.keys(validatedNom).forEach(key => {
+      formattedNom[key] = validatedNom[key] === '' ? null : validatedNom[key]
+    })
+    return formattedNom // / consider mutating and returning validated.value instead - not sure
+  }
+  throw new Error(validated.error.ValidationError)
+}

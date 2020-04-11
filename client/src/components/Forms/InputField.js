@@ -14,7 +14,10 @@ const InputField = ({ name, labelProps }) => {
   return (
     <div>
       <div className="inputField-container">
-        <div className={labelClasses}>{labelProps.label}</div>
+        <div className={labelClasses}>
+          <span>{labelProps.label}</span>
+          <span>{field.isRequired && '*'}</span>
+        </div>
         <input className="inputField-input" {...field} />
       </div>
       {error && touched && <div className="form-error">{error}</div>}

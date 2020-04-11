@@ -31,19 +31,21 @@ const nominationSchema = Yup.object().shape({
   nominator: Yup.string().required(),
   address: Yup.string().required(),
   phone: Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
-  email: Yup.string().email().required(),
+  email: Yup.string().email(),
   locationOfTree: Yup.string(),
   lat: Yup.number(),
   lon: Yup.number(),
   measuringCrew: Yup.string().required(),
   dateMeasured: Yup.string().required(),
-  landOwnder: Yup.string().required(),
+  landOwner: Yup.string().required(),
+  ownerAddress: Yup.string(),
+  ownerPhone: Yup.string(),
+  ownerEmail: Yup.string(),
   circumference: Yup.number().required(),
   height: Yup.number().required(),
   spread1: Yup.number().required(),
   spread2: Yup.number().required(),
   comments: Yup.string(),
-
 })
 
 const AdminReview = () => {
@@ -140,7 +142,7 @@ const UserNomination = ({ images, setImages }) => {
             : <p>Drag up to 5 images here, or click to select from your file system</p>
         }
       </div>
-      <button className="nomination-submit" type="button" onClick={submitForm}>submit</button>
+      <button className="nomination-submit" type="button" onClick={() => { console.log('submitting form'); submitForm() }}>submit</button>
     </>
   )
 }
@@ -219,9 +221,11 @@ const Nomination = ({ initValues, isAdminReview }) => {
         onSubmit={handleSubmit}
         initialValues={initValues}
       >
-        {({}) => (
-          <Form>
-            {filteredCommonNames && (
+        {({ errors }) => {
+          console.log(errors)
+          return (
+            <Form>
+              {filteredCommonNames && (
               <SelectField
                 items={filteredCommonNames}
                 canAdd
@@ -230,8 +234,8 @@ const Nomination = ({ initValues, isAdminReview }) => {
                 name="commonName"
                 labelProps={{ label: 'Common Name' }}
               />
-            )}
-            {genera && (
+              )}
+              {genera && (
               <SelectField
                 name="genus"
                 canAdd
@@ -240,8 +244,8 @@ const Nomination = ({ initValues, isAdminReview }) => {
                 items={genera}
                 labelProps={{ label: 'Genus' }}
               />
-            )}
-            {filteredSpecies && (
+              )}
+              {filteredSpecies && (
               <SelectField
                 name="species"
                 canAdd
@@ -250,90 +254,91 @@ const Nomination = ({ initValues, isAdminReview }) => {
                 items={filteredSpecies}
                 labelProps={{ label: 'Species' }}
               />
-            )}
-            <SelectField
-              name="county"
-              items={counties}
-              labelProps={{ label: 'County' }}
-            />
-            <InputField
-              name="nominator"
-              labelProps={{ label: 'Nominator' }}
-            />
-            <InputField
-              name="address"
-              labelProps={{ label: 'Address' }}
-            />
-            <InputField
-              name="phone"
-              labelProps={{ label: 'Phone' }}
-            />
-            <InputField
-              name="email"
-              labelProps={{ label: 'Email' }}
-            />
-            <InputField
-              name="landOwner"
-              labelProps={{ label: 'Land Owner' }}
-            />
-            <InputField
-              name="ownerAddress"
-              labelProps={{ label: 'Owner Address (if different)' }}
-            />
-            <InputField
-              name="ownerPhone"
-              labelProps={{ label: 'Owner Phone (if different)' }}
-            />
-            <InputField
-              name="ownerEmail"
-              labelProps={{ label: 'Owner Email (if different)' }}
-            />
-            <InputField
-              name="locationOfTree"
-              labelProps={{ label: 'Location of tree' }}
-            />
-            <InputField
-              name="lon"
-              labelProps={{ label: 'longitude' }}
-            />
-            <InputField
-              name="lat"
-              labelProps={{ label: 'latitude' }}
-            />
-            <InputField
-              name="measuringCrew"
-              labelProps={{ label: 'Measuring Crew' }}
-            />
-            <InputField
-              name="dateMeasured"
-              labelProps={{ label: 'Date Measured' }}
-            />
+              )}
+              <SelectField
+                name="county"
+                items={counties}
+                labelProps={{ label: 'County' }}
+              />
+              <InputField
+                name="nominator"
+                labelProps={{ label: 'Nominator' }}
+              />
+              <InputField
+                name="address"
+                labelProps={{ label: 'Address' }}
+              />
+              <InputField
+                name="phone"
+                labelProps={{ label: 'Phone' }}
+              />
+              <InputField
+                name="email"
+                labelProps={{ label: 'Email' }}
+              />
+              <InputField
+                name="landOwner"
+                labelProps={{ label: 'Land Owner' }}
+              />
+              <InputField
+                name="ownerAddress"
+                labelProps={{ label: 'Owner Address (if different)' }}
+              />
+              <InputField
+                name="ownerPhone"
+                labelProps={{ label: 'Owner Phone (if different)' }}
+              />
+              <InputField
+                name="ownerEmail"
+                labelProps={{ label: 'Owner Email (if different)' }}
+              />
+              <InputField
+                name="locationOfTree"
+                labelProps={{ label: 'Location of tree' }}
+              />
+              <InputField
+                name="lon"
+                labelProps={{ label: 'longitude' }}
+              />
+              <InputField
+                name="lat"
+                labelProps={{ label: 'latitude' }}
+              />
+              <InputField
+                name="measuringCrew"
+                labelProps={{ label: 'Measuring Crew' }}
+              />
+              <InputField
+                name="dateMeasured"
+                labelProps={{ label: 'Date Measured' }}
+              />
 
             -----
-            <InputField
-              name="circumference"
-              labelProps={{ label: 'Circumference (inches)' }}
-            />
-            <InputField
-              name="height"
-              labelProps={{ label: 'Height (feet)' }}
-            />
-            <InputField
-              name="spread1"
-              labelProps={{ label: 'Spread (first measurement' }}
-            />
-            <InputField
-              name="spread2"
-              labelProps={{ label: 'Spread (second measurement' }}
-            />
-            {/* @TODO point calculations */}
-            <InputField
-              name="comments"
-              labelProps={{ label: 'Comments' }}
-            />
-            {isAdminReview ? <AdminReview images={images} setImages={setImages} /> : <UserNomination images={images} setImages={setImages} />}
-          </Form>
-        )}
+              <InputField
+                name="circumference"
+                labelProps={{ label: 'Circumference (inches)' }}
+              />
+              <InputField
+                name="height"
+                labelProps={{ label: 'Height (feet)' }}
+              />
+              <InputField
+                name="spread1"
+                labelProps={{ label: 'Spread (first measurement' }}
+              />
+              <InputField
+                name="spread2"
+                labelProps={{ label: 'Spread (second measurement' }}
+              />
+              {/* @TODO point calculations */}
+              <InputField
+                name="comments"
+                labelProps={{ label: 'Comments' }}
+              />
+              {isAdminReview ? <AdminReview images={images} setImages={setImages} /> : <UserNomination images={images} setImages={setImages} />}
+            </Form>
+          )
+        }}
       </Formik>
     </div>
   )
