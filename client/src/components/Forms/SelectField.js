@@ -2,6 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Select } from '@blueprintjs/select'
 import { useFormikContext } from 'formik'
+import classNames from 'classnames'
 
 import './inputField.scss'
 
@@ -39,6 +40,11 @@ const SelectField = ({
 
   const createItem = (query) => ({ name: query, id: 'NEW' })
 
+  const labelClasses = classNames({
+    'inputField-label': true,
+    'inputField-label-error': error && isTouched,
+  })
+
   const createNewItemRenderer = (newItem, active, handleClick) => (
     <button onClick={handleClick} type="button">
       <i className="fas fa-plus select-field-icon" />
@@ -48,7 +54,7 @@ const SelectField = ({
   return (
     <div>
       <div className="inputField-container">
-        <div className="inputField-label">{labelProps.label}</div>
+        <div className={labelClasses}>{labelProps.label}</div>
         <div className="inputField-input select-field">
           <Select
             items={items}
