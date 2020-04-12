@@ -37,8 +37,9 @@ const nominationSchema = Yup.object().shape({
   lat: Yup.number(),
   lon: Yup.number(),
   measuringCrew: Yup.string().required(),
+  measuringTechnique: Yup.string().required(),
   dateMeasured: Yup.string().required(),
-  landOwner: Yup.string().required(),
+  landOwner: Yup.string(),
   ownerAddress: Yup.string(),
   ownerPhone: Yup.string(),
   ownerEmail: Yup.string(),
@@ -160,7 +161,7 @@ const UserNomination = ({ images, setImages }) => {
             : <p>Drag up to 5 images here, or click to select from your file system</p>
         }
       </div>
-      <button className="nomination-submit" type="button" onClick={() => { console.log('submitting form'); submitForm() }}>submit</button>
+      <button className="nomination-submit" type="button" onClick={submitForm}>submit</button>
     </>
   )
 }
@@ -183,7 +184,6 @@ const Nomination = ({ initValues, isAdminReview }) => {
   }, [])
 
   const handleSubmit = useCallback(async (values, { resetForm }) => {
-    console.log('handling submit!')
     try {
       const formValues = { ...values, imagePaths: images.map((img) => img.imagePath) }
       await nominateTree({ ...formValues })
@@ -246,7 +246,7 @@ const Nomination = ({ initValues, isAdminReview }) => {
           onSubmit={handleSubmit}
           initialValues={initValues}
         >
-          {({ errors, values }) => (
+          {({ values }) => (
             <Form>
               {filteredCommonNames && (
                 <SelectField
@@ -331,6 +331,11 @@ const Nomination = ({ initValues, isAdminReview }) => {
                 name="measuringCrew"
                 labelProps={{ label: 'Measuring Crew' }}
               />
+              <SelectField
+                name="measuringTechnique"
+                items={measuringTechniques}
+                labelProps={{ label: 'Measuring Technique' }}
+              />
               <InputField
                 name="dateMeasured"
                 labelProps={{ label: 'Date Measured' }}
@@ -356,6 +361,7 @@ const Nomination = ({ initValues, isAdminReview }) => {
                 <span className="points-label">Points: </span>
                 <span className="points-value">{calculatePoints(values.circumference, values.height, values.spread1, values.spread2)}</span>
               </div>
+              <div className="form-divider" />
               <InputField
                 name="comments"
                 labelProps={{ label: 'Comments' }}

@@ -22,13 +22,13 @@ export default (sequelize) => {
     lon: { type: Sequelize.FLOAT },
     lat: { type: Sequelize.FLOAT },
     measuringCrew: { type: Sequelize.STRING },
+    measuringTechnique: { type: Sequelize.INTEGER },
     dateMeasured: { type: Sequelize.STRING },
     circumference: { type: Sequelize.STRING },
     height: { type: Sequelize.FLOAT },
     spread1: { type: Sequelize.FLOAT },
     spread2: { type: Sequelize.FLOAT },
     comments: { type: Sequelize.STRING },
-    // add genusName genusId fields etc...if genusName we know to create new genus during approbal provess
   }, { timestamps: false })
 
   // Tree.associate = function (models) {

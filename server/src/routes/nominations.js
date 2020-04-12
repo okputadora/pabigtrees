@@ -65,6 +65,7 @@ router.post('/', (req, res) => {
     db.nominations.create(formattedNomination).then(nom => {
       res.json({ success: true })
     }).catch(e => {
+      console.log(e)
       res.status(500).send(e)
     })
   } catch (e) {

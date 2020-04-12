@@ -74,6 +74,7 @@ const nominationSchema = Joi.object({
   lat: Joi.number().empty(''),
   lon: Joi.number().empty(''),
   measuringCrew: Joi.string().required(),
+  measuringTechnique: Joi.number().required(),
   dateMeasured: Joi.string().required(),
   landOwner: Joi.string().allow(''),
   ownerAddress: Joi.string().allow(''),

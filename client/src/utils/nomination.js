@@ -68,9 +68,11 @@ export const counties = [
   { id: 67, name: 'York' },
 ]
 
-export const measuringTechniques = {
-  1: 'ENTS',
-  2: 'UNK',
-  3: 'CLIN@100',
-  4: 'Abney Level',
-}
+export const measuringTechniques = [
+  { id: 1, name: 'ENTS' },
+  { id: 2, name: 'UNK' },
+  { id: 3, name: 'CLIN@100' },
+  { id: 4, name: 'Abney' },
+  { id: 5, name: 'Estimated' },
+  { id: 6, name: 'Other' },
+]
