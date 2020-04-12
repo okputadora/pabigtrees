@@ -3,7 +3,7 @@ import Sequelize from 'sequelize'
 export default (sequelize) => {
   const Nomination = sequelize.define('Nomination', {
     // attributes
-    id: { type: Sequelize.UUID, primaryKey: true },
+    id: { type: Sequelize.UUID, primaryKey: true, autoIncrement: true },
     speciesId: { type: Sequelize.UUID },
     speciesName: { type: Sequelize.STRING },
     commonName: { type: Sequelize.STRING },
@@ -31,13 +31,5 @@ export default (sequelize) => {
     comments: { type: Sequelize.STRING },
   }, { timestamps: false })
 
-  // Tree.associate = function (models) {
-  //   models.Task.belongsTo(models.T, {
-  //     onDelete: 'CASCADE',
-  //     foreignKey: {
-  //       allowNull: false,
-  //     },
-  //   })
-  // }
   return Nomination
 }

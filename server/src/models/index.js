@@ -6,6 +6,7 @@ import counties from './counties'
 import genus from './genus'
 import treeImages from './treeImages'
 import nominations from './nominations'
+import nominationImages from './nominationImages'
 // const env = process.env.NODE_ENV || 'development'
 // const config = require(`${__dirname}/../config/config.js`)[env]
 const db = {}
@@ -38,6 +39,7 @@ db.counties = counties(sequelize, Sequelize)
 db.genus = genus(sequelize, Sequelize)
 db.treeImages = treeImages(sequelize, Sequelize)
 db.nominations = nominations(sequelize, Sequelize)
+db.nominationImages = nominationImages(sequelize, Sequelize)
 // Relations
 db.trees.belongsTo(db.species, { foreignKey: 'species' })
 db.trees.belongsTo(db.counties, { foreignKey: 'k_county' })
@@ -46,6 +48,7 @@ db.treeImages.belongsTo(db.trees, { foreignKey: 'k_tree' })
 db.nominations.belongsTo(db.species, { foreignKey: 'speciesId' })
 db.nominations.belongsTo(db.genus, { foreignKey: 'genusId' })
 db.nominations.belongsTo(db.counties, { foreignKey: 'county' })
+db.nominationImages.belongsTo(db.nominations, { foreignKey: 'nominationId' })
 
 db.sequelize = sequelize
 db.Sequelize = Sequelize

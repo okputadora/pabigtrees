@@ -36,8 +36,23 @@ router.get('/', (req, res) => {
   const countyQuery = { model: db.counties }
   const speciesQuery = { model: db.species }
   const genusQuery = { model: db.genus }
-  db.nominations.findAll({ include: [countyQuery, genusQuery, speciesQuery] }).then(nominations => {
-    res.json({ nominations })
+  let nominations
+  db.nominations.findAll({
+    include: [
+      countyQuery,
+      genusQuery,
+      speciesQuery,
+    ],
+  }).then(noms => {
+    nominations = noms
+    return Promise.all(noms.map(n => db.nominationImages.findAll({ where: { nominationId: n.id } })))
+  }).then(nomImages => {
+    const formattedNomImages = nomImages.map(imageArr => imageArr.map(image => image.dataValues.location))
+    const nominationsWithImages = nominations.map((nom, i) => ({
+      ...nom.toJSON(),
+      imagePaths: formattedNomImages[i],
+    }))
+    res.json({ nominations: nominationsWithImages })
   }).catch(err => {
     res.status(500).json({ error: err })
   })
@@ -62,17 +77,18 @@ router.post('/upload', upload.array('photo', 5), async (req, res) => {
 router.post('/', (req, res) => {
   try {
     const formattedNomination = formatAndValidateNomination(req.body)
-    db.nominations.create(formattedNomination).then(nom => {
+    db.nominations.create(formattedNomination).then(nom => (Promise.all(formattedNomination.imagePaths.map(img => db.nominationImages.create({
+      location: img,
+      nominationId: nom.toJSON().id,
+    }))))).then(() => {
       res.json({ success: true })
     }).catch(e => {
-      console.log(e)
       res.status(500).send(e)
     })
   } catch (e) {
     res.status(400).send(e)
   }
 })
-
 
 // nomination approval
 router.put('/approval/:id', async (req, res) => {
