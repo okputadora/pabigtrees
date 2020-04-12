@@ -18,6 +18,7 @@ import InputField from '@/components/Forms/InputField'
 import SelectField from '@/components/Forms/SelectField'
 import { initialValues } from './formData'
 import { counties, measuringTechniques } from '@/utils/nomination'
+import Header from '@/components/Common/Header'
 
 import './nomination.scss'
 
@@ -47,6 +48,23 @@ const nominationSchema = Yup.object().shape({
   spread2: Yup.number().required(),
   comments: Yup.string(),
 })
+
+const calculatePoints = (c, h, s1, s2) => {
+  if (c && h && s1 && s2) {
+    try {
+      const cInt = parseInt(c, 10)
+      const hInt = parseInt(h, 10)
+      const s1Int = parseInt(s1, 10)
+      const s2Int = parseInt(s2, 10)
+
+      return cInt + hInt + ((s1Int + s2Int) / 8)
+    } catch (e) {
+      return 'Error calculating'
+    }
+  } else {
+    return 'Enter Circumference, height, and both spread values to calculate points'
+  }
+}
 
 const AdminReview = () => {
   const { values } = useFormikContext()
@@ -215,45 +233,50 @@ const Nomination = ({ initValues, isAdminReview }) => {
   }, [species, genera, commonNames, isNew, activeSpecies, activeCommonName])
 
   return (
-    <div className="nomination-container">
-      <Formik
-        validationSchema={nominationSchema}
-        onSubmit={handleSubmit}
-        initialValues={initValues}
-      >
-        {({ errors }) => {
-          console.log(errors)
-          return (
+    <div className="nomination-pageContainer">
+      {!isAdminReview && (
+      <div className="nomination-title">
+        <Header text="Tree Nomination Form" />
+        <p className="nomination-prompt">Your help is needed to locate, document, and preserve outstanding trees in Pennsylvania. If you know of a potential Champion Tree, please bring it to our attention using use our nomination form below.</p>
+      </div>
+      )}
+      <div className="nomination-container">
+        <Formik
+          validationSchema={nominationSchema}
+          onSubmit={handleSubmit}
+          initialValues={initValues}
+        >
+          {({ errors, values }) => (
             <Form>
               {filteredCommonNames && (
-              <SelectField
-                items={filteredCommonNames}
-                canAdd
-                handleSelect={handleSelect('commonName')}
-                activeItem={activeCommonName}
-                name="commonName"
-                labelProps={{ label: 'Common Name' }}
-              />
+                <SelectField
+                  items={filteredCommonNames}
+                  canAdd
+                  handleSelect={handleSelect('commonName')}
+                  activeItem={activeCommonName}
+                  name="commonName"
+                  labelProps={{ label: 'Common Name' }}
+                />
               )}
               {genera && (
-              <SelectField
-                name="genus"
-                canAdd
-                handleSelect={handleSelect('genus')}
-                activeItem={activeGenus}
-                items={genera}
-                labelProps={{ label: 'Genus' }}
-              />
+                <SelectField
+                  name="genus"
+                  canAdd
+                  handleSelect={handleSelect('genus')}
+                  activeItem={activeGenus}
+                  items={genera}
+                  labelProps={{ label: 'Genus' }}
+                />
               )}
               {filteredSpecies && (
-              <SelectField
-                name="species"
-                canAdd
-                handleSelect={handleSelect('species')}
-                activeItem={activeSpecies}
-                items={filteredSpecies}
-                labelProps={{ label: 'Species' }}
-              />
+                <SelectField
+                  name="species"
+                  canAdd
+                  handleSelect={handleSelect('species')}
+                  activeItem={activeSpecies}
+                  items={filteredSpecies}
+                  labelProps={{ label: 'Species' }}
+                />
               )}
               <SelectField
                 name="county"
@@ -312,8 +335,7 @@ const Nomination = ({ initValues, isAdminReview }) => {
                 name="dateMeasured"
                 labelProps={{ label: 'Date Measured' }}
               />
-
-            -----
+              <div className="form-divider" />
               <InputField
                 name="circumference"
                 labelProps={{ label: 'Circumference (inches)' }}
@@ -324,22 +346,25 @@ const Nomination = ({ initValues, isAdminReview }) => {
               />
               <InputField
                 name="spread1"
-                labelProps={{ label: 'Spread (first measurement' }}
+                labelProps={{ label: 'Spread (first measurement, feet)' }}
               />
               <InputField
                 name="spread2"
-                labelProps={{ label: 'Spread (second measurement' }}
+                labelProps={{ label: 'Spread (second measurement, feet)' }}
               />
-              {/* @TODO point calculations */}
+              <div className="points-calculation">
+                <span className="points-label">Points: </span>
+                <span className="points-value">{calculatePoints(values.circumference, values.height, values.spread1, values.spread2)}</span>
+              </div>
               <InputField
                 name="comments"
                 labelProps={{ label: 'Comments' }}
               />
               {isAdminReview ? <AdminReview images={images} setImages={setImages} /> : <UserNomination images={images} setImages={setImages} />}
             </Form>
-          )
-        }}
-      </Formik>
+          )}
+        </Formik>
+      </div>
     </div>
   )
 }

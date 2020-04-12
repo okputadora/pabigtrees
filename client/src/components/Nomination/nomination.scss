@@ -1,5 +1,11 @@
+.nomination-pageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .nomination-container {
-  width: 50%;
+  width: 80%;
   margin-bottom: 50px;
 }
 
@@ -146,6 +152,19 @@
   margin-top: 22px;
 }
 
+.nomination-prompt {
+  color: white;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.form-divider {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  height: 3px;
+  background-color: white;
+}
+
 @-webkit-keyframes load2 {
   0% {
     -webkit-transform: rotate(0deg);
@@ -165,4 +184,21 @@
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+}
+
+.points-calculation {
+  color: white;
+  font-size: 18px;
+  padding: 8px;
+  background: rgb(28, 133, 28);
+  margin-top: 10px;
+  border-radius: 2px;
+}
+
+.points-label {
+  font-weight: 700;
+  color: #E8E710;
+}
+
+.points-value {
 }
