@@ -2,6 +2,7 @@ import React, {
   useCallback, useState, useEffect,
 } from 'react'
 import PropTypes from 'prop-types'
+import { useParams, useHistory } from 'react-router-dom'
 import { Formik, useFormikContext } from 'formik'
 import { useDropzone } from 'react-dropzone'
 import { Checkbox } from '@blueprintjs/core'
@@ -48,6 +49,7 @@ const nominationSchema = Yup.object().shape({
   spread1: Yup.number().required(),
   spread2: Yup.number().required(),
   comments: Yup.string(),
+  isPublic: Yup.bool(),
 })
 
 const calculatePoints = (c, h, s1, s2) => {
@@ -69,15 +71,17 @@ const calculatePoints = (c, h, s1, s2) => {
 
 const AdminReview = () => {
   const { values } = useFormikContext()
+  const params = useParams()
+  const history = useHistory()
   const [isPublic, setIsPublic] = useState(false)
   const handleSubmit = useCallback(async () => {
     try {
-      await confirmNomination({ ...values, isPublic, isApproved: true })
+      await confirmNomination(params.id, { ...values, isPublic, isApproved: true })
+      history.push('/admin/confirmation')
     } catch (e) {
       alert('something went wrong!')
     }
-  }, [values])
-
+  }, [values, isPublic, params])
   const deleteImage = useCallback(async (imagePath) => {
     const shouldDelete = window.confirm('Are you sure you want to remove this image? This action cannot be undone, the image will be lost forever')
     if (shouldDelete) {
@@ -93,9 +97,9 @@ const AdminReview = () => {
       <div className="nomination-checkbox"><Checkbox labelElement={<span className="white">public</span>} checked={isPublic} onChange={() => setIsPublic(!isPublic)} /></div>
       <div className="nomination-review-previewImages">
         {values.imagePaths.map((img) => (
-          <div className="nomination-previewContainer">
-            <a href={`http://localhost:4000/uploads/${img}`} target="_blank" rel="noopener noreferrer">
-              <img className="nomination-previewImage" key={img} src={`http://localhost:4000/uploads/${img}`} alt="preview" />
+          <div className="nomination-previewContainer" key={img.id}>
+            <a href={`http://localhost:4000/uploads/${img.location}`} target="_blank" rel="noopener noreferrer">
+              <img className="nomination-previewImage" key={img} src={`http://localhost:4000/uploads/${img.location}`} alt="preview" />
             </a>
             <button type="button" className="nomination-deleteImage" onClick={deleteImage}>X</button>
           </div>
@@ -183,17 +187,6 @@ const Nomination = ({ initValues, isAdminReview }) => {
     })()
   }, [])
 
-  const handleSubmit = useCallback(async (values, { resetForm }) => {
-    try {
-      const formValues = { ...values, imagePaths: images.map((img) => img.imagePath) }
-      await nominateTree({ ...formValues })
-      alert('Your nomination has been submitted!')
-      resetForm()
-    } catch (err) {
-      alert(err)
-    }
-  }, [images, isNew])
-
   const handleSelect = useCallback((itemType) => (itemSelected) => {
     if (!itemSelected.id) {
       setFilteredTreeLists({
@@ -232,6 +225,24 @@ const Nomination = ({ initValues, isAdminReview }) => {
     }
   }, [species, genera, commonNames, isNew, activeSpecies, activeCommonName])
 
+  useEffect(() => {
+    if (initValues && isAdminReview && species) {
+      const newActiveSpecies = species.filter((s) => s.id === initValues.speciesId)[0]
+      handleSelect('species')(newActiveSpecies)
+    }
+  }, [initValues, isAdminReview, species])
+
+  const history = useHistory()
+  const handleSubmit = useCallback(async (values) => {
+    try {
+      const formValues = { ...values, imagePaths: images.map((img) => img.imagePath) }
+      await nominateTree({ ...formValues })
+      alert('Your nomination has been submitted!')
+      history.push('/confirmation')
+    } catch (err) {
+      alert(err)
+    }
+  }, [images, isNew])
   return (
     <div className="nomination-pageContainer">
       {!isAdminReview && (
@@ -255,7 +266,7 @@ const Nomination = ({ initValues, isAdminReview }) => {
                   handleSelect={handleSelect('commonName')}
                   activeItem={activeCommonName}
                   name="commonName"
-                  labelProps={{ label: 'Common Name' }}
+                  labelProps={{ label: 'Common Name*' }}
                 />
               )}
               {genera && (
@@ -265,7 +276,7 @@ const Nomination = ({ initValues, isAdminReview }) => {
                   handleSelect={handleSelect('genus')}
                   activeItem={activeGenus}
                   items={genera}
-                  labelProps={{ label: 'Genus' }}
+                  labelProps={{ label: 'Genus*' }}
                 />
               )}
               {filteredSpecies && (
@@ -275,21 +286,22 @@ const Nomination = ({ initValues, isAdminReview }) => {
                   handleSelect={handleSelect('species')}
                   activeItem={activeSpecies}
                   items={filteredSpecies}
-                  labelProps={{ label: 'Species' }}
+                  labelProps={{ label: 'Species*' }}
                 />
               )}
               <SelectField
                 name="county"
                 items={counties}
-                labelProps={{ label: 'County' }}
+                activeItem={initValues ? counties.filter((c) => c.id.toString() === initValues.county.toString())[0] : null}
+                labelProps={{ label: 'County*' }}
               />
               <InputField
                 name="nominator"
-                labelProps={{ label: 'Nominator' }}
+                labelProps={{ label: 'Nominator*' }}
               />
               <InputField
                 name="address"
-                labelProps={{ label: 'Address' }}
+                labelProps={{ label: 'Address*' }}
               />
               <InputField
                 name="phone"
@@ -297,7 +309,7 @@ const Nomination = ({ initValues, isAdminReview }) => {
               />
               <InputField
                 name="email"
-                labelProps={{ label: 'Email' }}
+                labelProps={{ label: 'Email*' }}
               />
               <InputField
                 name="landOwner"
@@ -329,33 +341,34 @@ const Nomination = ({ initValues, isAdminReview }) => {
               />
               <InputField
                 name="measuringCrew"
-                labelProps={{ label: 'Measuring Crew' }}
+                labelProps={{ label: 'Measuring Crew*' }}
               />
               <SelectField
                 name="measuringTechnique"
                 items={measuringTechniques}
-                labelProps={{ label: 'Measuring Technique' }}
+                activeItem={initValues ? measuringTechniques.filter((c) => c.id.toString() === initValues.measuringTechnique)[0] : null}
+                labelProps={{ label: 'Measuring Technique*' }}
               />
               <InputField
                 name="dateMeasured"
-                labelProps={{ label: 'Date Measured' }}
+                labelProps={{ label: 'Date Measured*' }}
               />
               <div className="form-divider" />
               <InputField
                 name="circumference"
-                labelProps={{ label: 'Circumference (inches)' }}
+                labelProps={{ label: 'Circumference (inches)*' }}
               />
               <InputField
                 name="height"
-                labelProps={{ label: 'Height (feet)' }}
+                labelProps={{ label: 'Height (feet)*' }}
               />
               <InputField
                 name="spread1"
-                labelProps={{ label: 'Spread (first measurement, feet)' }}
+                labelProps={{ label: 'Spread (first measurement, feet)*' }}
               />
               <InputField
                 name="spread2"
-                labelProps={{ label: 'Spread (second measurement, feet)' }}
+                labelProps={{ label: 'Spread (second measurement, feet)*' }}
               />
               <div className="points-calculation">
                 <span className="points-label">Points: </span>

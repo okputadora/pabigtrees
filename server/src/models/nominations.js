@@ -29,6 +29,8 @@ export default (sequelize) => {
     spread1: { type: Sequelize.FLOAT },
     spread2: { type: Sequelize.FLOAT },
     comments: { type: Sequelize.STRING },
+    treeId: { type: Sequelize.UUID },
+    isApproved: { type: Sequelize.BOOLEAN },
   }, { timestamps: false })
 
   return Nomination

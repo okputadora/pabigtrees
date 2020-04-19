@@ -10,8 +10,8 @@ const NominationViewer = ({ match: { params: { id } } }) => {
   useEffect(() => {
     const fetchNomination = async () => {
       try {
-        const { data: { nomination: dataNom } } = await getNomination(id)
-        setNomination(dataNom)
+        const { data } = await getNomination(id)
+        setNomination({ ...data.nomination, imagePaths: [...data.imagePaths] })
       } catch (err) {
         alert(err)
       }

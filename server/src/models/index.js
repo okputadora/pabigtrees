@@ -49,6 +49,8 @@ db.nominations.belongsTo(db.species, { foreignKey: 'speciesId' })
 db.nominations.belongsTo(db.genus, { foreignKey: 'genusId' })
 db.nominations.belongsTo(db.counties, { foreignKey: 'county' })
 db.nominationImages.belongsTo(db.nominations, { foreignKey: 'nominationId' })
+db.nominations.belongsTo(db.trees, { foreignKey: 'treeId' })
+
 
 db.sequelize = sequelize
 db.Sequelize = Sequelize

@@ -32,32 +32,48 @@ export const keyMap = {
   // 'Common Name', 'Address',
 }
 
-export const nominationToTreeMap = (nomination) => {
-  console.log(nomination)
-  return {
-    species: nomination.species, // Look up species code from species table might need nomination.genera to do this too
-    k_county: null, // nomination.county @TODO need to lookup county code first,
-    k_technique: null, // @TODO Ask aaron where this data comes from
-    d_nominated: nomination.createdAt.toString(),
-    d_last_measured: nomination.dateMeasured,
-    i_circum_inchs: nomination.circumference ? parseInt(nomination.circumference, 10) : null,
-    i_height_feet: nomination.height ? parseInt(nomination.height, 10) : null,
-    i_spread_feet: null, // @TODO where does this come from (I think multiplying the two spreads?),
-    i_points: null, // @TODO calculation for nomination points,
-    t_address: nomination.address,
-    t_gps: nomination.lon && nomination.lat ? `${nomination.lon}, ${nomination.lat}` : null,
-    t_measure_crew: nomination.measuringCrew,
-    t_original_nominator: nomination.nominator,
-    t_comments: nomination.comments,
-    f_national_champ: null, // @TODO ask aaron, should these fields be part of approval form
-    f_retired: null, // @TODO ,
-    f_penn_charter: null,
-    f_multistemmed: null,
-    f_tallest: null,
-    k_user_added: null,
-    d_added: Date.now(),
+const calculatePoints = (c, h, s1, s2) => {
+  if (c && h && s1 && s2) {
+    try {
+      const cInt = parseInt(c, 10)
+      const hInt = parseInt(h, 10)
+      const s1Int = parseInt(s1, 10)
+      const s2Int = parseInt(s2, 10)
+
+      return cInt + hInt + ((s1Int + s2Int) / 8)
+    } catch (e) {
+      return 'Error calculating'
+    }
+  } else {
+    return 'Enter Circumference, height, and both spread values to calculate points'
   }
 }
+
+export const mapNominationToTree = (nomination) => ({
+  species: nomination.speciesId, // Look up species code from species table might need nomination.genera to do this too
+  k_county: nomination.county, // nomination.county @TODO need to lookup county code first,
+  k_technique: nomination.measuringTechnique,
+  d_nominated: nomination.createdAt && nomination.createdAt.toString(),
+  d_last_measured: nomination.dateMeasured,
+  i_circum_inchs: nomination.circumference ? parseInt(nomination.circumference, 10) : null,
+  i_height_feet: nomination.height ? parseInt(nomination.height, 10) : null,
+  i_spread_feet: (parseInt(nomination.spread1, 10) + parseInt(nomination.spread2, 10)) / 2,
+  i_points: calculatePoints(nomination.circumference, nomination.height, nomination.spread1, nomination.spread2),
+  t_address: nomination.address,
+  t_gps: nomination.lon && nomination.lat ? `${nomination.lon}, ${nomination.lat}` : null,
+  t_measure_crew: nomination.measuringCrew,
+  t_original_nominator: nomination.nominator,
+  t_comments: nomination.comments,
+  f_national_champ: null, // @TODO ask aaron, should these fields be part of approval form
+  f_retired: null, // @TODO ,
+  f_penn_charter: null,
+  f_multistemmed: null,
+  f_tallest: null,
+  k_user_added: null, // @ Todo whats this?
+  d_added: Date.now(),
+  isPublic: nomination.isPublic ? 1 : 0,
+  isTest: 1,
+})
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
@@ -95,6 +111,7 @@ export const formatAndValidateNomination = nomination => {
       ...nomination,
       speciesId: nomination.species,
       genusId: nomination.genus,
+      isApproved: false,
     }
     delete validatedNom.species
     delete validatedNom.commonName

@@ -9,6 +9,7 @@ import Login from './Login/Login'
 import Signup from './Signup/Signup'
 import Trees from './Trees/TreesTable'
 import Nomination from './Nomination/Nomination'
+import Confirmation from './Common/Confirmation'
 
 import './main.scss'
 
@@ -34,6 +35,10 @@ const Main = () => (
           <Route
             path="/nomination-form"
             component={Nomination}
+          />
+          <Route
+            path="/confirmation"
+            component={Confirmation}
           />
           <Route
             path="/:pathName"

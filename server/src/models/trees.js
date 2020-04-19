@@ -25,6 +25,8 @@ export default (sequelize) => {
     f_tallest: { type: Sequelize.INTEGER },
     k_user_added: { type: Sequelize.STRING },
     d_added: { type: Sequelize.STRING },
+    isPublic: { type: Sequelize.TINYINT },
+    isTest: { type: Sequelize.TINYINT },
   }, { timestamps: false })
 
   // Tree.associate = function (models) {

@@ -35,16 +35,18 @@ const NominationPreview = ({
 }
 
 NominationPreview.defaultProps = {
-  commonName: null,
   species: null,
-  Sp: null,
+  Species: null,
   imagePaths: [],
   nominator: null,
 }
 
 NominationPreview.propTypes = {
-  commonName: PropTypes.string,
-  species: PropTypes.string,
+  speciesName: PropTypes.string,
+  Species: PropTypes.shape({
+    t_common: PropTypes.string,
+    t_species: PropTypes.string,
+  }),
   genus: PropTypes.string,
   imagePaths: PropTypes.arrayOf(PropTypes.string),
   nominator: PropTypes.string,

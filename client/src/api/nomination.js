@@ -22,10 +22,10 @@ export const nominateTree = (data) => (
   })
 )
 
-export const confirmNomination = (data) => (
+export const confirmNomination = (id, data) => (
   request({
     method: 'PUT',
-    url: `/nominations/approval/${data._id}`,
+    url: `/nominations/approval/${id}`,
     data,
   })
 )

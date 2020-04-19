@@ -1,10 +1,10 @@
 import { Router } from 'express'
 import multer from 'multer'
+import fs from 'fs'
 // import path from 'path'
 
 import db from '../models'
-import Nomination from '../mongoModels/Nomination'
-import { formatAndValidateNomination, nominationToTreeMap } from '../utils'
+import { formatAndValidateNomination, mapNominationToTree } from '../utils'
 
 const router = Router()
 const storage = multer.diskStorage({
@@ -19,6 +19,13 @@ const storage = multer.diskStorage({
     cb(null, `${Date.now()}-${file.originalname}`)
   },
 })
+
+const moveToTreeImages = imagePaths => Promise.all(imagePaths.map(img => new Promise((resolve, reject) => {
+  fs.rename(`uploads/${img.location}`, `treeImages/${img.location}`, (err) => {
+    if (err) reject(err)
+    else resolve()
+  })
+})))
 
 const imageFilter = (req, file, cb) => {
   // Accept images only
@@ -60,8 +67,9 @@ router.get('/', (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const nomination = await Nomination.findById(req.params.id)
-    res.json({ nomination })
+    const nomination = await db.nominations.findOne({ where: { id: req.params.id } })
+    const imagePaths = await db.nominationImages.findAll({ where: { nominationId: nomination.id } })
+    res.json({ nomination, imagePaths })
   } catch (err) {
     res.json({ error: err })
   }
@@ -77,10 +85,14 @@ router.post('/upload', upload.array('photo', 5), async (req, res) => {
 router.post('/', (req, res) => {
   try {
     const formattedNomination = formatAndValidateNomination(req.body)
-    db.nominations.create(formattedNomination).then(nom => (Promise.all(formattedNomination.imagePaths.map(img => db.nominationImages.create({
-      location: img,
-      nominationId: nom.toJSON().id,
-    }))))).then(() => {
+    db.nominations.create(formattedNomination).then(nom => (
+      Promise.all(formattedNomination.imagePaths.map(
+        img => db.nominationImages.create({
+          location: img,
+          nominationId: nom.toJSON().id,
+        }),
+      ))
+    )).then(() => {
       res.json({ success: true })
     }).catch(e => {
       res.status(500).send(e)
@@ -93,26 +105,15 @@ router.post('/', (req, res) => {
 // nomination approval
 router.put('/approval/:id', async (req, res) => {
   try {
-    // const nomination = await Nomination.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true })
-    // console.log({ nomination })
-    // create new tree entry
-    // look up species and and genus ids ... if they dont exist create a new one
-    const { species, genus } = req.body
-    console.log(species, genus)
-    const spec = await db.species.findAll({ where: { t_species: species.toLowerCase() }, include: { model: db.genus } })
-    if (spec.length === 0) {
-      // we have to create a new species
+    await db.nominations.update({ isApproved: true }, { where: { id: req.params.id } })
+    const newTree = mapNominationToTree(req.body)
+    const tree = await db.trees.create({ ...newTree, id: `TR${Date.now()}` })
+    if (req.body.imagePaths && req.body.imagePaths.length > 0) {
+      await Promise.all(req.body.imagePaths.map(img => db.treeImages.create({ k_tree: tree.id, img_location: img.location, f_active: 1 })))
+      await moveToTreeImages(req.body.imagePaths)
     }
-
-    // format nomination
-    // const tree = db.trees.build(nominationToTreeMap(nomination))
-    // create tree images
-    // tree.points = 600
-    // tree.id = `TR${Date.now()}` // not a great way to generate ids I know but this matches the dataset we inherited
-    // await tree.save()
-    res.json({ success: true, spec })
+    res.json({ success: true, tree })
   } catch (err) {
-    console.log(err)
     res.status(500).json({ error: err })
   }
 })

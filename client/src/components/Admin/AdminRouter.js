@@ -9,6 +9,7 @@ import DatabaseManager from './DatabaseManager'
 import NominationManager from './NominationManager/NominationManager'
 import NominationViewer from './NominationManager/NominationViewer'
 import TreeEditor from './TreeEditor'
+import Confirmation from './Confirmation'
 
 import './admin.scss'
 
@@ -24,6 +25,7 @@ const Admin = () => (
           <Route path="/admin/databaseManager" component={DatabaseManager} />
           <Route path="/admin/nominationManager" component={NominationManager} />
           <Route path="/admin/nomination/:id" component={NominationViewer} />
+          <Route path="/admin/confirmation" component={Confirmation} />
           <Route path="/admin" component={AdminSummary} />
         </Switch>
       </div>
