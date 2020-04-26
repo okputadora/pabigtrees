@@ -7,47 +7,44 @@ import { getNominations } from '@/api/nomination'
 import './nominationManager.scss'
 
 const NominationPreview = ({
-  Species: {
-    t_species: species,
-    t_common: commonName,
-  },
-  Genus: {
-    t_genus: genus,
-  },
+  Species,
+  Genus,
   imagePaths,
   nominator,
+  speciesId,
+  genusId,
   id,
-}) => {
-  console.log(imagePaths)
-  return (
-    <Link to={`nomination/${id}`} key={id}>
-      <div className="nominationPreview-container">
-        <img className="nominationPreview-image" src={imagePaths[0] ? `http://localhost:4000/uploads/${imagePaths[0]}` : ''} alt="preview" />
-        <div className="nominationPreview-title">
-          {commonName || species || genus}
-        </div>
-        <div className="nominationPreview-subtitle">
-          {nominator}
-        </div>
+}) => (
+  <Link to={`nomination/${id}?newSpecies=${!Species}&newGenus=${!Genus}`} key={id}>
+    <div className="nominationPreview-container">
+      <img className="nominationPreview-image" src={imagePaths[0] ? `http://localhost:4000/uploads/${imagePaths[0]}` : ''} alt="preview" />
+      <div className="nominationPreview-title">
+        {(Species || Genus) ? Species.t_common || Species.t_species || Genus.genus : speciesId || genusId }
       </div>
-    </Link>
-  )
-}
+      <div className="nominationPreview-subtitle">
+        {nominator}
+      </div>
+    </div>
+  </Link>
+)
 
 NominationPreview.defaultProps = {
-  species: null,
   Species: null,
+  Genus: null,
   imagePaths: [],
   nominator: null,
 }
 
 NominationPreview.propTypes = {
-  speciesName: PropTypes.string,
+  speciesId: PropTypes.string.isRequired,
   Species: PropTypes.shape({
     t_common: PropTypes.string,
     t_species: PropTypes.string,
   }),
-  genus: PropTypes.string,
+  Genus: PropTypes.shape({
+    genus: PropTypes.string,
+  }),
+  genusId: PropTypes.string.isRequired,
   imagePaths: PropTypes.arrayOf(PropTypes.string),
   nominator: PropTypes.string,
   id: PropTypes.number.isRequired,
@@ -67,7 +64,7 @@ const NominationManager = () => {
     <div className="nominationManager-container">
       <h1 className="nominationManager-title">Nomination manager</h1>
       <div className="nominationManager-nominations">
-        {nominations.map((nom) => <NominationPreview {...nom} />)}
+        {nominations.map((nom) => <NominationPreview key={nom.id} {...nom} />)}
       </div>
     </div>
   )

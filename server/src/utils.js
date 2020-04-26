@@ -102,16 +102,25 @@ const nominationSchema = Joi.object({
   spread2: Joi.number().required(),
   comments: Joi.string().allow(''),
   imagePaths: Joi.array().items(Joi.string()).optional(),
+  isNew: Joi.object({
+    commonName: Joi.bool().required(),
+    species: Joi.bool().required(),
+    genus: Joi.bool().required(),
+  }).required(),
 })
 
 export const formatAndValidateNomination = nomination => {
+  const { isNew } = nomination
   const validated = nominationSchema.validate(nomination)
   if (!validated.error) {
     const validatedNom = {
       ...nomination,
-      speciesId: nomination.species,
-      genusId: nomination.genus,
+      speciesId: isNew.species ? null : nomination.species,
+      genusId: isNew.genus ? null : nomination.genus,
       isApproved: false,
+      speciesName: isNew.species ? nomination.species : null,
+      commonName: isNew.commonName ? nomination.commonName : null,
+      genusName: isNew.genus ? nomination.genus : null,
     }
     delete validatedNom.species
     delete validatedNom.commonName

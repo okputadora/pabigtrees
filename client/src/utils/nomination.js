@@ -1,3 +1,51 @@
+import * as Yup from 'yup'
+
+export const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+
+export const nominationSchema = Yup.object().shape({
+  commonName: Yup.string().required(),
+  genus: Yup.string().required(),
+  species: Yup.string().required(),
+  county: Yup.number().required(),
+  nominator: Yup.string().required(),
+  address: Yup.string().required(),
+  phone: Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
+  email: Yup.string().email(),
+  locationOfTree: Yup.string(),
+  lat: Yup.number(),
+  lon: Yup.number(),
+  measuringCrew: Yup.string().required(),
+  measuringTechnique: Yup.string().required(),
+  dateMeasured: Yup.string().required(),
+  landOwner: Yup.string(),
+  ownerAddress: Yup.string(),
+  ownerPhone: Yup.string(),
+  ownerEmail: Yup.string(),
+  circumference: Yup.number().required(),
+  height: Yup.number().required(),
+  spread1: Yup.number().required(),
+  spread2: Yup.number().required(),
+  comments: Yup.string(),
+  isPublic: Yup.bool(),
+})
+
+export const calculatePoints = (c, h, s1, s2) => {
+  if (c && h && s1 && s2) {
+    try {
+      const cInt = parseInt(c, 10)
+      const hInt = parseInt(h, 10)
+      const s1Int = parseInt(s1, 10)
+      const s2Int = parseInt(s2, 10)
+
+      return cInt + hInt + ((s1Int + s2Int) / 8)
+    } catch (e) {
+      return 'Error calculating'
+    }
+  } else {
+    return 'Enter Circumference, height, and both spread values to calculate points'
+  }
+}
+
 export const counties = [
   { id: 1, name: 'Adams' },
   { id: 2, name: 'Allegheny' },

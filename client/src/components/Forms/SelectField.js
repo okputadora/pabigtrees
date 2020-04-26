@@ -37,9 +37,6 @@ const SelectField = ({
     setFieldValue(fieldName, item.id === 'NEW' ? item.name : item.id)
     if (handleSelect) handleSelect(item)
   }
-  if (fieldName === 'county') {
-    console.log({ activeItem })
-  }
 
   const createItem = (query) => ({ name: query, id: 'NEW' })
 

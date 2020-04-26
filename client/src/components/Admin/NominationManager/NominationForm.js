@@ -7,7 +7,6 @@ import { Formik, useFormikContext } from 'formik'
 import { useDropzone } from 'react-dropzone'
 import { Checkbox } from '@blueprintjs/core'
 import classNames from 'classnames'
-import * as Yup from 'yup'
 
 import {
   nominateTree, uploadFiles, confirmNomination, removeImage,
@@ -17,57 +16,11 @@ import { getSpeciesAndGenera } from '@/api/tree'
 import Form from '@/components/Forms/Form'
 import InputField from '@/components/Forms/InputField'
 import SelectField from '@/components/Forms/SelectField'
-import { initialValues } from './formData'
-import { counties, measuringTechniques } from '@/utils/nomination'
+import {
+  counties, measuringTechniques, nominationSchema, calculatePoints,
+} from '@/utils/nomination'
 import Header from '@/components/Common/Header'
 
-import './nomination.scss'
-
-const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
-
-const nominationSchema = Yup.object().shape({
-  commonName: Yup.string().required(),
-  genus: Yup.string().required(),
-  species: Yup.string().required(),
-  county: Yup.number().required(),
-  nominator: Yup.string().required(),
-  address: Yup.string().required(),
-  phone: Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
-  email: Yup.string().email(),
-  locationOfTree: Yup.string(),
-  lat: Yup.number(),
-  lon: Yup.number(),
-  measuringCrew: Yup.string().required(),
-  measuringTechnique: Yup.string().required(),
-  dateMeasured: Yup.string().required(),
-  landOwner: Yup.string(),
-  ownerAddress: Yup.string(),
-  ownerPhone: Yup.string(),
-  ownerEmail: Yup.string(),
-  circumference: Yup.number().required(),
-  height: Yup.number().required(),
-  spread1: Yup.number().required(),
-  spread2: Yup.number().required(),
-  comments: Yup.string(),
-  isPublic: Yup.bool(),
-})
-
-const calculatePoints = (c, h, s1, s2) => {
-  if (c && h && s1 && s2) {
-    try {
-      const cInt = parseInt(c, 10)
-      const hInt = parseInt(h, 10)
-      const s1Int = parseInt(s1, 10)
-      const s2Int = parseInt(s2, 10)
-
-      return cInt + hInt + ((s1Int + s2Int) / 8)
-    } catch (e) {
-      return 'Error calculating'
-    }
-  } else {
-    return 'Enter Circumference, height, and both spread values to calculate points'
-  }
-}
 
 const AdminReview = () => {
   const { values } = useFormikContext()
@@ -179,7 +132,6 @@ const Nomination = ({ initValues, isAdminReview }) => {
   const [activeCommonName, setActiveCommonName] = useState({})
   const [isNew, setIsNew] = useState({ commonName: false, species: false, genus: false })
   const location = useLocation()
-  console.log(isNew)
 
 
   const { newSpecies, newGenus } = useMemo(() => {
@@ -188,91 +140,76 @@ const Nomination = ({ initValues, isAdminReview }) => {
     const genusQuery = query.get('newGenus')
     return { newSpecies: speciesQuery === 'true', newGenus: genusQuery === 'true' }
   }, location.search)
-
+  // console.log({ params })
   useEffect(() => {
     (async () => {
       const { data: { species: speciesList, genera: generaList, commonNames: commonList } } = await getSpeciesAndGenera()
-      if (newSpecies) {
-        speciesList.unshift({ name: initValues.speciesId, id: 'NEW' })
-      }
       setTreeLists({ species: speciesList, genera: generaList, commonNames: commonList })
       setFilteredTreeLists({ filteredSpecies: speciesList, filteredCommonNames: commonList })
     })()
   }, [newSpecies, newGenus, initValues])
 
-  const handleSelect = useCallback((itemType) => (itemSelected) => {
-    if (itemSelected.id === 'NEW') {
-      setIsNew({ ...isNew, [itemType]: true })
-    }
-    if ((!itemSelected.id || itemSelected.id === 'NEW')) {
-      setFilteredTreeLists({
-        filteredSpecies: species,
-        filteredCommonNames: commonNames,
-      })
-      return
-    }
-    if (itemType === 'commonName') {
-      const newActiveSpecies = species.filter((s) => s.id === itemSelected.id)[0]
-      const newActiveGenus = genera.filter((g) => g.id === itemSelected.genusId)[0]
-      setActiveSpecies(newActiveSpecies)
-      setActiveGenus(newActiveGenus)
-      setActiveCommonName(itemSelected)
-    } else if (itemType === 'genus') {
-      setFilteredTreeLists({
-        filteredSpecies: species.filter((s) => s.genusId === itemSelected.id),
-        filteredCommonNames: commonNames.filter((c) => c.genusId === itemSelected.id),
-      })
-      if (activeSpecies.id) {
-        setActiveSpecies({})
-      }
-      if (activeCommonName.id) {
-        setActiveCommonName({})
-      }
-      setActiveGenus(itemSelected)
-    } else if (itemType === 'species') {
-      const newActiveCommonName = commonNames.filter((s) => s.id === itemSelected.id)[0]
-      const newActiveGenus = genera.filter((g) => g.id === itemSelected.genusId)[0]
-      setActiveSpecies(itemSelected)
-      setActiveGenus(newActiveGenus)
-      setActiveCommonName(newActiveCommonName)
-    }
-  }, [species, genera, commonNames, isNew, activeSpecies, activeCommonName])
+  // const handleSelect = useCallback((itemType) => (itemSelected) => {
+  //   if (!itemSelected.id || itemSelected.id === 'NEW') {
+  //     setFilteredTreeLists({
+  //       filteredSpecies: species,
+  //       filteredCommonNames: commonNames,
+  //     })
+  //     return
+  //   }
+  //   if (itemSelected.id === 'NEW') {
+  //     setIsNew({ ...isNew, [itemType]: true })
+  //   }
+  //   if (itemType === 'commonName') {
+  //     const newActiveSpecies = species.filter((s) => s.id === itemSelected.id)[0]
+  //     const newActiveGenus = genera.filter((g) => g.id === itemSelected.genusId)[0]
+  //     setActiveSpecies(newActiveSpecies)
+  //     setActiveGenus(newActiveGenus)
+  //     setActiveCommonName(itemSelected)
+  //   } else if (itemType === 'genus') {
+  //     setFilteredTreeLists({
+  //       filteredSpecies: species.filter((s) => s.genusId === itemSelected.id),
+  //       filteredCommonNames: commonNames.filter((c) => c.genusId === itemSelected.id),
+  //     })
+  //     if (activeSpecies.id) {
+  //       setActiveSpecies({})
+  //     }
+  //     if (activeCommonName.id) {
+  //       setActiveCommonName({})
+  //     }
+  //     setActiveGenus(itemSelected)
+  //   } else if (itemType === 'species') {
+  //     const newActiveCommonName = commonNames.filter((s) => s.id === itemSelected.id)[0]
+  //     const newActiveGenus = genera.filter((g) => g.id === itemSelected.genusId)[0]
+  //     setActiveSpecies(itemSelected)
+  //     setActiveGenus(newActiveGenus)
+  //     setActiveCommonName(newActiveCommonName)
+  //   }
+  // }, [species, genera, commonNames, isNew, activeSpecies, activeCommonName])
 
-  useEffect(() => {
-    if (initValues && isAdminReview && species) {
-      let newActiveSpecies
-      if (newSpecies) {
-        [newActiveSpecies] = species.filter((s) => s.id === 'NEW')
-      } else {
-        [newActiveSpecies] = species.filter((s) => s.id === initValues.speciesId)
-      }
-      handleSelect('species')(newActiveSpecies)
-    }
-  }, [initValues, isAdminReview, species, newSpecies, newGenus])
+  // useEffect(() => {
+  //   if (initValues && isAdminReview && species) {
+  //     if (newSpecies) {
+  //       return
+  //     }
+  //     const newActiveSpecies = species.filter((s) => s.id === initValues.speciesId)[0]
+  //     handleSelect('species')(newActiveSpecies)
+  //   }
+  // }, [initValues, isAdminReview, species, newSpecies, newGenus])
 
   const history = useHistory()
-
   const handleSubmit = useCallback(async (values) => {
     try {
       const formValues = { ...values, imagePaths: images.map((img) => img.imagePath) }
-      await nominateTree({ ...formValues, isNew })
+      await nominateTree({ ...formValues })
       alert('Your nomination has been submitted!')
       history.push('/confirmation')
     } catch (err) {
       alert(err)
     }
   }, [images, isNew])
-
-  // const SpeciesField = isAdminReview && newSpecies ? InputField : SelectField
-
   return (
     <div className="nomination-pageContainer">
-      {!isAdminReview && (
-      <div className="nomination-title">
-        <Header text="Tree Nomination Form" />
-        <p className="nomination-prompt">Your help is needed to locate, document, and preserve outstanding trees in Pennsylvania. If you know of a potential Champion Tree, please bring it to our attention using use our nomination form below.</p>
-      </div>
-      )}
       <div className="nomination-container">
         <Formik
           validationSchema={nominationSchema}
@@ -420,7 +357,7 @@ UserNomination.propTypes = {
 }
 
 Nomination.defaultProps = {
-  initValues: initialValues,
+  initValues: {},
   isAdminReview: false,
 }
 

@@ -82,9 +82,10 @@ router.post('/upload', upload.array('photo', 5), async (req, res) => {
   return res.json(req.files.map(f => f.filename))
 })
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const formattedNomination = formatAndValidateNomination(req.body)
+    console.log({ formattedNomination })
     db.nominations.create(formattedNomination).then(nom => (
       Promise.all(formattedNomination.imagePaths.map(
         img => db.nominationImages.create({
@@ -98,6 +99,7 @@ router.post('/', (req, res) => {
       res.status(500).send(e)
     })
   } catch (e) {
+    console.log(e)
     res.status(400).send(e)
   }
 })
