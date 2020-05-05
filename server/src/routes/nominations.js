@@ -1,10 +1,15 @@
 import { Router } from 'express'
 import multer from 'multer'
 import fs from 'fs'
+import uniqid from 'uniqid'
 // import path from 'path'
 
 import db from '../models'
-import { formatAndValidateNomination, mapNominationToTree } from '../utils'
+import {
+  formatAndValidateNomination,
+  formatAndValidateApproval,
+  mapNominationToTree,
+} from '../utils'
 
 const router = Router()
 const storage = multer.diskStorage({
@@ -85,7 +90,6 @@ router.post('/upload', upload.array('photo', 5), async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const formattedNomination = formatAndValidateNomination(req.body)
-    console.log({ formattedNomination })
     db.nominations.create(formattedNomination).then(nom => (
       Promise.all(formattedNomination.imagePaths.map(
         img => db.nominationImages.create({
@@ -107,15 +111,45 @@ router.post('/', async (req, res) => {
 // nomination approval
 router.put('/approval/:id', async (req, res) => {
   try {
-    await db.nominations.update({ isApproved: true }, { where: { id: req.params.id } })
-    const newTree = mapNominationToTree(req.body)
-    const tree = await db.trees.create({ ...newTree, id: `TR${Date.now()}` })
-    if (req.body.imagePaths && req.body.imagePaths.length > 0) {
-      await Promise.all(req.body.imagePaths.map(img => db.treeImages.create({ k_tree: tree.id, img_location: img.location, f_active: 1 })))
-      await moveToTreeImages(req.body.imagePaths)
+    // const validatedApproval = formatAndValidateApproval(req.body)
+    const {
+      genusName,
+      speciesName,
+      speciesId,
+      genusId,
+      commonName,
+    } = req.body
+    let newGenus = {}
+    let newSpecies = {}
+    console.log(req.body)
+
+    // NEXTTODO: commonName is not being sent properly when species is new we're getting 'NEW'
+    // console.log({
+    //   speciesId, speciesName, genusId, genusName,
+    // })
+    if (!genusId) {
+      // create a genus
+      newGenus = await db.genus.create({ id: `GE${uniqid()}`, t_genus: genusName, t_common: genusName })
     }
-    res.json({ success: true, tree })
+    if (!speciesId) {
+      // create a species
+      newSpecies = await db.species.create({
+        id: `SP${uniqid()}`, k_genus: genusId || newGenus.id, t_species: speciesName, t_common: commonName,
+      })
+    }
+    console.log({ newSpecies })
+    console.log({ newGenus })
+    await db.nominations.update({ isApproved: true }, { where: { id: req.params.id } })
+
+    const newTree = mapNominationToTree(req.body, newGenus, newSpecies)
+    // const tree = await db.trees.create({ ...newTree, id: `TR${Date.now()}` })
+    // if (req.body.imagePaths && req.body.imagePaths.length > 0) {
+    //   await Promise.all(req.body.imagePaths.map(img => db.treeImages.create({ k_tree: tree.id, img_location: img.location, f_active: 1 })))
+    //   await moveToTreeImages(req.body.imagePaths)
+    // }
+    // res.json({ success: true, tree })
   } catch (err) {
+    console.log({ err })
     res.status(500).json({ error: err })
   }
 })

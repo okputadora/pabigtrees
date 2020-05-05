@@ -77,7 +77,7 @@ export const mapNominationToTree = (nomination) => ({
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
-const nominationSchema = Joi.object({
+const baseSchema = Joi.object({
   commonName: Joi.string().required(),
   genus: Joi.string().required(),
   species: Joi.string().required(),
@@ -102,13 +102,21 @@ const nominationSchema = Joi.object({
   spread2: Joi.number().required(),
   comments: Joi.string().allow(''),
   imagePaths: Joi.array().items(Joi.string()).optional(),
+})
+
+const nominationSchema = {
+  ...baseSchema,
   isNew: Joi.object({
     commonName: Joi.bool().required(),
     species: Joi.bool().required(),
     genus: Joi.bool().required(),
   }).required(),
-})
+}
 
+// const approvalSchema = {
+//   ...baseSchema,
+//   genusId:
+// }
 export const formatAndValidateNomination = nomination => {
   const { isNew } = nomination
   const validated = nominationSchema.validate(nomination)
@@ -129,6 +137,13 @@ export const formatAndValidateNomination = nomination => {
       formattedNom[key] = validatedNom[key] === '' ? null : validatedNom[key]
     })
     return formattedNom // / consider mutating and returning validated.value instead - not sure
+  }
+}
+
+export const formatAndValidateApproval = body => {
+  const validated = baseSchema.validate(body)
+  if (!validated.error) {
+    return body
   }
   throw new Error(validated.error.ValidationError)
 }
