@@ -123,7 +123,6 @@ export const formatAndValidateNomination = nomination => {
       genusName: isNew.genus ? nomination.genus : null,
     }
     delete validatedNom.species
-    delete validatedNom.commonName
     delete validatedNom.genus
     const formattedNom = {}
     Object.keys(validatedNom).forEach(key => {

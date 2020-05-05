@@ -179,15 +179,13 @@ const Nomination = ({ initValues, isAdminReview }) => {
   const [activeCommonName, setActiveCommonName] = useState({})
   const [isNew, setIsNew] = useState({ commonName: false, species: false, genus: false })
   const location = useLocation()
-  console.log(isNew)
-
 
   const { newSpecies, newGenus } = useMemo(() => {
     const query = new URLSearchParams(location.search)
     const speciesQuery = query.get('newSpecies')
     const genusQuery = query.get('newGenus')
     return { newSpecies: speciesQuery === 'true', newGenus: genusQuery === 'true' }
-  }, location.search)
+  }, [location.search])
 
   useEffect(() => {
     (async () => {

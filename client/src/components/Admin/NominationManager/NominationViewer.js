@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import { getNomination } from '@/api/nomination'
-import NominationForm from '@/components/Nomination/Nomination'
+import NominationForm from './NominationForm'
 import './nominationViewer.scss'
 
 const NominationViewer = ({ match: { params: { id } } }) => {
@@ -22,7 +22,6 @@ const NominationViewer = ({ match: { params: { id } } }) => {
     <div className="nominationViewer-container">
       <div className="nominationViewer-title">
         <NominationForm initValues={nomination} isAdminReview />
-
       </div>
     </div>
   ) : <div>loading</div>
