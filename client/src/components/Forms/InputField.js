@@ -21,7 +21,7 @@ const InputField = ({ name, labelProps }) => {
           <span>{labelProps.label}</span>
           <span>{field.isRequired && '*'}</span>
         </div>
-        <input className="inputField-input" {...field} />
+        <input className="inputField-input" {...field} value={field.value || ''} />
       </div>
       {error && touched && <div className="form-error">{error}</div>}
     </div>

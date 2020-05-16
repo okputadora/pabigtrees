@@ -6,6 +6,7 @@ export default (sequelize) => {
     id: { type: Sequelize.UUID, primaryKey: true },
     t_genus: { type: Sequelize.STRING },
     t_common: { type: Sequelize.STRING },
+    test: { type: Sequelize.TINYINT },
   }, { timestamps: false })
 
   // Tree.associate = function (models) {

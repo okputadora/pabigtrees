@@ -49,8 +49,8 @@ const calculatePoints = (c, h, s1, s2) => {
   }
 }
 
-export const mapNominationToTree = (nomination) => ({
-  species: nomination.speciesId, // Look up species code from species table might need nomination.genera to do this too
+export const mapNominationToTree = (nomination, newSpecies) => ({
+  species: newSpecies.id || nomination.speciesId, // Look up species code from species table might need nomination.genera to do this too
   k_county: nomination.county, // nomination.county @TODO need to lookup county code first,
   k_technique: nomination.measuringTechnique,
   d_nominated: nomination.createdAt && nomination.createdAt.toString(),

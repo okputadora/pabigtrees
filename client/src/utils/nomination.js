@@ -124,3 +124,11 @@ export const measuringTechniques = [
   { id: 5, name: 'Estimated' },
   { id: 6, name: 'Other' },
 ]
+
+export const formatInitialValues = (values) => {
+  console.log({ values })
+  const formattedValues = {}
+  Object.keys(values).forEach((key) => { formattedValues[key] = values[key] || '' })
+  console.log({ formattedValues })
+  return formattedValues
+}

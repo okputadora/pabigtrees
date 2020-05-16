@@ -11,7 +11,7 @@ const NominationViewer = ({ match: { params: { id } } }) => {
     const fetchNomination = async () => {
       try {
         const { data } = await getNomination(id)
-        setNomination({ ...data.nomination, imagePaths: [...data.imagePaths] })
+        setNomination({ ...data.nomination, imagePaths: [...data.imagePaths], commonNameNew: data.nomination.speciesId ? null : data.nomination.commonName })
       } catch (err) {
         alert(err)
       }

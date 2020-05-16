@@ -31,23 +31,23 @@ const nominationSchema = Yup.object().shape({
   nominator: Yup.string().required(),
   address: Yup.string().required(),
   phone: Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
-  email: Yup.string().email(),
-  locationOfTree: Yup.string(),
-  lat: Yup.number(),
-  lon: Yup.number(),
+  email: Yup.string().email().required(),
+  locationOfTree: Yup.string().nullable(),
+  lat: Yup.number().nullable(),
+  lon: Yup.number().nullable(),
   measuringCrew: Yup.string().required(),
   measuringTechnique: Yup.string().required(),
   dateMeasured: Yup.string().required(),
   landOwner: Yup.string(),
-  ownerAddress: Yup.string(),
-  ownerPhone: Yup.string(),
-  ownerEmail: Yup.string(),
+  ownerAddress: Yup.string().nullable(),
+  ownerPhone: Yup.string().nullable(),
+  ownerEmail: Yup.string().nullable(),
   circumference: Yup.number().required(),
   height: Yup.number().required(),
   spread1: Yup.number().required(),
   spread2: Yup.number().required(),
   comments: Yup.string(),
-  isPublic: Yup.bool(),
+  isPublic: Yup.bool().required(),
 })
 
 const calculatePoints = (c, h, s1, s2) => {
@@ -65,47 +65,6 @@ const calculatePoints = (c, h, s1, s2) => {
   } else {
     return 'Enter Circumference, height, and both spread values to calculate points'
   }
-}
-
-const AdminReview = () => {
-  const { values } = useFormikContext()
-  const params = useParams()
-  const history = useHistory()
-  const [isPublic, setIsPublic] = useState(false)
-  const handleSubmit = useCallback(async () => {
-    try {
-      await confirmNomination(params.id, { ...values, isPublic, isApproved: true })
-      history.push('/admin/confirmation')
-    } catch (e) {
-      alert('something went wrong!')
-    }
-  }, [values, isPublic, params])
-  const deleteImage = useCallback(async (imagePath) => {
-    const shouldDelete = window.confirm('Are you sure you want to remove this image? This action cannot be undone, the image will be lost forever')
-    if (shouldDelete) {
-      try {
-        await removeImage(imagePath)
-      } catch (e) {
-        alert('something went wrong!')
-      }
-    }
-  }, [])
-  return (
-    <>
-      <div className="nomination-checkbox"><Checkbox labelElement={<span className="white">public</span>} checked={isPublic} onChange={() => setIsPublic(!isPublic)} /></div>
-      <div className="nomination-review-previewImages">
-        {values.imagePaths.map((img) => (
-          <div className="nomination-previewContainer" key={img.id}>
-            <a href={`http://localhost:4000/uploads/${img.location}`} target="_blank" rel="noopener noreferrer">
-              <img className="nomination-previewImage" key={img} src={`http://localhost:4000/uploads/${img.location}`} alt="preview" />
-            </a>
-            <button type="button" className="nomination-deleteImage" onClick={deleteImage}>X</button>
-          </div>
-        ))}
-      </div>
-      <button className="nomination-submit" type="button" onClick={handleSubmit}>Approve Nomination</button>
-    </>
-  )
 }
 
 const Nomination = ({ initValues, isAdminReview }) => {
@@ -188,17 +147,30 @@ const Nomination = ({ initValues, isAdminReview }) => {
   }, [species, genera, commonNames, activeSpecies, activeCommonName])
 
   const history = useHistory()
-
+  const params = useParams()
+  const [isPublic, setIsPublic] = useState(false)
   const handleSubmit = useCallback(async (values) => {
+    console.log('you hit submit?')
+    console.log({ values })
+    console.log({ params })
     try {
-      const formValues = { ...values, imagePaths: images.map((img) => img.imagePath) }
-      await nominateTree({ ...formValues })
-      alert('Your nomination has been submitted!')
-      history.push('/confirmation')
-    } catch (err) {
-      alert(err)
+      await confirmNomination(params.id, { ...values, isPublic, isApproved: true })
+      history.push('/admin/confirmation')
+    } catch (e) {
+      alert('something went wrong!')
     }
-  }, [images])
+  }, [isPublic])
+
+  const deleteImage = useCallback(async (imagePath) => {
+    const shouldDelete = window.confirm('Are you sure you want to remove this image? This action cannot be undone, the image will be lost forever')
+    if (shouldDelete) {
+      try {
+        await removeImage(imagePath)
+      } catch (e) {
+        alert('something went wrong!')
+      }
+    }
+  }, [])
 
   // const SpeciesField = isAdminReview && newSpecies ? InputField : SelectField
 
@@ -214,11 +186,15 @@ const Nomination = ({ initValues, isAdminReview }) => {
         <Formik
           validationSchema={nominationSchema}
           onSubmit={handleSubmit}
-          initialValues={initValues}
+          initialValues={{ ...initValues, isPublic: false }}
         >
-          {({ values }) => (
-            <Form>
-              {filteredCommonNames && (
+          {({ values, handleSubmit: handleFormikSubmit }) => {
+            console.log({ initValues })
+            console.log({ values })
+
+            return (
+              <Form>
+                {filteredCommonNames && (
                 <SelectField
                   items={filteredCommonNames}
                   canAdd
@@ -227,8 +203,8 @@ const Nomination = ({ initValues, isAdminReview }) => {
                   name="commonName"
                   labelProps={{ label: 'Common Name*' }}
                 />
-              )}
-              {genera && (
+                )}
+                {genera && (
                 <SelectField
                   name="genus"
                   canAdd
@@ -237,8 +213,8 @@ const Nomination = ({ initValues, isAdminReview }) => {
                   items={genera}
                   labelProps={{ label: 'Genus*' }}
                 />
-              )}
-              {filteredSpecies && (
+                )}
+                {filteredSpecies && (
                 <SelectField
                   name="species"
                   canAdd
@@ -247,100 +223,114 @@ const Nomination = ({ initValues, isAdminReview }) => {
                   items={filteredSpecies}
                   labelProps={{ label: 'Species*' }}
                 />
-              )}
-              <SelectField
-                name="county"
-                items={counties}
-                activeItem={initValues ? counties.filter((c) => c.id.toString() === initValues.county.toString())[0] : null}
-                labelProps={{ label: 'County*' }}
-              />
-              <InputField
-                name="nominator"
-                labelProps={{ label: 'Nominator*' }}
-              />
-              <InputField
-                name="address"
-                labelProps={{ label: 'Address*' }}
-              />
-              <InputField
-                name="phone"
-                labelProps={{ label: 'Phone' }}
-              />
-              <InputField
-                name="email"
-                labelProps={{ label: 'Email*' }}
-              />
-              <InputField
-                name="landOwner"
-                labelProps={{ label: 'Land Owner' }}
-              />
-              <InputField
-                name="ownerAddress"
-                labelProps={{ label: 'Owner Address (if different)' }}
-              />
-              <InputField
-                name="ownerPhone"
-                labelProps={{ label: 'Owner Phone (if different)' }}
-              />
-              <InputField
-                name="ownerEmail"
-                labelProps={{ label: 'Owner Email (if different)' }}
-              />
-              <InputField
-                name="locationOfTree"
-                labelProps={{ label: 'Location of tree' }}
-              />
-              <InputField
-                name="lon"
-                labelProps={{ label: 'longitude' }}
-              />
-              <InputField
-                name="lat"
-                labelProps={{ label: 'latitude' }}
-              />
-              <InputField
-                name="measuringCrew"
-                labelProps={{ label: 'Measuring Crew*' }}
-              />
-              <SelectField
-                name="measuringTechnique"
-                items={measuringTechniques}
-                activeItem={initValues ? measuringTechniques.filter((c) => c.id.toString() === initValues.measuringTechnique)[0] : null}
-                labelProps={{ label: 'Measuring Technique*' }}
-              />
-              <InputField
-                name="dateMeasured"
-                labelProps={{ label: 'Date Measured*' }}
-              />
-              <div className="form-divider" />
-              <InputField
-                name="circumference"
-                labelProps={{ label: 'Circumference (inches)*' }}
-              />
-              <InputField
-                name="height"
-                labelProps={{ label: 'Height (feet)*' }}
-              />
-              <InputField
-                name="spread1"
-                labelProps={{ label: 'Spread (first measurement, feet)*' }}
-              />
-              <InputField
-                name="spread2"
-                labelProps={{ label: 'Spread (second measurement, feet)*' }}
-              />
-              <div className="points-calculation">
-                <span className="points-label">Points: </span>
-                <span className="points-value">{calculatePoints(values.circumference, values.height, values.spread1, values.spread2)}</span>
-              </div>
-              <div className="form-divider" />
-              <InputField
-                name="comments"
-                labelProps={{ label: 'Comments' }}
-              />
-              {isAdminReview && <AdminReview images={images} setImages={setImages} />}
-            </Form>
-          )}
+                )}
+                <SelectField
+                  name="county"
+                  items={counties}
+                  activeItem={initValues ? counties.filter((c) => c.id.toString() === initValues.county.toString())[0] : null}
+                  labelProps={{ label: 'County*' }}
+                />
+                <InputField
+                  name="nominator"
+                  labelProps={{ label: 'Nominator*' }}
+                />
+                <InputField
+                  name="address"
+                  labelProps={{ label: 'Address*' }}
+                />
+                <InputField
+                  name="phone"
+                  labelProps={{ label: 'Phone' }}
+                />
+                <InputField
+                  name="email"
+                  labelProps={{ label: 'Email*' }}
+                />
+                <InputField
+                  name="landOwner"
+                  labelProps={{ label: 'Land Owner' }}
+                />
+                <InputField
+                  name="ownerAddress"
+                  labelProps={{ label: 'Owner Address (if different)' }}
+                />
+                <InputField
+                  name="ownerPhone"
+                  labelProps={{ label: 'Owner Phone (if different)' }}
+                />
+                <InputField
+                  name="ownerEmail"
+                  labelProps={{ label: 'Owner Email (if different)' }}
+                />
+                <InputField
+                  name="locationOfTree"
+                  labelProps={{ label: 'Location of tree' }}
+                />
+                <InputField
+                  name="lon"
+                  labelProps={{ label: 'longitude' }}
+                />
+                <InputField
+                  name="lat"
+                  labelProps={{ label: 'latitude' }}
+                />
+                <InputField
+                  name="measuringCrew"
+                  labelProps={{ label: 'Measuring Crew*' }}
+                />
+                <SelectField
+                  name="measuringTechnique"
+                  items={measuringTechniques}
+                  activeItem={initValues ? measuringTechniques.filter((c) => c.id.toString() === initValues.measuringTechnique)[0] : null}
+                  labelProps={{ label: 'Measuring Technique*' }}
+                />
+                <InputField
+                  name="dateMeasured"
+                  labelProps={{ label: 'Date Measured*' }}
+                />
+                <div className="form-divider" />
+                <InputField
+                  name="circumference"
+                  labelProps={{ label: 'Circumference (inches)*' }}
+                />
+                <InputField
+                  name="height"
+                  labelProps={{ label: 'Height (feet)*' }}
+                />
+                <InputField
+                  name="spread1"
+                  labelProps={{ label: 'Spread (first measurement, feet)*' }}
+                />
+                <InputField
+                  name="spread2"
+                  labelProps={{ label: 'Spread (second measurement, feet)*' }}
+                />
+                <div className="points-calculation">
+                  <span className="points-label">Points: </span>
+                  <span className="points-value">{calculatePoints(values.circumference, values.height, values.spread1, values.spread2)}</span>
+                </div>
+                <div className="form-divider" />
+                <InputField
+                  name="comments"
+                  labelProps={{ label: 'Comments' }}
+                />
+                <>
+                  <div className="nomination-checkbox"><Checkbox labelElement={<span className="white">public</span>} checked={isPublic} onChange={() => setIsPublic(!isPublic)} /></div>
+                  <div className="nomination-review-previewImages">
+                    {values.imagePaths.map((img) => (
+                      <div className="nomination-previewContainer" key={img.id}>
+                        <a href={`http://localhost:4000/uploads/${img.location}`} target="_blank" rel="noopener noreferrer">
+                          <img className="nomination-previewImage" key={img} src={`http://localhost:4000/uploads/${img.location}`} alt="preview" />
+                        </a>
+                        <button type="button" className="nomination-deleteImage" onClick={deleteImage}>X</button>
+                      </div>
+                    ))}
+                  </div>
+                  <button className="nomination-submit" type="submit" onClick={handleFormikSubmit}>Approve Nomination</button>
+                </>
+              </Form>
+            )
+          }}
         </Formik>
       </div>
     </div>
@@ -349,12 +339,17 @@ const Nomination = ({ initValues, isAdminReview }) => {
 
 
 Nomination.defaultProps = {
-  initValues: {},
   isAdminReview: false,
 }
 
 Nomination.propTypes = {
-  initValues: PropTypes.shape({}),
+  initValues: PropTypes.shape({
+    speciesId: PropTypes.string,
+    genusId: PropTypes.string,
+    speciesName: PropTypes.string,
+    genusName: PropTypes.string,
+    commonName: PropTypes.string,
+  }).isRequired,
   isAdminReview: PropTypes.bool,
 }
 

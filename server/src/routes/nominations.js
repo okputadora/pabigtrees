@@ -109,6 +109,7 @@ router.post('/', async (req, res) => {
 })
 
 // nomination approval
+// @TODO consider splitting this into two requests 1 for creating the tree (and genus and species if necessary) and the other for updating the
 router.put('/approval/:id', async (req, res) => {
   try {
     // const validatedApproval = formatAndValidateApproval(req.body)
@@ -117,37 +118,39 @@ router.put('/approval/:id', async (req, res) => {
       speciesName,
       speciesId,
       genusId,
+      commonNameNew,
       commonName,
     } = req.body
-    let newGenus = {}
+    let newGenus
     let newSpecies = {}
-    console.log(req.body)
-
-    // NEXTTODO: commonName is not being sent properly when species is new we're getting 'NEW'
-    // console.log({
-    //   speciesId, speciesName, genusId, genusName,
-    // })
     if (!genusId) {
-      // create a genus
-      newGenus = await db.genus.create({ id: `GE${uniqid()}`, t_genus: genusName, t_common: genusName })
+      newGenus = await db.genus.create({
+        id: `GE${uniqid()}`, t_genus: genusName, t_common: genusName, test: true,
+      })
     }
     if (!speciesId) {
       // create a species
       newSpecies = await db.species.create({
-        id: `SP${uniqid()}`, k_genus: genusId || newGenus.id, t_species: speciesName, t_common: commonName,
+        id: `SP${uniqid()}`,
+        k_genus: genusId || newGenus.id,
+        t_species: speciesName,
+        t_common: commonNameNew,
+        test: true,
       })
     }
-    console.log({ newSpecies })
-    console.log({ newGenus })
-    await db.nominations.update({ isApproved: true }, { where: { id: req.params.id } })
+    await db.nominations.update({ isApproved: false }, { where: { id: req.params.id } })
 
-    const newTree = mapNominationToTree(req.body, newGenus, newSpecies)
-    // const tree = await db.trees.create({ ...newTree, id: `TR${Date.now()}` })
-    // if (req.body.imagePaths && req.body.imagePaths.length > 0) {
-    //   await Promise.all(req.body.imagePaths.map(img => db.treeImages.create({ k_tree: tree.id, img_location: img.location, f_active: 1 })))
-    //   await moveToTreeImages(req.body.imagePaths)
-    // }
-    // res.json({ success: true, tree })
+    const newTree = mapNominationToTree(req.body, newSpecies)
+    const tree = await db.trees.create({ ...newTree, id: `TR${Date.now()}`, isTest: true })
+    if (req.body.imagePaths && req.body.imagePaths.length > 0) {
+      try {
+        await Promise.all(req.body.imagePaths.map(img => db.treeImages.create({ k_tree: tree.id, img_location: img.location, f_active: 1 })))
+        await moveToTreeImages(req.body.imagePaths)
+      } catch (err) {
+        res.json({ success: false, message: `The Nomination was approved, the tree was created, but we ran into an issue moving the images to the "trees" directory, ask Mike to look for the following images ${req.body.imagePaths.join(' , ')}` })
+      }
+    }
+    res.json({ success: true, tree })
   } catch (err) {
     console.log({ err })
     res.status(500).json({ error: err })
