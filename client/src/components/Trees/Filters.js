@@ -2,10 +2,9 @@
 /* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Formik, Form } from 'formik'
 import { Select } from '@blueprintjs/select'
-
-import SearchField from '@/components/Forms/SearchField'
+import { Checkbox, Tooltip } from '@blueprintjs/core'
+// import SearchField from '@/components/Forms/SearchField'
 import './filters.scss'
 
 class Filters extends Component {
@@ -42,19 +41,33 @@ class Filters extends Component {
 
   selectSpecies = (activeSpecies) => this.props.setFilter({ activeSpecies })
 
+  toggleMultiStemmed = () => this.props.setFilter({ isMultiStemmedIncluded: !this.props.filters.isMultiStemmedIncluded })
+
+  toggleTallest = () => this.props.setFilter({ isTallestOfSpecies: !this.props.filters.isTallestOfSpecies })
+
+  toggleChamp = () => this.props.setFilter({ isNationalChamp: !this.props.filters.isNationalChamp })
+
   render() {
     const {
       genera,
       species,
-      filters: { activeGenus, activeSpecies, keyword },
+      filters,
+      filters: {
+        activeGenus,
+        activeSpecies,
+        isMultiStemmedIncluded,
+        isTallestOfSpecies,
+        isNationalChamp,
+      },
       isShowingMap,
       toggleShowMap,
     } = this.props
     const { filteredSpecies } = this.state
+    console.log({ filters })
     return (
-      <>
+      <div>
         <div className="filters">
-          <div>filters</div>
+          <div className="filters-title">Filters</div>
           <div className="dropdowns">
             <div className="filter-dropdown-container">
               <div>Genus</div>
@@ -83,16 +96,38 @@ class Filters extends Component {
               </div>
             </div>
           </div>
-          <Formik
-            initialValues={{ keyword: keyword || '' }}
-            enableReinitialize
-            onSubmit={this.handleSubmit}
-          >
-            {() => (<button type="button" onClick={toggleShowMap}>{isShowingMap ? <i className="fas fa-table" /> : <i className="fas fa-map-marked-alt" />}</button>
-            )}
-          </Formik>
+          <div className="filter-additional">
+            <Checkbox checked={isMultiStemmedIncluded} onChange={this.toggleMultiStemmed}>
+              <Tooltip content="Multi-stemmed trees cannot be National Champs">
+                <strong>Include Multi-Stemmed Trees</strong>
+              </Tooltip>
+            </Checkbox>
+            <Checkbox checked={isTallestOfSpecies} onChange={this.toggleTallest}>
+              <strong>Only Show Tallest of Each Species</strong>
+            </Checkbox>
+            <Checkbox checked={isNationalChamp} onChange={this.toggleChamp}>
+              <strong>Only Show National Champs</strong>
+            </Checkbox>
+          </div>
+          <button type="button" onClick={toggleShowMap}>
+            {isShowingMap
+              ? (
+                <span>
+                  <i className="fas fa-table" />
+                  {' '}
+                  Show Table
+                </span>
+              )
+              : (
+                <span>
+                  <i className="fas fa-map-marked-alt" />
+                  {' '}
+                  Show Map
+                </span>
+              )}
+          </button>
         </div>
-      </>
+      </div>
     )
   }
 }
@@ -107,6 +142,7 @@ Filters.propTypes = {
     keyword: PropTypes.string,
     activeSpecies: listItemPropType,
     activeGenus: listItemPropType,
+    isMultiStemmedIncluded: PropTypes.bool,
   }).isRequired,
   species: PropTypes.arrayOf(listItemPropType).isRequired,
   genera: PropTypes.arrayOf(listItemPropType).isRequired,

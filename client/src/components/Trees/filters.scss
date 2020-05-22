@@ -4,6 +4,11 @@
   margin-bottom: 10px;
 }
 
+.filters-title {
+  padding-bottom: 10px;
+  font-size: 20px;
+}
+
 .dropdowns {
   display: flex;
   margin-bottom: 10px;
@@ -21,6 +26,14 @@
   margin: 0 4px;
   border: 1px solid #aeaeae;
   background: white;
+}
+
+.filter-additional {
+  display: flex;
+}
+
+.filter-additional > * {
+  width: 33%;
 }
 
 .bp3-popover-wrapper {

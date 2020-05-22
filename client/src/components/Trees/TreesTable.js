@@ -52,6 +52,9 @@ const initialFilters = {
   sortOrder: 'DESC',
   page: 1,
   pageSize: 20,
+  isMultiStemmedIncluded: true,
+  isNationalChamp: false,
+  isTallestOfSpecies: false,
 }
 class Trees extends Component {
   state = {

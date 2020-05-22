@@ -14,10 +14,14 @@ export const buildTreeQuery = ({
   sortOrder,
   page,
   pageSize,
+  isMultiStemmedIncluded,
+  isNationalChamp,
+  isTallestOfSpecies,
 }) => {
   const { id: speciesId } = activeSpecies
   const { id: genusId } = activeGenus
-  return `/trees?activeSpecies=${speciesId}&activeGenus=${genusId}&sortField=${sortField}&sortOrder=${sortOrder}&page=${page}&pageSize=${pageSize}`
+  return `/trees?activeSpecies=${speciesId}&activeGenus=${genusId}&sortField=${sortField}&sortOrder=${sortOrder}&page=${page}&pageSize=${pageSize}
+  &isMultiStemmedIncluded=${isMultiStemmedIncluded}&isNationalChamp=${isNationalChamp}&isTallestOfSpecies=${isTallestOfSpecies}`
 }
 
 export default {}

@@ -13,6 +13,9 @@ router.get('/', (req, res) => {
     activeSpecies = 'All',
     page = 1,
     pageSize = 20,
+    isMultiStemmedIncluded = 'true',
+    isNationalChamp = false,
+    isTallestOfSpecies = false,
   } = req.query
   let order = [keyMap[sortField], sortOrder]
   if (sortField === 'genus') {
@@ -38,8 +41,16 @@ router.get('/', (req, res) => {
     speciesQuery.where.id = activeSpecies
   }
   const countyQuery = { model: models.counties }
+  const multiStemmedQuery = isMultiStemmedIncluded === 'false' && { f_multistemmed: 0 }
+  const champQuery = isNationalChamp === 'true' && { f_national_champ: 1 }
+  const tallestQuery = isTallestOfSpecies === 'true' && { f_tallest: 1 }
+  const additionalQueries = {
+    where: { ...multiStemmedQuery, ...champQuery, ...tallestQuery },
+  }
+  console.log({ additionalQueries })
   // @TODO validate there requests
   models.trees.findAll({
+    ...additionalQueries,
     include: [
       speciesQuery,
       countyQuery,
