@@ -25,8 +25,11 @@
 
 .row { 
   border-bottom: 1px solid black;
-  height: calc(600 / 20);
   cursor: pointer;
+}
+
+.row > td {
+  height: 26px;  
 }
 
 .row:hover {
@@ -44,6 +47,11 @@
 
 .odd {
   background-color: #FAFAD2
+}
+
+.table-icon {
+  display: flex;
+  position: static;
 }
 
 .tree-image {

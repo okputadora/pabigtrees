@@ -2,7 +2,7 @@
   "eslint.workingDirectories": [
     "./client", "./server"
   ],
-  "eslint.autoFixOnSave": true,
+  "eslint.autoFixOnSave": false,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   }

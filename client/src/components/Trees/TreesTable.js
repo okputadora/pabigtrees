@@ -17,6 +17,7 @@ const formatTableData = (rawData) => rawData.map((row) => (
     commonName: row.Species && row.Species.t_common,
     points: row.i_points,
     address: row.t_address,
+    'additional info': [row.f_national_champ, row.f_tallest],
     id: row.id,
   }
 ))
@@ -56,7 +57,7 @@ class Trees extends Component {
   state = {
     species: [initialFilters.activeSpecies],
     genera: [initialFilters.activeGenus],
-    columns: ['county', 'genus', 'species', 'common name', 'points', 'address'],
+    columns: ['county', 'genus', 'species', 'common name', 'points', 'address', 'additional info'],
     data: null,
     tableData: null,
     filters: initialFilters,

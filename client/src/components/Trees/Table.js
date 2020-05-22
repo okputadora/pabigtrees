@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import Icon from '@/components/Common/Icon'
+
 const Table = ({
   columns,
   setSortBy,
@@ -11,14 +13,26 @@ const Table = ({
   getPage,
   getNextPage,
 }) => (
-  <>
+  <div>
     <div className="tree-data-container">
       <table className="table">
         <thead><tr>{columns.map((col) => <th onClick={setSortBy} id={col} key={col} className="table-header">{col}</th>)}</tr></thead>
         <tbody>
           {tableData ? tableData.map((row, i) => (
             <tr onClick={() => goToTreePage(row.id)} className={`row ${i % 2 === 0 ? 'even' : 'odd'}`} key={row.id}>
-              {Object.keys(row).filter((k) => k !== 'id').map((key) => <td key={`${row.id}=${row[key]}`} className="cell">{row[key]}</td>)}
+              {Object.keys(row).filter((k) => k !== 'id').map((key) => {
+                if (key === 'additional info') {
+                  return (
+                    <td>
+                      <span className="table-icon">
+                        {row[key][0] === 1 && <Icon name="nationalChamp" />}
+                        {row[key][1] === 1 && <Icon name="tallest" />}
+                      </span>
+                    </td>
+                  )
+                }
+                return <td key={`${row.id}=${row[key]}`} className="cell">{row[key]}</td>
+              })}
             </tr>
           )) : new Array(20).fill('ROW').map((row, i) => (
             <tr key={i} className={`row ${i % 2 === 0 ? 'even' : 'odd'}`}>
@@ -42,7 +56,18 @@ const Table = ({
       ))}
       <button type="button" onClick={getNextPage}>Next</button>
     </div>
-  </>
+  </div>
 )
+
+Table.propTypes = {
+  columns: PropTypes.arrayOf(PropTypes.stng).isRequired,
+  setSortBy: PropTypes.func.isRequired,
+  tableData: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  goToTreePage: PropTypes.func.isRequired,
+  getPrevPage: PropTypes.func.isRequired,
+  filters: PropTypes.shape({ page: PropTypes.number }).isRequired,
+  getPage: PropTypes.func.isRequired,
+  getNextPage: PropTypes.func.isRequired,
+}
 
 export default Table
