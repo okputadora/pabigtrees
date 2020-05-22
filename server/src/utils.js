@@ -77,7 +77,7 @@ export const mapNominationToTree = (nomination, newSpecies) => ({
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
-const baseSchema = Joi.object({
+const baseSchema = {
   commonName: Joi.string().required(),
   genus: Joi.string().required(),
   species: Joi.string().required(),
@@ -102,16 +102,16 @@ const baseSchema = Joi.object({
   spread2: Joi.number().required(),
   comments: Joi.string().allow(''),
   imagePaths: Joi.array().items(Joi.string()).optional(),
-})
+}
 
-const nominationSchema = {
+const nominationSchema = Joi.object({
   ...baseSchema,
   isNew: Joi.object({
     commonName: Joi.bool().required(),
     species: Joi.bool().required(),
     genus: Joi.bool().required(),
   }).required(),
-}
+})
 
 // const approvalSchema = {
 //   ...baseSchema,

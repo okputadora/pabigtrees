@@ -7,7 +7,7 @@ import uniqid from 'uniqid'
 import db from '../models'
 import {
   formatAndValidateNomination,
-  formatAndValidateApproval,
+  // formatAndValidateApproval,
   mapNominationToTree,
 } from '../utils'
 
