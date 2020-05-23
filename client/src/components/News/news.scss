@@ -13,11 +13,18 @@
   align-items: flex-start;
 }
 
+.news-header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
 .news-title {
   font-size: 20px;
   margin-bottom: 15px;
   text-transform: capitalize;
 }
+
 
 .news-image {
   align-self: center;
