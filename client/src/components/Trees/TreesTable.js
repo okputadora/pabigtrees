@@ -65,6 +65,7 @@ class Trees extends Component {
     tableData: null,
     filters: initialFilters,
     isShowingMap: false,
+    count: 1800,
   }
 
   componentDidMount() {
@@ -75,8 +76,8 @@ class Trees extends Component {
   fetchTrees = async () => {
     const { filters } = this.state
     try {
-      const { data: { trees } } = await API.getTrees(filters)
-      this.setState({ tableData: formatTableData(trees), data: formatData(trees) })
+      const { data: { trees, count } } = await API.getTrees(filters)
+      this.setState({ tableData: formatTableData(trees), data: formatData(trees), count })
     } catch (e) {
       alert('Something went wrong! Try again in a few seconds')
     }
@@ -119,6 +120,10 @@ class Trees extends Component {
     this.setState((prevState) => ({ filters: { ...prevState.filters, page: prevState.filters.page - 1 } }), this.fetchTrees)
   }
 
+  getPage = (pageIndex) => {
+    this.setState((prevState) => ({ filters: { ...prevState.filters, page: pageIndex } }), this.fetchTrees)
+  }
+
   goToTreePage = (id) => {
     const { history, location } = this.props
     console.log({ location })
@@ -138,6 +143,7 @@ class Trees extends Component {
       filters,
       columns,
       isShowingMap,
+      count,
     } = this.state
     const { match: { params: { id } } } = this.props
     return (
@@ -163,7 +169,8 @@ class Trees extends Component {
                 columns={columns}
                 tableData={tableData}
                 filters={filters}
-                setPage={this.setPage}
+                count={count}
+                getPage={this.getPage}
                 getNextPage={this.getNextPage}
                 getPrevPage={this.getPrevPage}
                 goToTreePage={this.goToTreePage}
@@ -182,6 +189,8 @@ Trees.propTypes = {
       id: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
+  history: PropTypes.shape({}).isRequired,
+  location: PropTypes.shape({ pathname: PropTypes.string }).isRequired,
 }
 
 export default Trees

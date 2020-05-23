@@ -10,8 +10,10 @@
 }
 
 .tree-data-pagination {
+  max-width: 1100px;
   display: flex;
   justify-content: center;
+  flex-flow: wrap;
 }
 
 .pagination-button {
@@ -19,11 +21,14 @@
   background: transparent;
   border: none;
   color: yellow;
-  cursor: pointer;
 }
 
-.pagination-button:hover {
+.pagination-button:hover, .pagination-button_active {
+  width: 32px;
+  background: transparent;
+  border: none;
   color: rgb(22, 187, 22);
+  cursor: pointer;
 }
 
 .table {

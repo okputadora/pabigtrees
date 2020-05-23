@@ -5,7 +5,7 @@ import { keyMap } from '../utils'
 
 const router = Router()
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   const {
     sortField = 'points',
     sortOrder = 'DESC',
@@ -48,20 +48,22 @@ router.get('/', (req, res) => {
     where: { ...multiStemmedQuery, ...champQuery, ...tallestQuery },
   }
   // @TODO validate the requests
-  models.trees.findAll({
-    ...additionalQueries,
-    include: [
-      speciesQuery,
-      countyQuery,
-    ],
-    order: [order],
-    limit: parseInt(pageSize, 10),
-    offset: (parseInt(page, 10) - 1) * parseInt(pageSize, 10),
-  }).then(trees => {
-    res.json({ trees })
-  }).catch(e => {
-    console.log({ efetching: e })
-  })
+  try {
+    const { count, rows: trees } = await models.trees.findAndCountAll({
+      ...additionalQueries,
+      include: [
+        speciesQuery,
+        countyQuery,
+      ],
+      order: [order],
+      limit: parseInt(pageSize, 10),
+      offset: (parseInt(page, 10) - 1) * parseInt(pageSize, 10),
+    })
+    console.log({ trees })
+    res.json({ count, trees })
+  } catch (error) {
+    res.status(500).json({ error })
+  }
 })
 
 router.get('/image/:id', (req, res) => {

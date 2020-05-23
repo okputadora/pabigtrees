@@ -1,6 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 
 import Icon from '@/components/Common/Icon'
 
@@ -9,10 +10,11 @@ const Table = ({
   setSortBy,
   tableData,
   goToTreePage,
-  getPrevPage,
+  // getPrevPage,
   filters,
   getPage,
-  getNextPage,
+  // getNextPage,
+  count,
 }) => (
   <div>
     <div className="tree-data-container">
@@ -44,19 +46,25 @@ const Table = ({
       </table>
     </div>
     <div className="tree-data-pagination">
-      {filters.page > 1 && <button className="pagination-button" type="button" onClick={getPrevPage}>Prev</button>}
-      {new Array(10).fill().map((_, i) => (
-        <button
-          className="pagination-button"
-          type="button"
-          key={filters.page + i}
-          onClick={getPage}
-          id={filters.page + i}
-        >
-          {filters.page + i}
-        </button>
-      ))}
-      <button className="pagination-button" type="button" onClick={getNextPage}>Next</button>
+      {/* {filters.page > 1 && <button className="pagination-button" type="button" onClick={getPrevPage}>Prev</button>} */}
+      {new Array(Math.floor(count / filters.pageSize)).fill().map((_, i) => {
+        const className = classNames({
+          'pagination-button': true,
+          'pagination-button_active': filters.page === i + 1,
+        })
+        return (
+          <button
+            className={className}
+            type="button"
+            key={filters.page + i}
+            onClick={() => getPage(i + 1)}
+            id={filters.page + i}
+          >
+            {i + 1}
+          </button>
+        )
+      })}
+      {/* <button className="pagination-button" type="button" onClick={getNextPage}>Next</button> */}
     </div>
   </div>
 )
@@ -67,9 +75,13 @@ Table.propTypes = {
   tableData: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   goToTreePage: PropTypes.func.isRequired,
   getPrevPage: PropTypes.func.isRequired,
-  filters: PropTypes.shape({ page: PropTypes.number }).isRequired,
+  filters: PropTypes.shape({
+    page: PropTypes.number,
+    pageSize: PropTypes.number,
+  }).isRequired,
   getPage: PropTypes.func.isRequired,
   getNextPage: PropTypes.func.isRequired,
+  count: PropTypes.number.isRequired,
 }
 
 export default Table
