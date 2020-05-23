@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React from 'react'
 import PropTypes from 'prop-types'
 
@@ -43,9 +44,10 @@ const Table = ({
       </table>
     </div>
     <div className="tree-data-pagination">
-      {filters.page > 1 && <button type="button" onClick={getPrevPage}>Prev</button>}
+      {filters.page > 1 && <button className="pagination-button" type="button" onClick={getPrevPage}>Prev</button>}
       {new Array(10).fill().map((_, i) => (
         <button
+          className="pagination-button"
           type="button"
           key={filters.page + i}
           onClick={getPage}
@@ -54,7 +56,7 @@ const Table = ({
           {filters.page + i}
         </button>
       ))}
-      <button type="button" onClick={getNextPage}>Next</button>
+      <button className="pagination-button" type="button" onClick={getNextPage}>Next</button>
     </div>
   </div>
 )

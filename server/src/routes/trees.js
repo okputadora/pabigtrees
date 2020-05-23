@@ -47,8 +47,7 @@ router.get('/', (req, res) => {
   const additionalQueries = {
     where: { ...multiStemmedQuery, ...champQuery, ...tallestQuery },
   }
-  console.log({ additionalQueries })
-  // @TODO validate there requests
+  // @TODO validate the requests
   models.trees.findAll({
     ...additionalQueries,
     include: [

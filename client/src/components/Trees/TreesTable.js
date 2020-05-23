@@ -98,9 +98,7 @@ class Trees extends Component {
   }
 
   setFilter = (updatedFilter) => {
-    this.setState((prevState) => ({ filters: { ...prevState.filters, ...updatedFilter, page: 1 } }), () => {
-      this.fetchTrees()
-    })
+    this.setState((prevState) => ({ filters: { ...prevState.filters, ...updatedFilter, page: 1 } }), this.fetchTrees)
   }
 
   fetchSpeciesAndGenusLists = async () => {
@@ -115,6 +113,10 @@ class Trees extends Component {
 
   getNextPage = () => {
     this.setState((prevState) => ({ filters: { ...prevState.filters, page: prevState.filters.page + 1 } }), this.fetchTrees)
+  }
+
+  getPrevPage = () => {
+    this.setState((prevState) => ({ filters: { ...prevState.filters, page: prevState.filters.page - 1 } }), this.fetchTrees)
   }
 
   goToTreePage = (id) => {
@@ -162,8 +164,8 @@ class Trees extends Component {
                 tableData={tableData}
                 filters={filters}
                 setPage={this.setPage}
-                setNextPage={this.setNextPage}
-                setPrevPage={this.setPrevPage}
+                getNextPage={this.getNextPage}
+                getPrevPage={this.getPrevPage}
                 goToTreePage={this.goToTreePage}
                 setSortBy={this.setSortBy}
               />

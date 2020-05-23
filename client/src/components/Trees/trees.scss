@@ -6,7 +6,24 @@
   display: flex;
   flex-flow: column;
   width: 100%;
-  margin-bottom: 100px;
+  margin-bottom: 20px;
+}
+
+.tree-data-pagination {
+  display: flex;
+  justify-content: center;
+}
+
+.pagination-button {
+  width: 32px;
+  background: transparent;
+  border: none;
+  color: yellow;
+  cursor: pointer;
+}
+
+.pagination-button:hover {
+  color: rgb(22, 187, 22);
 }
 
 .table {
