@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import getNews from '@/api/news'
 
+import './news.scss'
+
 const News = () => {
   const [entries, setEntries] = useState([])
   useEffect(() => {

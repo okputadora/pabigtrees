@@ -6,8 +6,7 @@ const router = Router()
 
 router.get('/', async (req, res) => {
   try {
-    const news = await models.news.findAll({})
-    console.log({ news })
+    const news = await models.news.findAll({ order: [['create_date', 'DESC']] })
     res.json({ news })
   } catch (err) {
     console.log({ err })
