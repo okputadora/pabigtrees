@@ -10,6 +10,7 @@ import Signup from './Signup/Signup'
 import Trees from './Trees/TreesTable'
 import Nomination from './Nomination/Nomination'
 import Confirmation from './Common/Confirmation'
+import News from './News/News'
 
 import './main.scss'
 
@@ -39,6 +40,10 @@ const Main = () => (
           <Route
             path="/confirmation"
             component={Confirmation}
+          />
+          <Route
+            path="/news"
+            component={News}
           />
           <Route
             path="/:pathName"

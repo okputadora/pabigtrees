@@ -13,6 +13,7 @@ import {
   nominations,
   pages,
   trees,
+  news,
 } from './routes'
 
 const { port } = config.default.core
@@ -44,6 +45,7 @@ app.use('/treeImages', express.static(path.join(__dirname, '../treeImages')))
 app.use('/trees', trees)
 app.use('/pages', pages)
 app.use('/nominations', nominations)
+app.use('/news', news)
 
 app.listen(port, () => logger.log({ level: 'info', message: `Example app listening on port ${port}!` }))
 

@@ -59,7 +59,6 @@ router.get('/', async (req, res) => {
       limit: parseInt(pageSize, 10),
       offset: (parseInt(page, 10) - 1) * parseInt(pageSize, 10),
     })
-    console.log({ trees })
     res.json({ count, trees })
   } catch (error) {
     res.status(500).json({ error })
@@ -69,11 +68,9 @@ router.get('/', async (req, res) => {
 router.get('/image/:id', (req, res) => {
   const { id } = req.params
   models.treeImages.findAll({ where: { k_tree: id, f_active: 1 } }).then((treeImages) => {
-    console.log(treeImages)
     res.json(treeImages)
-  }).catch(e => {
-    console.log(e)
-    res.status(500).send()
+  }).catch(error => {
+    res.status(500).json({ error })
   })
 })
 
