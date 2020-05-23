@@ -3,22 +3,29 @@
 }
 
 .news-entry {
+  display: flex;
+  flex-flow: column;
   margin: 20px;
   padding: 10px;
   border-radius: 4px;
   background: white;
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  align-items: flex-start;
 }
 
 .news-title {
   font-size: 20px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  text-transform: capitalize;
 }
 
 .news-image {
-
+  align-self: center;
+  margin: auto;
 }
 
 .news-body {
-
+  font-size: 16px;
+  max-width: 800px;
+  padding: 10px 20px;
 }
