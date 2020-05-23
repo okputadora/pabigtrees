@@ -48,7 +48,7 @@ const TreeEditor = (props) => {
     console.log('removing ', e.target.id)
   }
   return (
-    <div>
+    <div className="tree-editor">
       {editableTree && (
         <>
           <Formik

@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDropzone } from 'react-dropzone'
-import { Checkbox } from '@blueprintjs/core'
 import classNames from 'classnames'
 
 const ImageUpload = ({ images: initialImages, upload, onUpload }) => {
@@ -12,18 +11,18 @@ const ImageUpload = ({ images: initialImages, upload, onUpload }) => {
       alert('some files were rejected')
     }
     if (files) {
-      if (files.length > 5) {
-        alert('You\'re attempting to upload too many files. The limit is 5')
+      if (files.length > 1) {
+        alert('You\'re attempting to upload too many files. The limit is 1')
       }
       try {
         setUploading(true)
         const { data: uploadedFiles } = await upload(files)
-        setImages(images.concat(files.map((file, i) => Object.assign(file, {
+        const newImages = images.concat(files.map((file, i) => Object.assign(file, {
           preview: URL.createObjectURL(file),
           imagePath: uploadedFiles[i],
-        }))), () => {
-          if (onUpload) onUpload(images)
-        })
+        })))
+        setImages(newImages)
+        onUpload(newImages)
       } catch (err) {
         alert(err.message)
       } finally {
@@ -58,7 +57,7 @@ const ImageUpload = ({ images: initialImages, upload, onUpload }) => {
         {
           isDragActive
             ? <p>Drop the images here ...</p>
-            : <p>Drag up to 5 images here, or click to select from your file system</p>
+            : <p>Drag an image or click to select from your file system</p>
         }
       </div>
     </>

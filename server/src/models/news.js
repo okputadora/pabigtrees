@@ -3,7 +3,7 @@ import Sequelize from 'sequelize'
 export default (sequelize) => {
   const News = sequelize.define('News', {
     // attributes
-    i_id: { type: Sequelize.INTEGER, primaryKey: true },
+    i_id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
     news_title: { type: Sequelize.STRING },
     news_body: { type: Sequelize.STRING },
     f_display: { type: Sequelize.INTEGER },

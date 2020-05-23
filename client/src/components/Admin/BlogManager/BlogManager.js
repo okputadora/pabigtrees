@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import moment from 'moment'
 
+import CreateEntry from './CreateEntry'
 import { getNews } from '@/api/news'
 
-import './news.scss'
-
-const News = () => {
+const BlogManager = () => {
   const [entries, setEntries] = useState([])
 
   useEffect(() => {
@@ -21,6 +20,7 @@ const News = () => {
 
   return (
     <div className="news">
+      <CreateEntry />
       {entries.map((entry) => (
         <div key={entry.i_id} className="news-entry">
           <div className="news-header">
@@ -35,4 +35,4 @@ const News = () => {
   )
 }
 
-export default News
+export default BlogManager

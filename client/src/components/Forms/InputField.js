@@ -5,7 +5,7 @@ import { useField } from 'formik'
 
 import './inputField.scss'
 
-const InputField = ({ name, labelProps }) => {
+const InputField = ({ name, labelProps, inputProps }) => {
   const [field, { error, touched }] = useField(name)
   const labelClasses = classNames({
     'inputField-label': true,
@@ -21,11 +21,18 @@ const InputField = ({ name, labelProps }) => {
           <span>{labelProps.label}</span>
           <span>{field.isRequired && '*'}</span>
         </div>
-        <input className="inputField-input" {...field} value={field.value || ''} />
+        {inputProps.textArea
+          ? <textarea className="inputField-input_textArea" {...field} value={field.value || ''} />
+          : <input className="inputField-input" {...field} value={field.value || ''} />}
       </div>
       {error && touched && <div className="form-error">{error}</div>}
     </div>
   )
+}
+
+
+InputField.defaultProps = {
+  inputProps: {},
 }
 
 InputField.propTypes = {
@@ -33,5 +40,6 @@ InputField.propTypes = {
   labelProps: PropTypes.shape({
     label: PropTypes.string.isRequired,
   }).isRequired,
+  inputProps: PropTypes.shape({ textArea: PropTypes.bool }),
 }
 export default InputField
