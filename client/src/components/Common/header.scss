@@ -1,6 +1,8 @@
+@import '../../styles/colors.scss';
+
 .headerContainer {
   padding: 15px;
-  background: #234030;
+  background: $header-color;
   color: white;
   display: flex;
   justify-content: flex-start;
