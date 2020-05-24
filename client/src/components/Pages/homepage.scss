@@ -1,0 +1,35 @@
+.homepage-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.homepage-title {
+  font-size: 26px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.homepage-image {
+  // border: 1px solid red;
+}
+
+.homepage-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  padding: 40px;
+  margin: 100px;
+  border-radius: 5px;
+}
+
+.homepage-section-title {
+  color: black;
+  font-size: 20px;
+  margin: 10px;
+}
+
+.homepage-section-body {
+  font-size: 18px;
+}
