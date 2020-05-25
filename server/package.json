@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --delay 2500 --exec babel-node ./src/index.js"
+    "dev": "nodemon --exec babel-node ./src/index.js",
+    "build": "babel './src' -s -D -d lib",
+    "start": "node ./lib"
   },
   "author": "",
   "events": {
