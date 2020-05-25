@@ -4,8 +4,8 @@ import * as API from '@/api/page'
 
 // @TODO FETCH THIS INFORMATION
 const paths = {
-  '/': '5de12e6538a99e3154370d02',
-  measurement: '5de12ed038a99e3154370d03',
+  '/': '2',
+  measurement: '1',
 }
 
 class PageData extends Component {
@@ -13,7 +13,6 @@ class PageData extends Component {
     data: null,
   }
 
-  // @TODO data fetching should be moved out of here to a HOC
   componentDidMount() {
     this.fetchPage()
   }
@@ -30,6 +29,7 @@ class PageData extends Component {
     const { match: { params: { pathName = '/' } } } = this.props
     const id = paths[pathName]
     const { data } = await API.getPageData(id)
+    console.log({ data })
     this.setState({ data })
   }
 

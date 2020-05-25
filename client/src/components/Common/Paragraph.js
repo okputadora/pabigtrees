@@ -7,12 +7,12 @@ import EditableText from './EditableText'
 import './paragraph.scss'
 
 const Paragraph = (props) => {
-  const { className, text, isAdmin } = props
+  const { className, children, isAdmin } = props
   const pClasses = classNames({
     paragraph: true,
     [className]: true,
   })
-  return (isAdmin ? <EditableText multiline {...props} /> : <p className={pClasses}>{text}</p>)
+  return (isAdmin ? <EditableText multiline {...props} /> : <p className={pClasses}>{children}</p>)
 }
 
 Paragraph.defaultProps = {
@@ -21,7 +21,7 @@ Paragraph.defaultProps = {
 }
 
 Paragraph.propTypes = {
-  text: PropTypes.string.isRequired,
+  children: PropTypes.string.isRequired,
   className: PropTypes.string,
   isAdmin: PropTypes.bool,
 }

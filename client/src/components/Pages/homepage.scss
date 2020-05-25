@@ -2,16 +2,27 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 8;
 }
 
 .homepage-title {
   font-size: 26px;
   text-align: center;
+  color: white;
+  margin-top: 10%;
+  width: 80%;
   margin-bottom: 10px;
+  z-index: 10;
 }
 
 .homepage-image {
   // border: 1px solid red;
+  width: 100%;
+  filter: brightness(65%);
+  // height: 300px;
+  overflow: hidden;
+  position: absolute;
+  z-index: 9;
 }
 
 .homepage-section {
@@ -22,6 +33,7 @@
   padding: 40px;
   margin: 100px;
   border-radius: 5px;
+  z-index: 10;
 }
 
 .homepage-section-title {

@@ -7,6 +7,7 @@ export default (sequelize) => {
     page_id: { type: Sequelize.UUID },
     section_type: { type: Sequelize.STRING },
     content: { type: Sequelize.STRING },
+    secondary_content: { type: Sequelize.STRING },
   }, { timestamps: false })
 
   return Section

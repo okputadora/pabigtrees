@@ -1,12 +1,13 @@
 import React from 'react'
 
+import cover from './cover.jpg'
 import './homepage.scss'
 
 const Homepage = () => (
   <div className="homepage">
     <div className="homepage-header">
       <div className="homepage-title">What literally covers the Commonwealth of Pennsylvania from A to Z? Trees! Trees of all kinds--from Abies to Ziziphus. Some of the largest of each species, are found here recorded on this website.</div>
-      <img className="homepage-image" src="http://www.pabigtrees.com/images/long_big_small1.jpg" alt="homepage-tree" />
+      <img className="homepage-image" src={cover} alt="homepage-tree" />
     </div>
     <div className="homepage-section">
       <div className="homepage-section-title">Who are we?</div>

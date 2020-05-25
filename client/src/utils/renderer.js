@@ -1,40 +1,20 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
-import Layouts from '@/components/Layouts'
 import Components from '@/components/Common'
 
-export default ({
-  layout, sections, column1,
-}, isAdmin = false, handleEdit) => {
-  console.log({ layout })
-  console.log('rendering sections: ', sections)
-  const Layout = Layouts[layout]
-  if (layout === 'TwoCol') {
-    const col1 = []
-    const col2 = []
-    sections.forEach((section) => {
-      const {
-        component, index, _id, ...rest
-      } = section
-      const Comp = Components[component]
-      if (column1.includes(index)) {
-        col1.push(<Comp key={_id} {...rest} isAdmin={isAdmin} handleEdit={(newText, field) => { handleEdit(newText, field, _id) }} />)
-      } else {
-        col2.push(<Comp key={_id} {...rest} isAdmin={isAdmin} handleEdit={(newText, field) => { handleEdit(newText, field, _id) }} />)
-      }
-    })
-    return <Layout col1={col1} col2={col2} />
+export default ({ sections }, ...rest) => sections.sort((a, b) => a.order - b.order).map((section) => {
+  const {
+    id,
+    section_type,
+    content,
+    secondary_content,
+  } = section
+  const Comp = Components[section_type]
+  if (section_type === 'Image') {
+    return <Comp key={id} src={content} alt={secondary_content} />
   }
-  console.log('returingn new layout!')
-  return (
-
-    <Layout content={sections.map((section) => {
-      const {
-        component, index, id, ...rest
-      } = section
-      const Comp = Components[component]
-      return <Comp key={index} {...rest} isAdmin={isAdmin} handleEdit={(newText, field) => { handleEdit(newText, field, _id) }} />
-    })}
-    />
-  )
-}
+  if (section_type === 'Link') {
+    return <Comp key={id} {...rest} to={secondary_content}>{content}</Comp>
+  }
+  return <Comp key={id} {...rest}>{content}</Comp>
+})
