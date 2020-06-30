@@ -11,10 +11,10 @@ import './trees.scss'
 // @TODO Move this to utils
 const formatTableData = (rawData) => rawData.map((row) => (
   {
-    county: row.County ? row.County.county : null,
-    genus: row.Species && row.Species.Genus && row.Species.Genus.t_genus,
-    species: row.Species && row.Species.t_species,
-    commonName: row.Species && row.Species.t_common,
+    county: row.county ? row.county.county : null,
+    genus: row.species && row.species.genus && row.species.genus.t_genus,
+    species: row.species && row.species.t_species,
+    commonName: row.species && row.species.t_common,
     points: row.i_points,
     address: row.t_address,
     'additional info': [row.f_national_champ, row.f_tallest],
@@ -126,7 +126,6 @@ class Trees extends Component {
 
   goToTreePage = (id) => {
     const { history, location } = this.props
-    console.log({ location })
     history.push(`${location.pathname}/${id}`)
     // this.setState({ selectedTreeId: id })
   }

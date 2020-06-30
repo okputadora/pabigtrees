@@ -21,11 +21,12 @@
   flex-grow: 1;
   height: 35px;
   background-color: white;
+  border: 1px solid #aaa;
   width: auto;
 }
 
 .inputField-label {
-  color: white;
+  // color: white;
   font-size: 16px;
   flex-basis: 260px;
   // pointer-events: none;

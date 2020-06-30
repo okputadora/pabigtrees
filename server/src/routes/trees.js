@@ -59,6 +59,8 @@ router.get('/', async (req, res) => {
       limit: parseInt(pageSize, 10),
       offset: (parseInt(page, 10) - 1) * parseInt(pageSize, 10),
     })
+    // console.log({ trees })
+    // console.log({ tree: trees[0].species })
     res.json({ count, trees })
   } catch (error) {
     res.status(500).json({ error })
@@ -77,7 +79,6 @@ router.get('/image/:id', (req, res) => {
 router.get('/filter-lists', (req, res) => {
   const speciesQuery = { include: models.genus }
   models.species.findAll(speciesQuery).then(data => {
-    console.log({ data })
     const species = data.map(d => ({ name: d.t_species, id: d.id, genusId: d.k_genus })).sort((a, b) => (a.name > b.name ? 1 : -1))
     // get unique genera list
     const genera = data.map(d => ({ name: d.genus.t_genus, id: d.k_genus, speciesId: d.id })).sort((a, b) => (a.name > b.name ? 1 : -1))
