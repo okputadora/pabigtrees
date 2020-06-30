@@ -17,6 +17,7 @@ module.exports = merge(common, {
     new CompressionPlugin(),
     new HtmlWebpackPlugin({
       title: 'Production',
+      template: './src/index.html',
     }),
   ],
 })

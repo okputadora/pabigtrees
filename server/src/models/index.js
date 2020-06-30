@@ -15,15 +15,11 @@ import sections from './sections'
 // const config = require(`${__dirname}/../config/config.js`)[env]
 const db = {}
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.MYSQL_USERNAME,
-  process.env.MYSQL_PW,
+const sequelize = new Sequelize(process.env.JAWSDB_URL,
   {
-    host: 'localhost',
     dialect: 'mysql',
-  },
-)
+    logging: console.log,
+  })
 
 sequelize
   .authenticate()
@@ -49,13 +45,13 @@ db.newsImages = newsImages(sequelize, Sequelize)
 db.pages = pages(sequelize, Sequelize)
 db.sections = sections(sequelize, Sequelize)
 // Relations
-db.trees.belongsTo(db.species, { foreignKey: 'species' })
+db.trees.belongsTo(db.species, { foreignKey: 'k_species' })
 db.trees.belongsTo(db.counties, { foreignKey: 'k_county' })
 db.species.belongsTo(db.genus, { foreignKey: 'k_genus' })
 db.treeImages.belongsTo(db.trees, { foreignKey: 'k_tree' })
 db.nominations.belongsTo(db.species, { foreignKey: 'speciesId' })
 db.nominations.belongsTo(db.genus, { foreignKey: 'genusId' })
-db.nominations.belongsTo(db.counties, { foreignKey: 'county' })
+db.nominations.belongsTo(db.counties, { foreignKey: 'countyId' })
 db.nominationImages.belongsTo(db.nominations, { foreignKey: 'nominationId' })
 db.nominations.belongsTo(db.trees, { foreignKey: 'treeId' })
 db.newsImages.belongsTo(db.news, { foreignKey: 'k_news' })

@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize'
 
 export default (sequelize) => {
-  const Species = sequelize.define('Species', {
+  const Species = sequelize.define('species', {
     // attributes
     id: { type: Sequelize.UUID, primaryKey: true },
     k_genus: { type: Sequelize.UUID },

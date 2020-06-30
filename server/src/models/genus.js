@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize'
 
 export default (sequelize) => {
-  const Genus = sequelize.define('Genus', {
+  const Genus = sequelize.define('genus', {
     // attributes
     id: { type: Sequelize.UUID, primaryKey: true },
     t_genus: { type: Sequelize.STRING },

@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize'
 
 export default (sequelize) => {
-  const NominationImage = sequelize.define('nominationImage', {
+  const NominationImage = sequelize.define('nominationimage', {
     // attributes
     id: { type: Sequelize.UUID, primaryKey: true, autoIncrement: true },
     nominationId: { type: Sequelize.UUID },

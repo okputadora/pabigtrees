@@ -37,10 +37,19 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
 app.use('/treeImages', express.static(path.join(__dirname, '../treeImages')))
 app.use('/newsImages', express.static(path.join(__dirname, '../newsImages')))
 
+// Serve react app
+app.use(express.static(path.join(__dirname, '../lib/public')))
+
 app.use('/pages', pages)
 app.use('/trees', trees)
 app.use('/pages', pages)
 app.use('/nominations', nominations)
 app.use('/news', news)
+
+app.get('/*', (req, res) => {
+  if (process.env.NODE_ENV !== 'dev') {
+    res.sendFile(path.join(__dirname, '../lib/public/index.html'))
+  }
+})
 
 app.listen(port, () => logger.log({ level: 'info', message: `Example app listening on port ${port}!` }))

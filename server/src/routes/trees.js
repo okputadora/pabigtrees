@@ -77,9 +77,10 @@ router.get('/image/:id', (req, res) => {
 router.get('/filter-lists', (req, res) => {
   const speciesQuery = { include: models.genus }
   models.species.findAll(speciesQuery).then(data => {
+    console.log({ data })
     const species = data.map(d => ({ name: d.t_species, id: d.id, genusId: d.k_genus })).sort((a, b) => (a.name > b.name ? 1 : -1))
     // get unique genera list
-    const genera = data.map(d => ({ name: d.Genus.t_genus, id: d.k_genus, speciesId: d.id })).sort((a, b) => (a.name > b.name ? 1 : -1))
+    const genera = data.map(d => ({ name: d.genus.t_genus, id: d.k_genus, speciesId: d.id })).sort((a, b) => (a.name > b.name ? 1 : -1))
     const commonNames = data.map(d => ({ name: d.t_common, id: d.id, genusId: d.k_genus })).sort((a, b) => (a.name > b.name ? 1 : -1))
     const uniqueGenera = []
     const map = new Map()

@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize'
 
 export default (sequelize) => {
-  const NewsImages = sequelize.define('NewsImages', {
+  const NewsImages = sequelize.define('newsimages', {
     // attributes
     i_id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
     k_news: { type: Sequelize.STRING },

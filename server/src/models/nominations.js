@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize'
 
 export default (sequelize) => {
-  const Nomination = sequelize.define('Nomination', {
+  const Nomination = sequelize.define('nomination', {
     // attributes
     id: { type: Sequelize.UUID, primaryKey: true, autoIncrement: true },
     speciesId: { type: Sequelize.UUID },
@@ -9,7 +9,7 @@ export default (sequelize) => {
     commonName: { type: Sequelize.STRING },
     genusId: { type: Sequelize.UUID },
     genusName: { type: Sequelize.STRING },
-    county: { type: Sequelize.UUID },
+    countyId: { type: Sequelize.UUID },
     nominator: { type: Sequelize.STRING },
     address: { type: Sequelize.STRING },
     phone: { type: Sequelize.STRING },

@@ -23,10 +23,10 @@ export const formatTreeData = (data) => {
 
 const formatTableData = (rawData) => rawData.map((row) => (
   {
-    county: row.County ? row.County.county : null,
-    genus: row.Species && row.Species.Genus && row.Species.Genus.t_genus,
-    species: row.Species && row.Species.t_species,
-    commonName: row.Species && row.Species.t_common,
+    county: row.county ? row.County.county : null,
+    genus: row.species && row.Species.Genus && row.Species.Genus.t_genus,
+    species: row.species && row.Species.t_species,
+    commonName: row.species && row.Species.t_common,
     points: row.i_points,
     address: row.t_address,
     id: row.id,
@@ -35,10 +35,10 @@ const formatTableData = (rawData) => rawData.map((row) => (
 
 export const formatData = (rawData) => rawData.map((tree) => (
   {
-    county: tree.County ? tree.County.county : null,
-    genus: tree.Species && tree.Species.Genus && tree.Species.Genus.t_genus,
-    species: tree.Species && tree.Species.t_species,
-    commonName: tree.Species && tree.Species.t_common,
+    county: tree.county ? tree.county.county : null,
+    genus: tree.species && tree.species.genus && tree.species.genus.t_genus,
+    species: tree.species && tree.species.t_species,
+    commonName: tree.species && tree.species.t_common,
     points: tree.i_points,
     address: tree.t_address,
     id: tree.id,
@@ -57,10 +57,10 @@ export const formatData = (rawData) => rawData.map((tree) => (
 
 export const formatAdminData = (tree) => (
   {
-    county: tree.County ? tree.County.county : null,
-    genus: tree.Species && tree.Species.Genus && tree.Species.Genus.t_genus,
-    species: tree.Species && tree.Species.t_species,
-    commonName: tree.Species && tree.Species.t_common,
+    county: tree.county ? tree.county.county : null,
+    genus: tree.species && tree.species.genus && tree.species.genus.t_genus,
+    species: tree.species && tree.species.t_species,
+    commonName: tree.species && tree.species.t_common,
     points: tree.i_points,
     address: tree.t_address,
     id: tree.id,

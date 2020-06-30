@@ -50,7 +50,7 @@ const calculatePoints = (c, h, s1, s2) => {
 }
 
 export const mapNominationToTree = (nomination, newSpecies) => ({
-  species: newSpecies.id || nomination.speciesId, // Look up species code from species table might need nomination.genera to do this too
+  k_species: newSpecies.id || nomination.speciesId, // Look up species code from species table might need nomination.genera to do this too
   k_county: nomination.county, // nomination.county @TODO need to lookup county code first,
   k_technique: nomination.measuringTechnique,
   d_nominated: nomination.createdAt && nomination.createdAt.toString(),
@@ -129,15 +129,18 @@ export const formatAndValidateNomination = nomination => {
       speciesName: isNew.species ? nomination.species : null,
       commonName: isNew.commonName ? nomination.commonName : null,
       genusName: isNew.genus ? nomination.genus : null,
+      countyId: nomination.county,
     }
     delete validatedNom.species
     delete validatedNom.genus
+    delete validatedNom.county
     const formattedNom = {}
     Object.keys(validatedNom).forEach(key => {
       formattedNom[key] = validatedNom[key] === '' ? null : validatedNom[key]
     })
     return formattedNom // / consider mutating and returning validated.value instead - not sure
   }
+  // handle error
 }
 
 export const formatAndValidateApproval = body => {

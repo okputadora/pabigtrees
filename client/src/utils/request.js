@@ -1,10 +1,18 @@
 import axios from 'axios'
 
+const getApiUrl = () => {
+  switch (process.env.NODE_ENV) {
+    case 'development':
+      return 'http://localhost:4000'
+    case 'production':
+      return 'https://bigtrees.herokuapp.com/'
+    default:
+      return 'https://bigtrees.herokuapp.com/'
+  }
+}
+const baseURL = getApiUrl()
 // @ todo get token from cookies to send w/ req
-export const request = axios.create({
-  baseURL: 'http://localhost:4000/',
-  // @TODO set headers
-})
+export const request = axios.create({ baseURL })
 
 export const buildTreeQuery = ({
   activeSpecies,

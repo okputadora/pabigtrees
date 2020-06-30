@@ -4,7 +4,7 @@ export default (sequelize) => {
   const Tree = sequelize.define('tree', {
     // attributes
     id: { type: Sequelize.UUID, primaryKey: true, autoIncrement: true },
-    species: { type: Sequelize.UUID },
+    k_species: { type: Sequelize.UUID },
     k_county: { type: Sequelize.INTEGER },
     k_technique: { type: Sequelize.INTEGER },
     d_nominated: { type: Sequelize.STRING },
