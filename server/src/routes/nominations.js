@@ -10,6 +10,7 @@ import {
   // formatAndValidateApproval,
   mapNominationToTree,
 } from '../utils'
+import genus from '../models/genus'
 
 const router = Router()
 const storage = multer.diskStorage({
@@ -72,7 +73,10 @@ router.get('/', (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const nomination = await db.nominations.findOne({ where: { id: req.params.id } })
+    const countyQuery = { model: db.counties }
+    const speciesQuery = { model: db.species }
+    const genusQuery = { model: db.genus }
+    const nomination = await db.nominations.findOne({ where: { id: req.params.id }, include: [countyQuery, speciesQuery, genusQuery] })
     const imagePaths = await db.nominationImages.findAll({ where: { nominationId: nomination.id } })
     res.json({ nomination, imagePaths })
   } catch (err) {

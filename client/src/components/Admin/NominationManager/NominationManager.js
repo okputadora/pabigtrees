@@ -7,19 +7,19 @@ import { getNominations } from '@/api/nomination'
 import './nominationManager.scss'
 
 const NominationPreview = ({
-  Species,
-  Genus,
+  species,
+  genus,
   imagePaths,
   nominator,
-  speciesId,
-  genusId,
+  speciesName,
+  genusName,
   id,
 }) => (
-  <Link to={`nomination/${id}?newSpecies=${!Species}&newGenus=${!Genus}`} key={id}>
+  <Link to={`nomination/${id}?newSpecies=${!species}&newGenus=${!genus}`} key={id}>
     <div className="nominationPreview-container">
       <img className="nominationPreview-image" src={imagePaths[0] ? `http://localhost:4000/uploads/${imagePaths[0]}` : ''} alt="preview" />
       <div className="nominationPreview-title">
-        {(Species || Genus) ? Species.t_common || Species.t_species || Genus.genus : speciesId || genusId }
+        {(species || genus) ? species.t_common || species.t_species || genus.genus : speciesName || genusName }
       </div>
       <div className="nominationPreview-subtitle">
         {nominator}
@@ -29,22 +29,24 @@ const NominationPreview = ({
 )
 
 NominationPreview.defaultProps = {
-  Species: null,
-  Genus: null,
+  species: null,
+  genus: null,
   imagePaths: [],
   nominator: null,
+  genusName: null,
+  speciesName: null,
 }
 
 NominationPreview.propTypes = {
-  speciesId: PropTypes.string.isRequired,
-  Species: PropTypes.shape({
+  speciesName: PropTypes.string,
+  species: PropTypes.shape({
     t_common: PropTypes.string,
     t_species: PropTypes.string,
   }),
-  Genus: PropTypes.shape({
+  genus: PropTypes.shape({
     genus: PropTypes.string,
   }),
-  genusId: PropTypes.string.isRequired,
+  genusName: PropTypes.string,
   imagePaths: PropTypes.arrayOf(PropTypes.string),
   nominator: PropTypes.string,
   id: PropTypes.number.isRequired,
@@ -55,6 +57,7 @@ const NominationManager = () => {
   useEffect(() => {
     const fetchNominations = async () => {
       const { data: { nominations: dataNoms } } = await getNominations()
+      console.log({ dataNoms })
       setNominations(dataNoms)
     }
     fetchNominations()

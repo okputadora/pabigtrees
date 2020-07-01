@@ -227,7 +227,7 @@ const Nomination = ({ initValues, isAdminReview }) => {
                 <SelectField
                   name="county"
                   items={counties}
-                  activeItem={initValues ? counties.filter((c) => c.id.toString() === initValues.county.toString())[0] : null}
+                  activeItem={initValues ? counties.filter((c) => c.id.toString() === initValues.county.id.toString())[0] : null}
                   labelProps={{ label: 'County*' }}
                 />
                 <InputField
