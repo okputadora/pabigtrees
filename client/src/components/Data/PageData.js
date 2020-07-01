@@ -6,6 +6,8 @@ import * as API from '@/api/page'
 const paths = {
   '/': '2',
   measurement: '1',
+  about: '3',
+
 }
 
 class PageData extends Component {
@@ -28,6 +30,7 @@ class PageData extends Component {
   async fetchPage() {
     const { match: { params: { pathName = '/' } } } = this.props
     const id = paths[pathName]
+    console.log({ id })
     const { data } = await API.getPageData(id)
     console.log({ data })
     this.setState({ data })

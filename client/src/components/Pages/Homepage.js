@@ -17,11 +17,11 @@ const Homepage = () => (
       </div>
       <div className="homepage-section">
         <div className="homepage-section-title">Who are we?</div>
-        <p className="homepage-section-body">The Pennsylvania Forestry Association is a broad-based citizen's organization that provides leadership and education in sound, science-based forest management and promotes stewardship to ensure the sustainability of all forest resources, resulting in benefits for all, today and into the future. The Champion Tree Program is one of the many resources we provide to achieve our goals. A champion tree represents the laregest of each species of tree found in the state. Finding, measuring and nominating big trees is an enjoyable outdoor hobby. Join us!</p>
+        <p className="homepage-section-body">The Pennsylvania Forestry Association is a broad-based citizen&#39;s organization that provides leadership and education in sound, science-based forest management and promotes stewardship to ensure the sustainability of all forest resources, resulting in benefits for all, today and into the future. The Champion Tree Program is one of the many resources we provide to achieve our goals. A champion tree represents the laregest of each species of tree found in the state. Finding, measuring and nominating big trees is an enjoyable outdoor hobby. Join us!</p>
       </div>
       <div className="homepage-section">
-        <div className="homepage-section-title">What's new?</div>
-        <p className="homepage-section-body">The Pennsylvania Forestry Association is a broad-based citizen's organization that provides leadership and education in sound, science-based forest management and promotes stewardship to ensure the sustainability of all forest resources, resulting in benefits for all, today and into the future. The Champion Tree Program is one of the many resources we provide to achieve our goals. A champion tree represents the laregest of each species of tree found in the state. Finding, measuring and nominating big trees is an enjoyable outdoor hobby. Join us!</p>
+        <div className="homepage-section-title">What&#39;s new?</div>
+        <p className="homepage-section-body">The Pennsylvania Forestry Association is a broad-based citizen&#39;s organization that provides leadership and education in sound, science-based forest management and promotes stewardship to ensure the sustainability of all forest resources, resulting in benefits for all, today and into the future. The Champion Tree Program is one of the many resources we provide to achieve our goals. A champion tree represents the laregest of each species of tree found in the state. Finding, measuring and nominating big trees is an enjoyable outdoor hobby. Join us!</p>
       </div>
       <div className="homepage-section">
         <div className="homepage-section-title">Big Trees of Pennsylvania Register</div>
