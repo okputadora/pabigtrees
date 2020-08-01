@@ -22,27 +22,25 @@ const formatTableData = (rawData) => rawData.map((row) => (
   }
 ))
 
-const formatData = (rawData) => rawData.map((tree) => (
-  {
-    county: tree.County ? tree.County.county : null,
-    genus: tree.Species && tree.Species.Genus && tree.Species.Genus.t_genus,
-    species: tree.Species && tree.Species.t_species,
-    commonName: tree.Species && tree.Species.t_common,
-    points: tree.i_points,
-    address: tree.t_address,
-    id: tree.id,
-    circumference: tree.i_circum_inchs,
-    isMultiStemmed: tree.f_multistemmed === 1,
-    spread: tree.i_spread_feet,
-    height: tree.i_height_feet,
-    measuringCrew: tree.t_measuring_crew,
-    originalNominator: tree.t_original_nominator,
-    comments: tree.t_comments,
-    measuringTechnique: tree.k_technique,
-    yearNominated: tree.d_nominated,
-    yearLastMeasured: tree.d_last_measured,
-  }
-))
+const formatData = (rawData) => rawData.map((tree) => ({
+  county: tree.county ? tree.county.county : null,
+  genus: tree.species && tree.species.genus && tree.species.genus.t_genus,
+  species: tree.species && tree.species.t_species,
+  commonName: tree.species && tree.species.t_common,
+  points: tree.i_points,
+  address: tree.t_address,
+  id: tree.id,
+  circumference: tree.i_circum_inchs,
+  isMultiStemmed: tree.f_multistemmed === 1,
+  spread: tree.i_spread_feet,
+  height: tree.i_height_feet,
+  measuringCrew: tree.t_measure_crew,
+  originalNominator: tree.t_original_nominator,
+  comments: tree.t_comments,
+  measuringTechnique: tree.k_technique,
+  yearNominated: tree.d_nominated,
+  yearLastMeasured: tree.d_last_measured,
+}))
 
 const initialFilters = {
   activeGenus: { name: 'All', id: 'All' },
@@ -101,7 +99,6 @@ class Trees extends Component {
   }
 
   setFilter = (updatedFilter) => {
-    console.log({ updatedFilter })
     this.setState((prevState) => ({ filters: { ...prevState.filters, ...updatedFilter, page: 1 } }), this.fetchTrees)
   }
 
@@ -153,7 +150,6 @@ class Trees extends Component {
       isShowingMap,
       count,
     } = this.state
-    console.log({ filters })
     const { match: { params: { id } } } = this.props
     return (
       !id ? (
@@ -188,7 +184,7 @@ class Trees extends Component {
               />
             )}
         </div>
-      ) : <Tree tree={data.filter((t) => t.id === id)[0]} isAdmin={isAdmin} />
+      ) : data && <Tree tree={data.filter((t) => t.id === id)[0]} isAdmin={isAdmin} />
     )
   }
 }

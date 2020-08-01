@@ -42,8 +42,6 @@ router.get('/', async (req, res) => {
     }
     speciesQuery.where.id = activeSpecies
   }
-  console.log({ activeCounty })
-  console.log({ activeSpecies })
   if (activeCounty !== 'All') {
     countyQuery.where = { id: activeCounty }
   }
@@ -65,8 +63,6 @@ router.get('/', async (req, res) => {
       limit: parseInt(pageSize, 10),
       offset: (parseInt(page, 10) - 1) * parseInt(pageSize, 10),
     })
-    // console.log({ trees })
-    // console.log({ tree: trees[0].species })
     res.json({ count, trees })
   } catch (error) {
     res.status(500).json({ error })

@@ -7,7 +7,6 @@ const Navabr = () => {
   const links = [
     { name: 'home', path: '/' },
     { name: 'tree listings', path: '/tree-listings' },
-    { name: 'tallest trees', path: '/tallest-trees' },
     { name: 'measurement', path: '/measurement' },
     { name: 'News/Updates', path: '/news' },
     { name: 'Links/Resources', path: '/links-resource' },
