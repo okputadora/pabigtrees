@@ -1,9 +1,8 @@
 import React, { useCallback, useState } from 'react'
-import { Formik } from 'formik'
+import { Formik, Form } from 'formik'
 import { Overlay } from '@blueprintjs/core'
 import InputField from '@/components/Forms/InputField'
 
-import Form from '@/components/Forms/Form'
 import ImageUpload from '@/components/ImageUpload'
 import { createNewsEntry, uploadNewsImage } from '@/api/news'
 

@@ -14,7 +14,6 @@ import {
 } from '@/api/nomination'
 
 import { getSpeciesAndGenera } from '@/api/tree'
-import Form from '@/components/Forms/Form'
 import InputField from '@/components/Forms/InputField'
 import SelectField from '@/components/Forms/SelectField'
 import { initialValues } from './formData'

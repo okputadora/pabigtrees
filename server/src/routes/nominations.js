@@ -5,6 +5,7 @@ import uniqid from 'uniqid'
 // import path from 'path'
 
 import db from '../models'
+import { authenticateToken } from '../middleware/authorization'
 import {
   formatAndValidateNomination,
   // formatAndValidateApproval,
@@ -44,8 +45,7 @@ const imageFilter = (req, file, cb) => {
 exports.imageFilter = imageFilter
 const upload = multer({ storage, fileFilter: imageFilter })
 
-// @TODO getting nominations should be restricted to admins
-router.get('/', (req, res) => {
+router.get('/', authenticateToken, (req, res) => {
   const countyQuery = { model: db.counties }
   const speciesQuery = { model: db.species }
   const genusQuery = { model: db.genus }
@@ -71,7 +71,7 @@ router.get('/', (req, res) => {
   })
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', authenticateToken, async (req, res) => {
   try {
     const countyQuery = { model: db.counties }
     const speciesQuery = { model: db.species }

@@ -1,3 +1,26 @@
+.login {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: column;
+}
+
+.login-container {
+  background: grey;
+  padding: 20px;
+}
+
+.login-form {
+  display: flex;
+  flex-flow: column;
+}
+
+.login-form > * {
+  margin: 10px;
+}
 .testClass {
   color: green;
+  background-color: white;
 }

@@ -10,9 +10,14 @@ const getApiUrl = () => {
       return 'https://bigtrees.herokuapp.com/'
   }
 }
-const baseURL = getApiUrl()
 // @ todo get token from cookies to send w/ req
-export const request = axios.create({ baseURL })
+export const request = axios.create({
+  baseURL: getApiUrl(),
+  withCredentials: true,
+  // headers: {
+  //   credentials:
+  // }
+})
 
 export const buildTreeQuery = ({
   activeSpecies,

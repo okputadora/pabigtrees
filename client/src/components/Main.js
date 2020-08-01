@@ -5,8 +5,6 @@ import Page from './Page/Page'
 import PageData from './Data/PageData'
 import Banner from './Banner'
 import Navbar from './Navbar/Navbar'
-import Login from './Login/Login'
-import Signup from './Signup/Signup'
 import Trees from './Trees/TreesTable'
 import Nomination from './Nomination/Nomination'
 import Confirmation from './Common/Confirmation'
@@ -22,9 +20,6 @@ const Main = () => (
       <Navbar />
       <div className="main">
         <Switch>
-          <Route path="/login" component={Login} />
-          <Route path="/signup" component={Signup} />
-
           <Route
             path="/tree-listings/:id"
             component={Trees}

@@ -1,43 +1,56 @@
 import React, { Component } from 'react'
-import { Formik, Field } from 'formik'
-import { Link } from 'react-router-dom'
+import { Formik, Field, Form } from 'formik'
 import * as Yup from 'yup'
 
-import Form from '@/components/Forms/Form'
+// import Form from '@/components/Forms/Form'
 import * as auth from '@/api/auth'
 import './login.scss'
-// import PropTypes from 'prop-types'
 
 const schema = Yup.object().shape({
-  username: Yup.string().email().required(),
+  username: Yup.string().required(),
   password: Yup.string().required(),
 })
 class Login extends Component {
-  handleSubmit = (values) => {
-    auth.login(values)
+  state = { error: null }
+
+  handleSubmit = async (values) => {
+    try {
+      const { data: { token } } = await auth.login(values)
+      localStorage.setItem('token', token)
+    } catch (err) {
+      this.setState({ error: err.message })
+    }
   }
 
   render() {
+    const { error } = this.state
     return (
       <Formik
         initialValues={{ username: '', password: '' }}
         validationSchema={schema}
         onSubmit={this.handleSubmit}
       >
-        {({ isSubmitting, dirty }) => (
-          <>
-            <h1>Login</h1>
-            <Form>
-              <Field name="username">
-                {(props) => <input {...props.field} />}
-              </Field>
-              <Field name="password">
-                {(props) => <input {...props.field} />}
-              </Field>
-              <button className="testClass" type="submit" disabled={!dirty || isSubmitting}>submit</button>
-            </Form>
-            <Link to="signup">Signup</Link>
-          </>
+        {({ isSubmitting, dirty, errors }) => (
+          <div className="login">
+            <h1>PA Big Trees Admin Portal</h1>
+            <div className="login-container">
+              <h2>Login</h2>
+              <Form>
+                <div className="login-form">
+                  <Field name="username">
+                    {(props) => <input {...props.field} />}
+                  </Field>
+                  {dirty.username && <div className="error">{errors.username}</div>}
+                  <Field name="password" type="password">
+                    {(props) => <input {...props.field} />}
+                  </Field>
+                  {dirty.password && <div className="error">{errors.password}</div>}
+                  <button className="testClass" type="submit" disabled={!dirty || isSubmitting}>submit</button>
+                </div>
+              </Form>
+              {error && <div className="error">{error}</div>}
+            </div>
+          </div>
         )}
       </Formik>
     )

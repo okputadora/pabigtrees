@@ -7,8 +7,7 @@ import config from './config'
 import logger from './logger'
 
 import {
-  // login,
-  // logout,
+  login,
   pages,
   nominations,
   trees,
@@ -23,7 +22,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 // CORS
 const corsOptions = {
-  origin: '*',
+  origin: 'http://localhost:3000',
+  credentials: true,
 }
 app.use(cors(corsOptions))
 //   console.log({ clientAddress })
@@ -44,6 +44,7 @@ app.use('/pages', pages)
 app.use('/trees', trees)
 app.use('/pages', pages)
 app.use('/nominations', nominations)
+app.use('/login', login)
 app.use('/news', news)
 
 app.get('/*', (req, res) => {

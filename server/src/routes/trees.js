@@ -2,10 +2,12 @@ import { Router } from 'express'
 
 import models from '../models'
 import { keyMap } from '../utils'
+import { authenticateToken } from '../middleware/authorization'
 
 const router = Router()
 
 router.get('/', async (req, res) => {
+  console.log(req.headers)
   const {
     sortField = 'points',
     sortOrder = 'DESC',
@@ -102,7 +104,7 @@ router.get('/filter-lists', async (req, res) => {
   })
 })
 
-router.get('/admin/:id', (req, res) => {
+router.get('/admin/:id', authenticateToken, (req, res) => {
   const genusQuery = { model: models.genus }
   const speciesQuery = {
     model: models.species,

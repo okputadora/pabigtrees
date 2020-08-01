@@ -11,7 +11,7 @@ export const validateRequest = (schema) => (req, res, next) => {
 }
 
 export const issueToken = (user, res) => {
-  const payload = user.authSummary()
+  const payload = { id: user.id }
   const token = jwt.sign(payload, SECRET, {
     expiresIn: '2d',
   })
@@ -20,6 +20,7 @@ export const issueToken = (user, res) => {
     secure: IN_PROD,
     maxAge: 1000 * 60 * 60 * 24 * 2,
   })
+  return token
 }
 
 export const keyMap = {
