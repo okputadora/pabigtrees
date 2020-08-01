@@ -55,6 +55,7 @@ class Filters extends Component {
       filters: {
         activeGenus,
         activeSpecies,
+        counties,
         isMultiStemmedIncluded,
         isTallestOfSpecies,
         isNationalChamp,
@@ -90,6 +91,19 @@ class Filters extends Component {
                   itemPredicate={this.filterItems}
                   itemRenderer={this.renderItem}
                   onItemSelect={this.selectSpecies}
+                >
+                  <div className="filter-item">{activeSpecies.name}</div>
+                </Select>
+              </div>
+            </div>
+            <div className="filter-dropdown-container">
+              <div>Species</div>
+              <div className="filter-dropdown">
+                <Select
+                  items={counties}
+                  itemPredicate={this.filterCounties}
+                  itemRenderer={this.renderItem}
+                  onItemSelect={this.selectCounty}
                 >
                   <div className="filter-item">{activeSpecies.name}</div>
                 </Select>
@@ -142,7 +156,10 @@ Filters.propTypes = {
     keyword: PropTypes.string,
     activeSpecies: listItemPropType,
     activeGenus: listItemPropType,
+    counties: PropTypes.arrayOf(PropTypes.shape({})),
     isMultiStemmedIncluded: PropTypes.bool,
+    isTallestOfSpecies: PropTypes.bool,
+    isNationalChamp: PropTypes.bool,
   }).isRequired,
   species: PropTypes.arrayOf(listItemPropType).isRequired,
   genera: PropTypes.arrayOf(listItemPropType).isRequired,
