@@ -15,7 +15,8 @@
     "no-underscore-dangle": "off",
     "semi": ["error", "never"],
     "no-alert": "off",
-    "camelcase": "off"
+    "camelcase": "off",
+    "linebreak-style": "off",
   },
   "settings": {
     "import/resolver": {

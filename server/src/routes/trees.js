@@ -11,6 +11,7 @@ router.get('/', async (req, res) => {
     sortOrder = 'DESC',
     activeGenus = 'All',
     activeSpecies = 'All',
+    activeCounty = 'All',
     page = 1,
     pageSize = 20,
     isMultiStemmedIncluded = 'true',
@@ -31,6 +32,7 @@ router.get('/', async (req, res) => {
     required: true,
     include: [genusQuery],
   }
+  const countyQuery = { model: models.counties }
   if (activeGenus !== 'All') {
     speciesQuery.where = { k_genus: activeGenus }
   }
@@ -40,7 +42,11 @@ router.get('/', async (req, res) => {
     }
     speciesQuery.where.id = activeSpecies
   }
-  const countyQuery = { model: models.counties }
+  console.log({ activeCounty })
+  console.log({ activeSpecies })
+  if (activeCounty !== 'All') {
+    countyQuery.where = { id: activeCounty }
+  }
   const multiStemmedQuery = isMultiStemmedIncluded === 'false' && { f_multistemmed: 0 }
   const champQuery = isNationalChamp === 'true' && { f_national_champ: 1 }
   const tallestQuery = isTallestOfSpecies === 'true' && { f_tallest: 1 }
@@ -76,25 +82,27 @@ router.get('/image/:id', (req, res) => {
   })
 })
 
-router.get('/filter-lists', (req, res) => {
+router.get('/filter-lists', async (req, res) => {
   const speciesQuery = { include: models.genus }
-  models.species.findAll(speciesQuery).then(data => {
-    const species = data.map(d => ({ name: d.t_species, id: d.id, genusId: d.k_genus })).sort((a, b) => (a.name > b.name ? 1 : -1))
-    // get unique genera list
-    const genera = data.map(d => ({ name: d.genus.t_genus, id: d.k_genus, speciesId: d.id })).sort((a, b) => (a.name > b.name ? 1 : -1))
-    const commonNames = data.map(d => ({ name: d.t_common, id: d.id, genusId: d.k_genus })).sort((a, b) => (a.name > b.name ? 1 : -1))
-    const uniqueGenera = []
-    const map = new Map()
-    genera.forEach(item => {
-      if (!map.has(item.id)) {
-        map.set(item.id, true) // set any value to Map
-        uniqueGenera.push({
-          id: item.id,
-          name: item.name,
-        })
-      }
-    })
-    res.json({ species, genera: uniqueGenera, commonNames })
+  const counties = await models.counties.findAll()
+  const data = await models.species.findAll(speciesQuery)
+  const species = data.map(d => ({ name: d.t_species, id: d.id, genusId: d.k_genus })).sort((a, b) => (a.name > b.name ? 1 : -1))
+  // get unique genera list
+  const genera = data.map(d => ({ name: d.genus.t_genus, id: d.k_genus, speciesId: d.id })).sort((a, b) => (a.name > b.name ? 1 : -1))
+  const commonNames = data.map(d => ({ name: d.t_common, id: d.id, genusId: d.k_genus })).sort((a, b) => (a.name > b.name ? 1 : -1))
+  const uniqueGenera = []
+  const map = new Map()
+  genera.forEach(item => {
+    if (!map.has(item.id)) {
+      map.set(item.id, true) // set any value to Map
+      uniqueGenera.push({
+        id: item.id,
+        name: item.name,
+      })
+    }
+  })
+  res.json({
+    species, genera: uniqueGenera, commonNames, counties: counties.map(c => ({ id: c.id, name: c.county })),
   })
 })
 

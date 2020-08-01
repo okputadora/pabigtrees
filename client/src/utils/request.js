@@ -17,6 +17,7 @@ export const request = axios.create({ baseURL })
 export const buildTreeQuery = ({
   activeSpecies,
   activeGenus,
+  activeCounty,
   keyword,
   sortField,
   sortOrder,
@@ -28,7 +29,8 @@ export const buildTreeQuery = ({
 }) => {
   const { id: speciesId } = activeSpecies
   const { id: genusId } = activeGenus
-  return `/trees?activeSpecies=${speciesId}&activeGenus=${genusId}&sortField=${sortField}&sortOrder=${sortOrder}&page=${page}&pageSize=${pageSize}
+  const { id: countyId } = activeCounty
+  return `/trees?activeSpecies=${speciesId}&activeGenus=${genusId}&activeCounty=${countyId}&sortField=${sortField}&sortOrder=${sortOrder}&page=${page}&pageSize=${pageSize}
   &isMultiStemmedIncluded=${isMultiStemmedIncluded}&isNationalChamp=${isNationalChamp}&isTallestOfSpecies=${isTallestOfSpecies}`
 }
 

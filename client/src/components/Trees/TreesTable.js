@@ -47,6 +47,7 @@ const formatData = (rawData) => rawData.map((tree) => (
 const initialFilters = {
   activeGenus: { name: 'All', id: 'All' },
   activeSpecies: { name: 'All', id: 'All' },
+  activeCounty: { name: 'All', id: 'All' },
   keyword: '',
   sortField: 'points',
   sortOrder: 'DESC',
@@ -60,6 +61,7 @@ class Trees extends Component {
   state = {
     species: [initialFilters.activeSpecies],
     genera: [initialFilters.activeGenus],
+    counties: [initialFilters.activeCounty],
     columns: ['county', 'genus', 'species', 'common name', 'points', 'address', 'additional info'],
     data: null,
     tableData: null,
@@ -99,14 +101,20 @@ class Trees extends Component {
   }
 
   setFilter = (updatedFilter) => {
+    console.log({ updatedFilter })
     this.setState((prevState) => ({ filters: { ...prevState.filters, ...updatedFilter, page: 1 } }), this.fetchTrees)
   }
 
+  // @TODO Rename fetchFilterListss
   fetchSpeciesAndGenusLists = async () => {
     try {
       const { filters } = this.state
-      const { data: { species, genera } } = await API.getSpeciesAndGenera(filters)
-      this.setState({ genera: [initialFilters.activeGenus, ...genera], species: [initialFilters.activeSpecies, ...species] })
+      const { data: { species, genera, counties } } = await API.getSpeciesAndGenera(filters)
+      this.setState({
+        genera: [initialFilters.activeGenus, ...genera],
+        species: [initialFilters.activeSpecies, ...species],
+        counties: [initialFilters.activeCounty, ...counties],
+      })
     } catch (e) {
       // dosplay error
     }
@@ -139,11 +147,13 @@ class Trees extends Component {
       data,
       species,
       genera,
+      counties,
       filters,
       columns,
       isShowingMap,
       count,
     } = this.state
+    console.log({ filters })
     const { match: { params: { id } } } = this.props
     return (
       !id ? (
@@ -152,6 +162,7 @@ class Trees extends Component {
             <Filters
               species={species}
               genera={genera}
+              counties={counties}
               setFilter={this.setFilter}
               filters={filters}
               toggleShowMap={this.toggleShowMap}
@@ -185,7 +196,7 @@ class Trees extends Component {
 Trees.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
+      id: PropTypes.string,
     }).isRequired,
   }).isRequired,
   history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,

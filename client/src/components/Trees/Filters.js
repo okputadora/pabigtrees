@@ -41,6 +41,8 @@ class Filters extends Component {
 
   selectSpecies = (activeSpecies) => this.props.setFilter({ activeSpecies })
 
+  selectCounty = (activeCounty) => this.props.setFilter({ activeCounty })
+
   toggleMultiStemmed = () => this.props.setFilter({ isMultiStemmedIncluded: !this.props.filters.isMultiStemmedIncluded })
 
   toggleTallest = () => this.props.setFilter({ isTallestOfSpecies: !this.props.filters.isTallestOfSpecies })
@@ -51,11 +53,12 @@ class Filters extends Component {
     const {
       genera,
       species,
+      counties,
       filters,
       filters: {
         activeGenus,
         activeSpecies,
-        counties,
+        activeCounty,
         isMultiStemmedIncluded,
         isTallestOfSpecies,
         isNationalChamp,
@@ -63,8 +66,8 @@ class Filters extends Component {
       isShowingMap,
       toggleShowMap,
     } = this.props
-    const { filteredSpecies } = this.state
     console.log({ filters })
+    const { filteredSpecies } = this.state
     return (
       <div>
         <div className="filters">
@@ -97,15 +100,15 @@ class Filters extends Component {
               </div>
             </div>
             <div className="filter-dropdown-container">
-              <div>Species</div>
+              <div>Counties</div>
               <div className="filter-dropdown">
                 <Select
                   items={counties}
-                  itemPredicate={this.filterCounties}
+                  itemPredicate={this.filterItems}
                   itemRenderer={this.renderItem}
                   onItemSelect={this.selectCounty}
                 >
-                  <div className="filter-item">{activeSpecies.name}</div>
+                  <div className="filter-item">{activeCounty.name}</div>
                 </Select>
               </div>
             </div>
@@ -148,7 +151,7 @@ class Filters extends Component {
 
 const listItemPropType = PropTypes.shape({
   name: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
 }).isRequired
 
 Filters.propTypes = {
@@ -156,6 +159,7 @@ Filters.propTypes = {
     keyword: PropTypes.string,
     activeSpecies: listItemPropType,
     activeGenus: listItemPropType,
+    activeCounty: listItemPropType,
     counties: PropTypes.arrayOf(PropTypes.shape({})),
     isMultiStemmedIncluded: PropTypes.bool,
     isTallestOfSpecies: PropTypes.bool,
@@ -163,6 +167,7 @@ Filters.propTypes = {
   }).isRequired,
   species: PropTypes.arrayOf(listItemPropType).isRequired,
   genera: PropTypes.arrayOf(listItemPropType).isRequired,
+  counties: PropTypes.arrayOf(listItemPropType).isRequired,
   setFilter: PropTypes.func.isRequired,
   isShowingMap: PropTypes.bool.isRequired,
   toggleShowMap: PropTypes.func.isRequired,

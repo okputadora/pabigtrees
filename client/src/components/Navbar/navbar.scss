@@ -22,7 +22,7 @@
   font-size: 12px;
   padding: 20px;
   letter-spacing: 0.05em;
-  color: #E8E710;
+  color: $yellow;
   text-transform: uppercase;
   border-bottom: 3px solid transparent;
   cursor: pointer;
@@ -30,8 +30,8 @@
 }
 
 .nav-item:hover {
-  border-bottom: 3px solid #E8E710;
+  border-bottom: 3px solid $yellow;
   background: #191E1A;
-  color:#E8E710;
+  color: $yellow;
   text-decoration: none;
 }

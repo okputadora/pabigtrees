@@ -5,6 +5,7 @@
     "max-len": "off",
     "arrow-parens": "off",
     "no-underscore-dangle": "off",
-    "func-names": "off"
+    "func-names": "off",
+    "linebreak-style": "off"
   }
 }
