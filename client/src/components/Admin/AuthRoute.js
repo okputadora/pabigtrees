@@ -7,7 +7,6 @@ import { Redirect, Route } from 'react-router-dom'
 
 function AuthRoute({ component }) {
   if (localStorage.getItem('token')) {
-    console.log({ component })
     return (<Route component={component} />)
   }
 

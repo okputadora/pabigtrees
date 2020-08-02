@@ -11,6 +11,7 @@ const AdminNav = () => (
       <Link className="adminNav-navItem" to="/admin/databaseManager">Database Manager</Link>
       <Link className="adminNav-navItem" to="/admin/nominationManager">Nomination Manager</Link>
       <Link className="adminNav-navItem" to="/admin/blogManager">Blog Manager</Link>
+      <Link className="adminNav-navItem" to="/admin/logout">Logout</Link>
     </ul>
   </nav>
 )

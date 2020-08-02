@@ -42,5 +42,4 @@ router.post('/', validation, async (req, res) => {
   }
 })
 
-router.post('/auth')
 export default router

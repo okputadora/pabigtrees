@@ -8,6 +8,7 @@ import logger from './logger'
 
 import {
   login,
+  logout,
   pages,
   nominations,
   trees,
@@ -45,6 +46,7 @@ app.use('/trees', trees)
 app.use('/pages', pages)
 app.use('/nominations', nominations)
 app.use('/login', login)
+app.use('/logout', logout)
 app.use('/news', news)
 
 app.get('/*', (req, res) => {

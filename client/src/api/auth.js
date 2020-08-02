@@ -18,5 +18,12 @@ export const signup = (credentials) => (
   })
 )
 
+export const logout = () => {
+  request({
+    method: 'POST',
+    url: '/logout',
+  })
+}
+
 
 export default {}

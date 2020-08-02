@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Formik, Field, Form } from 'formik'
 import * as Yup from 'yup'
+import { withRouter } from 'react-router-dom'
 
 // import Form from '@/components/Forms/Form'
 import * as auth from '@/api/auth'
@@ -17,6 +18,7 @@ class Login extends Component {
     try {
       const { data: { token } } = await auth.login(values)
       localStorage.setItem('token', token)
+      this.props.history.push('/admin')
     } catch (err) {
       this.setState({ error: err.message })
     }
@@ -57,4 +59,4 @@ class Login extends Component {
   }
 }
 
-export default Login
+export default withRouter(Login)

@@ -9,6 +9,7 @@ import { Checkbox } from '@blueprintjs/core'
 import classNames from 'classnames'
 import * as Yup from 'yup'
 
+import Form from '@/components/Forms/Form'
 import {
   nominateTree, uploadFiles, confirmNomination, removeImage,
 } from '@/api/nomination'

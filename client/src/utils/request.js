@@ -14,9 +14,6 @@ const getApiUrl = () => {
 export const request = axios.create({
   baseURL: getApiUrl(),
   withCredentials: true,
-  // headers: {
-  //   credentials:
-  // }
 })
 
 export const buildTreeQuery = ({

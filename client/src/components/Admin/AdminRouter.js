@@ -11,6 +11,7 @@ import NominationViewer from './NominationManager/NominationViewer'
 import TreeEditor from './TreeEditor'
 import Confirmation from './Confirmation'
 import BlogManager from './BlogManager/BlogManager'
+import Logout from './Logout'
 
 import './admin.scss'
 
@@ -28,6 +29,7 @@ const Admin = () => (
           <Route path="/admin/nomination/:id" component={NominationViewer} />
           <Route path="/admin/confirmation" component={Confirmation} />
           <Route path="/admin/blogManager" component={BlogManager} />
+          <Route path="/admin/logout" component={Logout} />
           <Route path="/admin" component={AdminSummary} />
         </Switch>
       </div>
