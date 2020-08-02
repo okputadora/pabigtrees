@@ -13,7 +13,7 @@ const News = () => {
       const { data: { news, images } } = await getNews()
       const newsWithImages = news.map((newsEntry) => ({
         ...newsEntry,
-        image: images[newsEntry.i_id] ? images[newsEntry.i_id].img_location : null,
+        image: images[newsEntry.i_id] ? images[newsEntry.i_id].image_location : null,
       }))
       setEntries(newsWithImages)
     })()

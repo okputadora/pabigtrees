@@ -6,7 +6,6 @@ import { EditableText as BPEditableText } from '@blueprintjs/core'
 const EditableText = ({ text, handleEdit, multiline }) => {
   const inputEl = useRef(null)
   const [isEditing, toggleIsEditing] = useState(false)
-  console.log({ text })
   return (
     <BPEditableText
       ref={inputEl}

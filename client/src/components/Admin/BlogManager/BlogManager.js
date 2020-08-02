@@ -1,18 +1,23 @@
-import React, { useEffect, useState } from 'react'
-import moment from 'moment'
+import React, { useEffect, useState, useCallback } from 'react'
+import { Button } from '@blueprintjs/core'
 
-import CreateEntry from './CreateEntry'
-import { getNews } from '@/api/news'
+import EntryForm from './EntryForm'
+import { getNews, createNewsEntry } from '@/api/news'
+import Entry from './Entry'
 
 const BlogManager = () => {
   const [entries, setEntries] = useState([])
+
+  const handleSubmit = useCallback((values, images) => {
+    createNewsEntry({ ...values, images })
+  }, [])
 
   useEffect(() => {
     (async () => {
       const { data: { news, images } } = await getNews()
       const newsWithImages = news.map((newsEntry) => ({
         ...newsEntry,
-        image: images[newsEntry.i_id] ? images[newsEntry.i_id].img_location : null,
+        image: images[newsEntry.i_id] ? images[newsEntry.i_id].image_location : null,
       }))
       setEntries(newsWithImages)
     })()
@@ -20,17 +25,12 @@ const BlogManager = () => {
 
   return (
     <div className="news">
-      <CreateEntry />
-      {entries.map((entry) => (
-        <div key={entry.i_id} className="news-entry">
-          <div className="news-header">
-            <div className="news-title">{entry.news_title}</div>
-            <div className="news-date">{moment(entry.create_date).format('MMMM Do, YYYY')}</div>
-          </div>
-          {entry.image && <img className="news-image" key={entry.image} src={`http://localhost:4000/newsImages/${entry.image}`} alt={entry.image} />}
-          <div className="news-body">{entry.news_body}</div>
-        </div>
-      ))}
+      <>
+        <EntryForm handleSubmit={handleSubmit}>
+          {({ setIsOpen }) => <Button onClick={() => setIsOpen(true)}>Create New Post</Button>}
+        </EntryForm>
+        {entries.map((entry) => (<Entry entry={entry} key={entry.i_id} />))}
+      </>
     </div>
   )
 }

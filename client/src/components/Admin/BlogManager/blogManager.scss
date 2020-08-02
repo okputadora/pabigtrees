@@ -1,9 +1,13 @@
-.create-entry {
-  // background: white;
-  border: 1px solid red;
-  width: 100%;
-  height: 100%;
-  padding: 100px;
-  display: flex;
-  flex-flow: column;
+.blog-manager {
+  .create-entry {
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    flex-flow: column;
+  }
+  
+  .row { 
+    display: flex;
+  }
 }

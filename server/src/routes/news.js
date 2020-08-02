@@ -3,6 +3,7 @@ import fs from 'fs'
 import multer from 'multer'
 import moment from 'moment'
 
+import { authenticateToken } from '../middleware/authorization'
 import models from '../models'
 
 const router = Router()
@@ -46,18 +47,16 @@ router.get('/', async (req, res) => {
     newsImages.forEach(image => { normalizedNewsImages[image.k_news] = image })
     res.json({ news, images: normalizedNewsImages })
   } catch (err) {
-    console.log({ err })
     res.status(500).json({ err })
   }
 })
 
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
   try {
     // create entry
     const { body, title, images } = req.body
     const createDate = moment().toISOString()
     const newsEntry = await models.news.create({
-      // i_id: Date.now(),
       news_title: title,
       news_body: body,
       f_display: 1,
@@ -65,10 +64,9 @@ router.post('/', async (req, res) => {
       last_update: createDate,
     })
     if (req.body.images && req.body.images.length > 0) {
-      const image = await models.newsImages.create({
-        // i_id: Date.now(),
+      await models.newsImages.create({
         k_news: newsEntry.i_id,
-        img_location: images[0],
+        image_location: images[0],
         f_active: 1,
         create_date: createDate,
       })
@@ -77,12 +75,12 @@ router.post('/', async (req, res) => {
     // move image
     res.json({ success: true })
   } catch (err) {
-    console.log(err)
     res.status(500).json({ error: err })
   }
 })
 
-router.post('/upload', upload.array('photo', 5), async (req, res) => {
+router.post('/upload', authenticateToken, upload.array('photo', 5), async (req, res) => {
+  console.log('hello!!!!!')
   if (req.fileValidationError) {
     return res.status(415).send({ message: req.fileValidationError })
   }
