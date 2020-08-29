@@ -8,7 +8,7 @@ import './contentManager.scss'
 class ContentManager extends Component {
   state = {
     currentPage: 'homepage',
-    pages: ['homepage', 'treeListings', 'measurement'],
+    pages: ['homepage', 'measurement', 'linksAndResources', 'about'],
   }
 
   renderItem = (name, { handleClick }) => <div key={name} onClick={handleClick} tabIndex={0} onKeyPress={handleClick} role="button">{name}</div>

@@ -262,7 +262,7 @@ const Nomination = ({ initValues, isAdminReview }) => {
   }, [images, isNew])
 
   // const SpeciesField = isAdminReview && newSpecies ? InputField : SelectField
-
+  console.log({ filteredCommonNames, filteredSpecies, genera })
   return (
     <div className="nomination-pageContainer">
       {!isAdminReview && (

@@ -2,16 +2,6 @@ import { Component } from 'react'
 import PropTypes from 'prop-types'
 import * as API from '@/api/page'
 
-// @TODO FETCH THIS INFORMATION
-const paths = {
-  '/': '2',
-  measurement: '1',
-  about: '3',
-  resources: '4',
-
-
-}
-
 class PageData extends Component {
   state = {
     data: null,
@@ -31,8 +21,8 @@ class PageData extends Component {
 
   async fetchPage() {
     const { match: { params: { pathName = '/' } } } = this.props
-    const id = paths[pathName]
-    const { data } = await API.getPageData(id)
+    console.log(pathName)
+    const { data } = await API.getPageData(pathName)
     this.setState({ data })
   }
 

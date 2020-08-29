@@ -1,15 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Button, Popover, PopoverInteractionKind } from '@blueprintjs/core'
+
 import * as API from '@/api/page'
-
+import SectionEditor from './SectionEditor'
+import AddSection from './AddSection'
 import './pageEditor.scss'
-import Page from '@/components/Page/Page'
 
-const paths = {
-  homepage: '5de12e6538a99e3154370d02',
-  measurement: '5de12ed038a99e3154370d03',
-}
 class PageEditor extends Component {
   state =
     {
@@ -17,6 +13,7 @@ class PageEditor extends Component {
       sections: null,
       isUnsaved: false,
       isEdited: false,
+      isEditing: false,
     }
 
   componentDidMount() {
@@ -34,7 +31,7 @@ class PageEditor extends Component {
   fetchPageData = async () => {
     const { name } = this.props
     try {
-      const { data } = await API.getPageData(paths[name])
+      const { data } = await API.getPageData(name)
       const sections = data.sections.reduce((acc, s) => {
         const id = s._id
         acc[id] = s
@@ -46,10 +43,6 @@ class PageEditor extends Component {
     } catch (err) {
       console.log('something went wrong', err)
     }
-  }
-
-  confirmDelete = () => {
-    console.log('DELETED!')
   }
 
   handleEdit = (val, field = 'text', id) => {
@@ -70,7 +63,6 @@ class PageEditor extends Component {
     })
     try {
       await API.updateSections(sectionsToUpdate)
-      console.log('saved!')
       this.setState({ isUnsaved: false })
       // @ TODO Alert
     } catch (err) {
@@ -79,28 +71,19 @@ class PageEditor extends Component {
   }
 
   render() {
-    const { pageData, isUnsaved, isEdited } = this.state
-    return (
+    const {
+      pageData,
+      isUnsaved,
+      isEdited,
+      isEditing,
+    } = this.state
+    console.log({ pageData })
+    return pageData ? (
       <div>
-        <div className="pageEditor-mode">
-          <Button text="Publish" onClick={this.publish} />
-          <Popover interactionKind={PopoverInteractionKind.CLICK} position="right">
-            <Button text="🗑️" />
-            <div className="pageEditor-deleteModal">
-              Are you sure you want to delete this page?
-              <Button className="bp3-popover-dismiss danger" text="yes" onClick={this.confirmDelete} />
-              <Button className="bp3-popover-dismiss" text="cancel" />
-            </div>
-          </Popover>
-          {isUnsaved
-            ? <div className="pageEditor-unsaved">You have unsaved work!</div>
-            : <div className="pageEditor-saved">{isEdited && 'Saved!'}</div>}
-        </div>
-        <div className="pageEditor-content">
-          {pageData && <Page isAdmin handleEdit={this.handleEdit} data={pageData} />}
-        </div>
+        {pageData.sections.map((section) => <SectionEditor section={section} key={section.id} onEditSuccess={this.fetchPageData} />)}
+        <AddSection sectionId={pageData.page.id} />
       </div>
-    )
+    ) : <div>loading</div>
   }
 }
 

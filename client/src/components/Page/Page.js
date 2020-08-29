@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 
 import './page.scss'
 import renderer from '@/utils/renderer'
-// import samplePageData from '@/utils/samplePageData'
 
 const Page = (props) => {
   const { isAdmin, handleEdit, data } = props

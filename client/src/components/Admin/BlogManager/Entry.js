@@ -13,13 +13,10 @@ const Entry = ({ entry, onUpdate }) => {
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false)
 
   const handleSubmit = useCallback(async (values) => {
-    console.log({ values })
     try {
       await updateNewsEntry({ ...values, i_id: entry.i_id })
-      console.log('close delete modal!')
       setIsConfirmingDelete(false)
       onUpdate()
-      console.log('refetchiungb')
     } catch (err) {
       alert(err)
     }

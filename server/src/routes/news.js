@@ -91,9 +91,6 @@ router.put('/', authenticateToken, async (req, res) => {
     },
   } = req
   try {
-    console.log({
-      id, title, body, isPublic,
-    })
     const newsEntry = await models.news.findByPk(id)
     if (!isPublic) {
       // deleting
@@ -106,7 +103,6 @@ router.put('/', authenticateToken, async (req, res) => {
     await newsEntry.save()
     res.json(newsEntry)
   } catch (err) {
-    console.log({ err })
     res.status(500).send()
   }
 })

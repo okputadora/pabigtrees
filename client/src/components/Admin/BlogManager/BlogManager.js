@@ -8,10 +8,6 @@ import Entry from './Entry'
 const BlogManager = () => {
   const [entries, setEntries] = useState([])
 
-  const handleSubmit = useCallback((values, images) => {
-    createNewsEntry({ ...values, images })
-  }, [])
-
   const fetchNewsEntries = useCallback(async () => {
     const { data: { news, images } } = await getNews()
     const newsWithImages = news.map((newsEntry) => ({
@@ -20,6 +16,16 @@ const BlogManager = () => {
     }))
     setEntries(newsWithImages)
   })
+
+  const handleSubmit = useCallback(async (values, images) => {
+    try {
+      await createNewsEntry({ ...values, images })
+      await fetchNewsEntries()
+    } catch (err) {
+      alert(err)
+    }
+  }, [])
+
   useEffect(() => {
     fetchNewsEntries()
   }, [])
