@@ -54,7 +54,6 @@ class Filters extends Component {
       genera,
       species,
       counties,
-      filters,
       filters: {
         activeGenus,
         activeSpecies,
@@ -66,7 +65,6 @@ class Filters extends Component {
       isShowingMap,
       toggleShowMap,
     } = this.props
-    console.log({ filters })
     const { filteredSpecies } = this.state
     return (
       <div>

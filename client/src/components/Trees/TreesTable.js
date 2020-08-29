@@ -55,12 +55,21 @@ const initialFilters = {
   isNationalChamp: false,
   isTallestOfSpecies: false,
 }
+
 class Trees extends Component {
   state = {
     species: [initialFilters.activeSpecies],
     genera: [initialFilters.activeGenus],
     counties: [initialFilters.activeCounty],
-    columns: ['county', 'genus', 'species', 'common name', 'points', 'address', 'additional info'],
+    columns: [
+      { name: 'county', id: 'county' },
+      { name: 'genus', id: 'genus' },
+      { name: 'species', id: 'species' },
+      { name: 'common name', id: 'commonName' },
+      { name: 'points', id: 'points' },
+      { name: 'address', id: 'address' },
+      { name: 'additional info', id: 'additionalInfo' },
+    ],
     data: null,
     tableData: null,
     filters: initialFilters,
@@ -170,7 +179,7 @@ class Trees extends Component {
               <iframe title="map" src="https://www.google.com/maps/d/u/0/embed?mid=1YN9lv0OQQKbhT4QQEG2kiV7L0rHjsU6j&z=7" width="100%" height="600" />
             </div>
           )
-            : (
+            : tableData && (
               <Table
                 columns={columns}
                 tableData={tableData}

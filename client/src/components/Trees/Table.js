@@ -19,14 +19,27 @@ const Table = ({
   <div>
     <div className="tree-data-container">
       <table className="table">
-        <thead><tr>{columns.map((col) => <th onClick={setSortBy} id={col} key={col} className="table-header">{col}</th>)}</tr></thead>
+        <thead>
+          <tr>
+            {columns.map((col) => (
+              <th
+                onClick={col.name !== 'additional info' ? setSortBy : undefined}
+                id={col.id}
+                key={col.id}
+                className="table-header"
+              >
+                {col.name}
+              </th>
+            ))}
+          </tr>
+        </thead>
         <tbody>
           {tableData ? tableData.map((row, i) => (
             <tr onClick={() => goToTreePage(row.id)} className={`row ${i % 2 === 0 ? 'even' : 'odd'}`} key={row.id}>
               {Object.keys(row).filter((k) => k !== 'id').map((key) => {
                 if (key === 'additional info') {
                   return (
-                    <td>
+                    <td key={key}>
                       <span className="table-icon">
                         {row[key][0] === 1 && <Icon name="nationalChamp" />}
                         {row[key][1] === 1 && <Icon name="tallest" />}
@@ -70,17 +83,20 @@ const Table = ({
 )
 
 Table.propTypes = {
-  columns: PropTypes.arrayOf(PropTypes.stng).isRequired,
+  columns: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+    }).isRequired,
+  ).isRequired,
   setSortBy: PropTypes.func.isRequired,
   tableData: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   goToTreePage: PropTypes.func.isRequired,
-  getPrevPage: PropTypes.func.isRequired,
   filters: PropTypes.shape({
     page: PropTypes.number,
     pageSize: PropTypes.number,
   }).isRequired,
   getPage: PropTypes.func.isRequired,
-  getNextPage: PropTypes.func.isRequired,
   count: PropTypes.number.isRequired,
 }
 
