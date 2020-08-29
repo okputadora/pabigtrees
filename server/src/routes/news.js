@@ -15,8 +15,6 @@ const storage = multer.diskStorage({
 
   // By default, multer removes file extensions so let's add them back
   filename(req, file, cb) {
-    console.log(file)
-
     cb(null, `${Date.now()}-${file.originalname}`)
   },
 })
@@ -41,7 +39,7 @@ const upload = multer({ storage, fileFilter: imageFilter })
 
 router.get('/', async (req, res) => {
   try {
-    const news = await models.news.findAll({ order: [['create_date', 'DESC']] })
+    const news = await models.news.findAll({ where: { f_display: 1 }, order: [['create_date', 'DESC']] })
     const newsImages = await models.newsImages.findAll()
     const normalizedNewsImages = {}
     newsImages.forEach(image => { normalizedNewsImages[image.k_news] = image })
@@ -80,12 +78,37 @@ router.post('/', authenticateToken, async (req, res) => {
 })
 
 router.post('/upload', authenticateToken, upload.array('photo', 5), async (req, res) => {
-  console.log('hello!!!!!')
   if (req.fileValidationError) {
     return res.status(415).send({ message: req.fileValidationError })
   }
   return res.json(req.files.map(f => f.filename))
 })
 
+router.put('/', authenticateToken, async (req, res) => {
+  const {
+    body: {
+      i_id: id, title, body, isPublic = true,
+    },
+  } = req
+  try {
+    console.log({
+      id, title, body, isPublic,
+    })
+    const newsEntry = await models.news.findByPk(id)
+    if (!isPublic) {
+      // deleting
+      newsEntry.f_display = 0
+    } else {
+      // updating
+      newsEntry.news_body = body
+      newsEntry.news_title = title
+    }
+    await newsEntry.save()
+    res.json(newsEntry)
+  } catch (err) {
+    console.log({ err })
+    res.status(500).send()
+  }
+})
 
 export default router

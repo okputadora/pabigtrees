@@ -12,15 +12,16 @@ const BlogManager = () => {
     createNewsEntry({ ...values, images })
   }, [])
 
+  const fetchNewsEntries = useCallback(async () => {
+    const { data: { news, images } } = await getNews()
+    const newsWithImages = news.map((newsEntry) => ({
+      ...newsEntry,
+      image: images[newsEntry.i_id] ? images[newsEntry.i_id].image_location : null,
+    }))
+    setEntries(newsWithImages)
+  })
   useEffect(() => {
-    (async () => {
-      const { data: { news, images } } = await getNews()
-      const newsWithImages = news.map((newsEntry) => ({
-        ...newsEntry,
-        image: images[newsEntry.i_id] ? images[newsEntry.i_id].image_location : null,
-      }))
-      setEntries(newsWithImages)
-    })()
+    fetchNewsEntries()
   }, [])
 
   return (
@@ -29,7 +30,7 @@ const BlogManager = () => {
         <EntryForm handleSubmit={handleSubmit}>
           {({ setIsOpen }) => <Button onClick={() => setIsOpen(true)}>Create New Post</Button>}
         </EntryForm>
-        {entries.map((entry) => (<Entry entry={entry} key={entry.i_id} />))}
+        {entries.map((entry) => (<Entry entry={entry} key={entry.i_id} onUpdate={fetchNewsEntries} />))}
       </>
     </div>
   )

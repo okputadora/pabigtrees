@@ -3,22 +3,19 @@ import React, {
 } from 'react'
 import PropTypes from 'prop-types'
 import { useParams, useHistory } from 'react-router-dom'
-import { Formik, useFormikContext } from 'formik'
+import { Formik } from 'formik'
 import { Checkbox } from '@blueprintjs/core'
 import * as Yup from 'yup'
 
-import {
-  nominateTree, confirmNomination, removeImage,
-} from '@/api/nomination'
+import { confirmNomination, removeImage } from '@/api/nomination'
 
 import { getSpeciesAndGenera } from '@/api/tree'
+import Form from '@/components/Forms/Form'
 import InputField from '@/components/Forms/InputField'
 import SelectField from '@/components/Forms/SelectField'
-// import { initialValues } from '@/formData'
 import { counties, measuringTechniques } from '@/utils/nomination'
 import Header from '@/components/Common/Header'
 
-// import './nomination.scss'
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 

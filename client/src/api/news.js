@@ -7,13 +7,11 @@ export const getNews = () => (
   })
 )
 
-export const updateNewsEntry = (data) => {
-  request({
-    method: 'PUT',
-    url: '/news',
-    data,
-  })
-}
+export const updateNewsEntry = (data) => request({
+  method: 'PUT',
+  url: '/news',
+  data,
+})
 
 export const createNewsEntry = (data) => (
   request({
