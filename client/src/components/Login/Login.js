@@ -43,8 +43,8 @@ class Login extends Component {
                     {(props) => <input {...props.field} />}
                   </Field>
                   {dirty.username && <div className="error">{errors.username}</div>}
-                  <Field name="password" type="password">
-                    {(props) => <input {...props.field} />}
+                  <Field name="password">
+                    {(props) => <input type="password" {...props.field} />}
                   </Field>
                   {dirty.password && <div className="error">{errors.password}</div>}
                   <button className="testClass" type="submit" disabled={!dirty || isSubmitting}>submit</button>

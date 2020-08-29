@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 
 import { getTreeImages } from '@/api/tree'
 
@@ -38,8 +39,8 @@ const Tree = ({ tree }) => {
             <div>{`Original Nominator: ${tree.originalNominator}`}</div>
             <div>{`Comments: ${tree.comments}`}</div>
             <div>{`Measuring Technique: ${tree.measuringTechnique}`}</div>
-            <div>{`Year Nominated: ${tree.yearNominated}`}</div>
-            <div>{`Year Last Measured: ${tree.yearLastMeasured}`}</div>
+            <div>{`Year Nominated: ${moment(tree.yearNominated).format('YYYY')}`}</div>
+            <div>{`Year Last Measured: ${moment(tree.yearLastMeasured).format('YYYY')}`}</div>
           </div>
           <div className="tree-images">
             {treeImages.length > 0 && treeImages.map((img) => (

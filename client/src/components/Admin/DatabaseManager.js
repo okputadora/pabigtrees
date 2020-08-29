@@ -1,12 +1,6 @@
-import React, { Component } from 'react'
+import React from 'react'
 import TreesTable from '@/components/Trees/TreesTable'
 
-class DatabaseManager extends Component {
-  render() {
-    return (
-      <TreesTable isAdmin {...this.props} />
-    )
-  }
-}
+const DatabaseManager = (props) => <TreesTable isAdmin {...props} />
 
 export default DatabaseManager
