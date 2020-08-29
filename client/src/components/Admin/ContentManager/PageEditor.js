@@ -10,10 +10,6 @@ class PageEditor extends Component {
   state =
     {
       pageData: null,
-      sections: null,
-      isUnsaved: false,
-      isEdited: false,
-      isEditing: false,
     }
 
   componentDidMount() {
@@ -45,43 +41,14 @@ class PageEditor extends Component {
     }
   }
 
-  handleEdit = (val, field = 'text', id) => {
-    const { sections } = { ...this.state }
-    if (sections[id][field] !== val) {
-      sections[id][field] = val
-      sections[id].isEdited = true
-      this.setState({ sections, isUnsaved: true, isEdited: true })
-    }
-  }
-
-  publish = async () => {
-    // send currentState to API
-    const { sections } = { ...this.state }
-    const sectionsToUpdate = Object.keys(sections).filter((key) => sections[key].isEdited).map((key) => {
-      delete sections[key].isEdited
-      return sections[key]
-    })
-    try {
-      await API.updateSections(sectionsToUpdate)
-      this.setState({ isUnsaved: false })
-      // @ TODO Alert
-    } catch (err) {
-      // @TODO ALert
-    }
-  }
-
   render() {
     const {
       pageData,
-      isUnsaved,
-      isEdited,
-      isEditing,
     } = this.state
-    console.log({ pageData })
     return pageData ? (
       <div>
         {pageData.sections.map((section) => <SectionEditor section={section} key={section.id} onEditSuccess={this.fetchPageData} />)}
-        <AddSection sectionId={pageData.page.id} />
+        <AddSection pageId={pageData.page.id} onCreateSuccess={this.fetchPageData} />
       </div>
     ) : <div>loading</div>
   }

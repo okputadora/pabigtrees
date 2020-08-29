@@ -4,6 +4,7 @@ import Paragraph from '@/components/Common/Paragraph'
 import Section from '@/components/Common/Section'
 import Image from '@/components/Common/Image'
 import Link from '@/components/Common/Link'
+import Header from '@/components/Common/Header'
 
 export default ({ sections }, ...rest) => sections.sort((a, b) => a.order - b.order).map((section) => {
   const {
@@ -17,6 +18,7 @@ export default ({ sections }, ...rest) => sections.sort((a, b) => a.order - b.or
     section: Section,
     image: Image,
     link: Link,
+    header: Header,
   }
   const Comp = sectionTypeMap[section_type]
   if (section_type === 'image') {

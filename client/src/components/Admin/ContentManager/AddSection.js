@@ -6,34 +6,41 @@ import { Formik } from 'formik'
 import Form from '@/components/Forms/Form'
 import InputField from '@/components/Forms/InputField'
 import SelectField from '@/components/Forms/SelectField'
+import { createSection } from '@/api/page'
 
-const AddSection = ({ sectionId }) => {
+const AddSection = ({ pageId, onCreateSuccess }) => {
   const [isOpen, setIsOpen] = useState(false)
   const addSection = useCallback(async (values) => {
-    console.log({ sectionId, values })
-  })
+    try {
+      await createSection({ page_id: pageId, ...values })
+      setIsOpen(false)
+      onCreateSuccess()
+    } catch (err) {
+      alert(err)
+    }
+  }, [pageId])
 
   return (
     <>
       <Dialog isOpen={isOpen}>
         <Formik
           initialValues={{
-            sectionType: '',
+            section_type: '',
             content: '',
-            secondaryContent: '',
+            secondary_content: '',
           }}
           onSubmit={addSection}
         >
           {({ handleSubmit, values }) => (
             <Form>
               <SelectField
-                name="sectionType"
+                name="section_type"
                 items={['paragraph', 'header', 'image', 'link'].map((x) => ({ name: x, id: x }))}
                 labelProps={{ label: 'Section Type' }}
                 activeItem={{ id: values.sectionType, name: values.sectionType }}
               />
               <InputField name="content" labelProps={{ label: 'Content' }} inputProps={{ textArea: true }} />
-              <InputField name="secondaryContent" labelProps={{ label: 'Secondary Content' }} inputProps={{ textArea: true }} />
+              <InputField name="secondary_content" labelProps={{ label: 'Secondary Content' }} inputProps={{ textArea: true }} />
               <Button onClick={() => setIsOpen(false)}>Cancel</Button>
               <Button onClick={handleSubmit} intent={Intent.PRIMARY}>Submit</Button>
             </Form>
@@ -46,7 +53,8 @@ const AddSection = ({ sectionId }) => {
 }
 
 AddSection.propTypes = {
-  sectionId: PropTypes.number.isRequired,
+  pageId: PropTypes.number.isRequired,
+  onCreateSuccess: PropTypes.func.isRequired,
 }
 
 export default AddSection

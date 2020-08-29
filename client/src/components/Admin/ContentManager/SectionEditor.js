@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import { Formik } from 'formik'
 import {
-  Button, Dialog, Intent,
+  Button, Dialog, Intent, Alert,
 } from '@blueprintjs/core'
 import PropTypes from 'prop-types'
 
@@ -14,6 +14,8 @@ import './sectionEditor.scss'
 
 const SectionEditor = ({ section, onEditSuccess }) => {
   const [isOpen, setIsOpen] = useState(false)
+  const [isTrashing, setIsTrashing] = useState(false)
+
   const handleEdit = useCallback(async (values) => {
     try {
       await updateSection({ ...section, ...values })
@@ -22,11 +24,18 @@ const SectionEditor = ({ section, onEditSuccess }) => {
     } catch (err) {
       alert(err)
     }
-  })
+  }, [section.id])
 
   const trashSection = useCallback(async () => {
+    try {
+      await updateSection({ ...section, is_trashed: 1 })
+      setIsTrashing(false)
+      onEditSuccess()
+    } catch (err) {
+      alert(err)
+    }
+  }, [section.id])
 
-  })
   return (
     <div className="section-editor">
       <div className="title">{section.section_type}</div>
@@ -53,7 +62,18 @@ const SectionEditor = ({ section, onEditSuccess }) => {
         )}
       </Formik>
       <Button onClick={() => setIsOpen(true)} intent={Intent.PRIMARY} icon="edit" />
-      <Button onClick={trashSection} intent={Intent.DANGER} icon="trash" />
+      <Button onClick={() => setIsTrashing(true)} intent={Intent.DANGER} icon="trash" />
+      <Alert
+        isOpen={isTrashing}
+        intent={Intent.DANGER}
+        icon="trash"
+        confirmButtonText="Delete"
+        cancelButtonText="Cancel"
+        onConfirm={() => trashSection()}
+        onCancel={() => setIsTrashing(false)}
+      >
+        <p>Are you sure you want to delete this section?</p>
+      </Alert>
     </div>
   )
 }
@@ -65,6 +85,7 @@ SectionEditor.propTypes = {
     content: PropTypes.string,
     secondary_content: PropTypes.string,
   }).isRequired,
+  onEditSuccess: PropTypes.func.isRequired,
 }
 
 export default SectionEditor
