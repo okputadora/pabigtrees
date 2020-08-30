@@ -10,8 +10,8 @@ export const {
 } = process.env
 
 export const IS_DEV = NODE_ENV === 'dev'
+export const IS_PROD = NODE_ENV === 'production'
 
-console.log(NODE_ENV)
 export default {
   default: {
     // Core related settings

@@ -27,3 +27,26 @@ export const getTreeForAdmin = (id) => (
     url: `/trees/admin/${id}`,
   })
 )
+
+export const updateTree = (id, body) => (
+  request({
+    method: 'PUT',
+    url: `/trees/${id}`,
+    data: body,
+  })
+)
+
+export const uploadImages = (files) => {
+  const formData = new FormData()
+  files.forEach((file) => formData.append('photo', file))
+  return (
+    request({
+      method: 'POST',
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+      url: '/trees/upload',
+      data: formData,
+    })
+  )
+}

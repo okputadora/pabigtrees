@@ -179,7 +179,7 @@ const Nomination = ({ initValues, isAdminReview }) => {
   const [activeCommonName, setActiveCommonName] = useState({})
   const [isNew, setIsNew] = useState({ commonName: false, species: false, genus: false })
   const location = useLocation()
-
+  console.log({ activeSpecies, activeGenus, activeCommonName })
   const { newSpecies, newGenus } = useMemo(() => {
     const query = new URLSearchParams(location.search)
     const speciesQuery = query.get('newSpecies')
@@ -267,7 +267,7 @@ const Nomination = ({ initValues, isAdminReview }) => {
     <div className="nomination-pageContainer">
       {!isAdminReview && (
       <div className="nomination-title">
-        <Header text="Tree Nomination Form" />
+        <Header>Tree Nomination Form</Header>
         <p className="nomination-prompt">Your help is needed to locate, document, and preserve outstanding trees in Pennsylvania. If you know of a potential Champion Tree, please bring it to our attention using use our nomination form below.</p>
       </div>
       )}

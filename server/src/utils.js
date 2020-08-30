@@ -1,7 +1,7 @@
 import Joi from '@hapi/joi'
 import jwt from 'jsonwebtoken'
 
-import { IN_PROD, SECRET } from './config'
+import { IS_PROD, SECRET } from './config'
 
 export const validateRequest = (schema) => (req, res, next) => {
   const joiSchema = Joi.object(schema)
@@ -17,7 +17,7 @@ export const issueToken = (user, res) => {
   })
   res.cookie('user', token, {
     httpOnly: true,
-    secure: IN_PROD,
+    secure: IS_PROD,
     maxAge: 1000 * 60 * 60 * 24 * 2,
   })
   return token

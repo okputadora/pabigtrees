@@ -28,16 +28,9 @@ class PageEditor extends Component {
     const { name } = this.props
     try {
       const { data } = await API.getPageData(name)
-      const sections = data.sections.reduce((acc, s) => {
-        const id = s._id
-        acc[id] = s
-        return acc
-      }, {})
-      this.setState({
-        sections, pageData: data, isEdited: false, isUnsaved: false,
-      })
+      this.setState({ pageData: data })
     } catch (err) {
-      console.log('something went wrong', err)
+      alert('something went wrong', err)
     }
   }
 
@@ -45,7 +38,6 @@ class PageEditor extends Component {
     const {
       pageData,
     } = this.state
-    console.log({ pageData })
     return pageData ? (
       <div>
         {pageData.sections.map((section) => <SectionEditor section={section} key={section.id} onEditSuccess={this.fetchPageData} />)}

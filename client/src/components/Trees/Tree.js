@@ -6,6 +6,7 @@ import { getTreeImages } from '@/api/tree'
 
 const Tree = ({ tree }) => {
   const [treeImages, setTreeImages] = useState([])
+
   useEffect(() => {
     async function fetch() {
       try {
@@ -19,6 +20,8 @@ const Tree = ({ tree }) => {
     }
     fetch()
   }, [tree.id])
+
+
   return (
     <div className="tree-container">
       <div className="tree-header">
@@ -44,6 +47,7 @@ const Tree = ({ tree }) => {
           </div>
           <div className="tree-images">
             {treeImages.length > 0 && treeImages.map((img) => (
+              // @TODO make these urls dynamic for different environments
               <a href={`http://localhost:4000/treeImages/${img}`} target="_blank" rel="noopener noreferrer" key={img}>
                 <img className="tree-images-previewImage" key={img} src={`http://localhost:4000/treeImages/${img}`} alt={img} />
               </a>

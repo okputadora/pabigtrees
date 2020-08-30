@@ -1,4 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+} from 'react'
 import PropTypes from 'prop-types'
 import { Formik } from 'formik'
 
@@ -6,26 +11,31 @@ import * as API from '@/api/tree'
 import ImageUpload from '@/components/ImageUpload'
 import InputField from '@/components/Forms/InputField'
 import Form from '@/components/Forms/Form'
-import { formatAdminData } from '@/utils/format'
+import SpeciesManager from './SpeciesManager'
+// import { formatAdminData } from '@/utils/format'
+
 import './treeEditor.scss'
 
 const TreeEditor = (props) => {
   const { match: { params: { id } } } = props
   const [editableTree, setTree] = useState(null)
-  useEffect(() => {
-    const fetchTree = async () => {
-      try {
-        const { data: tree } = await API.getTreeForAdmin(id)
-        const formattedTree = formatAdminData(tree)
-        setTree(formattedTree)
-      } catch (e) {
-        console.log(e)
-      }
+
+  const fetchTree = useCallback(async () => {
+    try {
+      const { data: tree } = await API.getTreeForAdmin(id)
+      // const formattedTree = formatAdminData(tree)
+      setTree(tree)
+    } catch (err) {
+      alert(err)
     }
+  }, [id])
+  useEffect(() => {
     fetchTree()
   }, [id])
 
   const [treeImages, setTreeImages] = useState([])
+  const filePaths = useRef(null)
+
   useEffect(() => {
     async function fetch() {
       try {
@@ -40,13 +50,21 @@ const TreeEditor = (props) => {
     fetch()
   }, [id])
 
-  const handleSubmit = (values) => {
-    console.log(values)
-  }
+  const handleSubmit = useCallback(async (values) => {
+    try {
+      // eslint-disable-next-line no-param-reassign
+      delete values.species
+      await API.updateTree(id, values)
+      await fetchTree()
+    } catch (err) {
+      alert(err)
+    }
+  }, [id])
 
   const removeImage = (e) => {
     console.log('removing ', e.target.id)
   }
+
   return (
     <div className="tree-editor">
       {editableTree && (
@@ -54,9 +72,11 @@ const TreeEditor = (props) => {
           <Formik
             onSubmit={handleSubmit}
             initialValues={editableTree}
+            enableReinitialize
           >
-            {({ handleSubmit: handleFormikSubmit, dirty }) => (
+            {({ handleSubmit: handleFormikSubmit, dirty, setFieldValue }) => (
               <Form>
+                <SpeciesManager currentSpecies={editableTree.species} onSave={({ activeSpecies: { id: speciesId } }) => setFieldValue('k_species', speciesId)} />
                 {Object.keys(editableTree).map((key) => <InputField key={key} name={key} labelProps={{ label: key }} />)}
                 {dirty && <button type="submit" onClick={handleFormikSubmit} className="tree-editor-save-button">Save</button>}
               </Form>
@@ -72,7 +92,7 @@ const TreeEditor = (props) => {
               </>
             ))}
           </div>
-          <ImageUpload />
+          <ImageUpload upload={API.uploadImages} onUpload={(files) => console.log('save file paths to tree', files)} />
         </>
       )}
     </div>

@@ -7,7 +7,8 @@ actually have the images
 6. ~~Edit/delete blog posts~~
 7. ~~Manage content on other pages~~
 8. manually enter remaining content
-9. Style for generic content pages
+9. ~~Style for generic content pages~~
 10. ~~Image upload for content creation~~
-11. send image path with sectionUpdate body
+11. ~~send image path with sectionUpdate body~~
+12.Edit tree has issues with species and genus and county...isPublic also doesn't seem to be working
 

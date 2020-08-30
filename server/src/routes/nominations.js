@@ -8,10 +8,8 @@ import db from '../models'
 import { authenticateToken } from '../middleware/authorization'
 import {
   formatAndValidateNomination,
-  // formatAndValidateApproval,
   mapNominationToTree,
 } from '../utils'
-import genus from '../models/genus'
 
 const router = Router()
 const storage = multer.diskStorage({
@@ -142,7 +140,7 @@ router.put('/approval/:id', async (req, res) => {
         test: true,
       })
     }
-    await db.nominations.update({ isApproved: false }, { where: { id: req.params.id } })
+    await db.nominations.update({ isApproved: true }, { where: { id: req.params.id } })
 
     const newTree = mapNominationToTree(req.body, newSpecies)
     const tree = await db.trees.create({ ...newTree, id: `TR${Date.now()}`, isTest: true })
