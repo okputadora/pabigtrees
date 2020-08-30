@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Button, Dialog, Intent } from '@blueprintjs/core'
 import { Formik } from 'formik'
@@ -11,19 +11,23 @@ import { createSection, uploadImages } from '@/api/page'
 
 const AddSection = ({ pageId, onCreateSuccess }) => {
   const [isOpen, setIsOpen] = useState(false)
+  const imageFiles = useRef(null)
   const addSection = useCallback(async (values) => {
     try {
-      await createSection({ page_id: pageId, ...values })
+      const body = { page_id: pageId, ...values }
+      if (values.section_type === 'image') {
+        body.secondary_content = imageFiles.current[0].imagePath
+      }
+      await createSection(body)
       setIsOpen(false)
       onCreateSuccess()
     } catch (err) {
       alert(err)
     }
-  }, [pageId])
+  }, [pageId, imageFiles])
 
   const handleUploadSuccess = (files) => {
-    console.log(files)
-    // alert('Your images were uploaded successfully')
+    imageFiles.current = files
   }
 
 

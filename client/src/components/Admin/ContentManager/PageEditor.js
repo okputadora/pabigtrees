@@ -45,6 +45,7 @@ class PageEditor extends Component {
     const {
       pageData,
     } = this.state
+    console.log({ pageData })
     return pageData ? (
       <div>
         {pageData.sections.map((section) => <SectionEditor section={section} key={section.id} onEditSuccess={this.fetchPageData} />)}

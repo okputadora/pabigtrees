@@ -15,7 +15,7 @@ import {
   news,
 } from './routes'
 
-const { port } = config.default.core
+const { port, clientAddress } = config.default.core
 const app = express()
 
 app.use(bodyParser.json())
@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 // CORS
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: clientAddress,
   credentials: true,
 }
 app.use(cors(corsOptions))
@@ -37,6 +37,7 @@ app.use(cors(corsOptions))
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
 app.use('/treeImages', express.static(path.join(__dirname, '../treeImages')))
 app.use('/newsImages', express.static(path.join(__dirname, '../newsImages')))
+app.use('/pagesUploads', express.static(path.join(__dirname, '../pagesUploads')))
 
 // Serve react app
 app.use(express.static(path.join(__dirname, '../lib/public')))

@@ -3,6 +3,9 @@ import multer from 'multer'
 
 import models from '../models'
 import { authenticateToken } from '../middleware/authorization'
+import config from '../config'
+
+const { serverAddress } = config.default.core
 
 const router = Router()
 
@@ -68,11 +71,11 @@ const imageFilter = (req, file, cb) => {
 exports.imageFilter = imageFilter
 const upload = multer({ storage, fileFilter: imageFilter })
 
-router.post('/upload', authenticateToken, upload.array('photo', 5), async (req, res) => {
+router.post('/upload', authenticateToken, upload.array('photo', 1), async (req, res) => {
   if (req.fileValidationError) {
     return res.status(415).send({ message: req.fileValidationError })
   }
-  return res.json(req.files.map(f => f.filename))
+  return res.json(req.files.map(f => `${serverAddress}/pagesUploads/${f.filename}`))
 })
 
 export default router
