@@ -9,6 +9,7 @@ import Form from '@/components/Forms/Form'
 import InputField from '@/components/Forms/InputField'
 import renderer from '@/utils/renderer'
 import { updateSection } from '@/api/page'
+import ImageUpload from '@/components/ImageUpload'
 
 import './sectionEditor.scss'
 
@@ -36,6 +37,10 @@ const SectionEditor = ({ section, onEditSuccess }) => {
     }
   }, [section.id])
 
+  const uploadImages = useCallback((values) => {
+    console.log(values)
+  }, [])
+
   return (
     <div className="section-editor">
       <div className="title">{section.section_type}</div>
@@ -48,12 +53,16 @@ const SectionEditor = ({ section, onEditSuccess }) => {
         {({ handleSubmit }) => (
           <Dialog
             isOpen={isOpen}
+            title={section.section_type}
+            onClose={() => setIsOpen(false)}
           >
             <>
-              <div className="title">{section.section_type}</div>
               <Form>
                 <InputField name="content" labelProps={{ label: 'content' }} inputProps={{ textArea: true }} />
-                <InputField name="secondary_content" labelProps={{ label: 'link' }} inputProps={{ textArea: true }} />
+                {section.section_type === 'image' ? (<ImageUpload upload={uploadImages} />) : (
+                  <InputField name="secondary_content" labelProps={{ label: 'link' }} inputProps={{ textArea: true }} />
+
+                )}
                 <Button onClick={() => setIsOpen(false)}>Cancel</Button>
                 <Button onClick={handleSubmit} intent={Intent.PRIMARY}>Submit</Button>
               </Form>

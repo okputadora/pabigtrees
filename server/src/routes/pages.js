@@ -1,9 +1,23 @@
 import { Router } from 'express'
-import models from '../models'
+import multer from 'multer'
 
+import models from '../models'
 import { authenticateToken } from '../middleware/authorization'
 
 const router = Router()
+
+const storage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, 'pagesUploads/')
+  },
+
+  // By default, multer removes file extensions so let's add them back
+  filename(req, file, cb) {
+    console.log(file)
+
+    cb(null, `${Date.now()}-${file.originalname}`)
+  },
+})
 
 router.get('/:title', async (req, res) => {
   try {
@@ -43,4 +57,22 @@ router.post('/section', authenticateToken, async (req, res) => {
     res.status(500).send(err)
   }
 })
+
+// @TODO extract to util function and share between trees and nomination
+const imageFilter = (req, file, cb) => {
+  if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/)) {
+    req.fileValidationError = 'Only image files are allowed!'
+  }
+  return cb(null, true)
+}
+exports.imageFilter = imageFilter
+const upload = multer({ storage, fileFilter: imageFilter })
+
+router.post('/upload', authenticateToken, upload.array('photo', 5), async (req, res) => {
+  if (req.fileValidationError) {
+    return res.status(415).send({ message: req.fileValidationError })
+  }
+  return res.json(req.files.map(f => f.filename))
+})
+
 export default router

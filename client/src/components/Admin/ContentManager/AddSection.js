@@ -6,7 +6,8 @@ import { Formik } from 'formik'
 import Form from '@/components/Forms/Form'
 import InputField from '@/components/Forms/InputField'
 import SelectField from '@/components/Forms/SelectField'
-import { createSection } from '@/api/page'
+import ImageUpload from '@/components/ImageUpload'
+import { createSection, uploadImages } from '@/api/page'
 
 const AddSection = ({ pageId, onCreateSuccess }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -19,6 +20,12 @@ const AddSection = ({ pageId, onCreateSuccess }) => {
       alert(err)
     }
   }, [pageId])
+
+  const handleUploadSuccess = (files) => {
+    console.log(files)
+    // alert('Your images were uploaded successfully')
+  }
+
 
   return (
     <>
@@ -40,7 +47,7 @@ const AddSection = ({ pageId, onCreateSuccess }) => {
                 activeItem={{ id: values.sectionType, name: values.sectionType }}
               />
               <InputField name="content" labelProps={{ label: 'Content' }} inputProps={{ textArea: true }} />
-              <InputField name="secondary_content" labelProps={{ label: 'Secondary Content' }} inputProps={{ textArea: true }} />
+              {values.section_type === 'image' ? <ImageUpload upload={uploadImages} onUpload={handleUploadSuccess} /> : <InputField name="secondary_content" labelProps={{ label: 'Secondary Content' }} inputProps={{ textArea: true }} />}
               <Button onClick={() => setIsOpen(false)}>Cancel</Button>
               <Button onClick={handleSubmit} intent={Intent.PRIMARY}>Submit</Button>
             </Form>

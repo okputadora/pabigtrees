@@ -23,4 +23,19 @@ export const createSection = (section) => (
   })
 )
 
+export const uploadImages = (files) => {
+  const formData = new FormData()
+  files.forEach((file) => formData.append('photo', file))
+  return (
+    request({
+      method: 'POST',
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+      url: '/pages/upload',
+      data: formData,
+    })
+  )
+}
+
 export default {}
