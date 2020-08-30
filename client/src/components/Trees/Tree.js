@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 
 import { getTreeImages } from '@/api/tree'
+import { BASE_URL } from '@/config'
 
 const Tree = ({ tree }) => {
   const [treeImages, setTreeImages] = useState([])
@@ -48,8 +49,8 @@ const Tree = ({ tree }) => {
           <div className="tree-images">
             {treeImages.length > 0 && treeImages.map((img) => (
               // @TODO make these urls dynamic for different environments
-              <a href={`http://localhost:4000/treeImages/${img}`} target="_blank" rel="noopener noreferrer" key={img}>
-                <img className="tree-images-previewImage" key={img} src={`http://localhost:4000/treeImages/${img}`} alt={img} />
+              <a href={`${BASE_URL}/treeImages/${img}`} target="_blank" rel="noopener noreferrer" key={img}>
+                <img className="tree-images-previewImage" key={img} src={`${BASE_URL}/treeImages/${img}`} alt={img} />
               </a>
             ))}
           </div>

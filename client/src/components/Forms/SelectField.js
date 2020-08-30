@@ -20,8 +20,8 @@ const SelectField = ({
   const isTouched = touched[fieldName]
   useEffect(() => {
     setActiveItem(activeItemProp)
-    if (activeItemProp.id) setFieldValue(fieldName, activeItemProp.id)
-  }, [activeItemProp.id, fieldName])
+    if (activeItemProp && activeItemProp.id) setFieldValue(fieldName, activeItemProp.id)
+  }, [activeItemProp, fieldName])
 
   const renderItem = useCallback(({ name, id }, { handleClick, modifiers }) => {
     if (!modifiers.matchesPredicate) {
@@ -64,9 +64,9 @@ const SelectField = ({
             createNewItemFromQuery={createItem}
             createNewItemRenderer={canAdd && createNewItemRenderer}
           >
-            <div className="select-activeItem">{activeItem.name || `Click to select a ${labelProps.label}`}</div>
+            <div className="select-activeItem">{(activeItem && activeItem.name) || `Click to select a ${labelProps.label}`}</div>
           </Select>
-          {activeItem.id && <i className="fas fa-times" role="button" onClick={() => selectItem({})} />}
+          {activeItem && activeItem.id && <i className="fas fa-times" role="button" onClick={() => selectItem({})} />}
         </div>
       </div>
       {isTouched && error && <div className="form-error">{error}</div>}

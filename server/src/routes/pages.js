@@ -3,9 +3,6 @@ import multer from 'multer'
 
 import models from '../models'
 import { authenticateToken } from '../middleware/authorization'
-import config from '../config'
-
-const { serverAddress } = config.default.core
 
 const router = Router()
 
@@ -16,8 +13,6 @@ const storage = multer.diskStorage({
 
   // By default, multer removes file extensions so let's add them back
   filename(req, file, cb) {
-    console.log(file)
-
     cb(null, `${Date.now()}-${file.originalname}`)
   },
 })
@@ -75,7 +70,8 @@ router.post('/upload', authenticateToken, upload.array('photo', 1), async (req, 
   if (req.fileValidationError) {
     return res.status(415).send({ message: req.fileValidationError })
   }
-  return res.json(req.files.map(f => `${serverAddress}/pagesUploads/${f.filename}`))
+  // @TODO all file mapping should include that path...right now its being hard coded on the FE
+  return res.json(req.files.map(f => `pagesUploads/${f.filename}`))
 })
 
 export default router

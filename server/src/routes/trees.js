@@ -120,27 +120,17 @@ router.get('/admin/:id', authenticateToken, (req, res) => {
 })
 
 router.put('/:id', authenticateToken, async (req, res) => {
-  console.log('UPDATING TREE')
   try {
     const { body, params: { id } } = req
-    // check if genus or species is new
-
-    // if new create new genus and species and retreive ids
-
-    // else retreive existing ids
-
-    // map body field names to db field names
-    console.log({ body })
     const tree = await models.trees.findByPk(id)
     Object.keys(body).forEach(key => {
       if (key !== 'species') { // species field is a complex object that we dont want to save...we just need species_id
         tree[key] = body[key]
       }
     })
-    // await tree.save()
+    await tree.save()
     res.sendStatus(200)
   } catch (err) {
-    console.log({ err })
     res.status(500).send(err)
   }
 })

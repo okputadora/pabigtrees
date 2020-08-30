@@ -19,8 +19,6 @@ const storage = multer.diskStorage({
 
   // By default, multer removes file extensions so let's add them back
   filename(req, file, cb) {
-    console.log(file)
-
     cb(null, `${Date.now()}-${file.originalname}`)
   },
 })
@@ -105,7 +103,6 @@ router.post('/', async (req, res) => {
       res.status(500).send(e)
     })
   } catch (e) {
-    console.log(e)
     res.status(400).send(e)
   }
 })
@@ -121,7 +118,6 @@ router.put('/approval/:id', async (req, res) => {
       speciesId,
       genusId,
       commonNameNew,
-      commonName,
     } = req.body
     let newGenus
     let newSpecies = {}
@@ -154,13 +150,12 @@ router.put('/approval/:id', async (req, res) => {
     }
     res.json({ success: true, tree })
   } catch (err) {
-    console.log({ err })
     res.status(500).json({ error: err })
   }
 })
 
-router.delete('/:imagePath', async (req, res) => {
+// router.delete('/:imagePath', async (req, res) => {
 
-})
+// })
 
 export default router

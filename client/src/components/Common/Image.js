@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { BASE_URL } from '@/config'
+
 import './image.scss'
 
 const Image = (props) => {
@@ -9,7 +11,7 @@ const Image = (props) => {
   } = props
   return (
     <div className="image-container">
-      <img className="image-image" src={src} alt={alt || text.split(0, text.indexOf('.'))} />
+      <img className="image-image" src={`${BASE_URL}/${src}`} alt={alt || text.split(0, text.indexOf('.'))} />
       <p className="image-text">{text}</p>
     </div>
   )

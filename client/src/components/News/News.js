@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import moment from 'moment'
 
 import { getNews } from '@/api/news'
+import { BASE_URL } from '@/config'
 
 import './news.scss'
 
@@ -27,7 +28,7 @@ const News = () => {
             <div className="news-title">{entry.news_title}</div>
             <div className="news-date">{moment(entry.create_date).format('MMMM Do, YYYY')}</div>
           </div>
-          {entry.image && <img className="news-image" key={entry.image} src={`http://localhost:4000/newsImages/${entry.image}`} alt={entry.image} />}
+          {entry.image && <img className="news-image" key={entry.image} src={`${BASE_URL}/newsImages/${entry.image}`} alt={entry.image} />}
           <div className="news-body">{entry.news_body}</div>
         </div>
       ))}

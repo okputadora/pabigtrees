@@ -20,6 +20,7 @@ import SelectField from '@/components/Forms/SelectField'
 import { initialValues } from './formData'
 import { counties, measuringTechniques } from '@/utils/nomination'
 import Header from '@/components/Common/Header'
+import { BASE_URL } from '@/config'
 
 import './nomination.scss'
 
@@ -98,8 +99,8 @@ const AdminReview = () => {
       <div className="nomination-review-previewImages">
         {values.imagePaths.map((img) => (
           <div className="nomination-previewContainer" key={img.id}>
-            <a href={`http://localhost:4000/uploads/${img.location}`} target="_blank" rel="noopener noreferrer">
-              <img className="nomination-previewImage" key={img} src={`http://localhost:4000/uploads/${img.location}`} alt="preview" />
+            <a href={`${BASE_URL}/uploads/${img.location}`} target="_blank" rel="noopener noreferrer">
+              <img className="nomination-previewImage" key={img} src={`${BASE_URL}/uploads/${img.location}`} alt="preview" />
             </a>
             <button type="button" className="nomination-deleteImage" onClick={deleteImage}>X</button>
           </div>
@@ -179,7 +180,6 @@ const Nomination = ({ initValues, isAdminReview }) => {
   const [activeCommonName, setActiveCommonName] = useState({})
   const [isNew, setIsNew] = useState({ commonName: false, species: false, genus: false })
   const location = useLocation()
-  console.log({ activeSpecies, activeGenus, activeCommonName })
   const { newSpecies, newGenus } = useMemo(() => {
     const query = new URLSearchParams(location.search)
     const speciesQuery = query.get('newSpecies')
@@ -261,8 +261,6 @@ const Nomination = ({ initValues, isAdminReview }) => {
     }
   }, [images, isNew])
 
-  // const SpeciesField = isAdminReview && newSpecies ? InputField : SelectField
-  console.log({ filteredCommonNames, filteredSpecies, genera })
   return (
     <div className="nomination-pageContainer">
       {!isAdminReview && (

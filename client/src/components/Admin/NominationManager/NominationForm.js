@@ -15,6 +15,7 @@ import InputField from '@/components/Forms/InputField'
 import SelectField from '@/components/Forms/SelectField'
 import { counties, measuringTechniques } from '@/utils/nomination'
 import Header from '@/components/Common/Header'
+import { BASE_URL } from '@/config'
 
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
@@ -64,7 +65,7 @@ const calculatePoints = (c, h, s1, s2) => {
 }
 
 const Nomination = ({ initValues, isAdminReview }) => {
-  const [images, setImages] = useState([])
+  // const [images, setImages] = useState([])
   const [{ species, genera, commonNames }, setTreeLists] = useState({})
   const [{ filteredSpecies, filteredCommonNames }, setFilteredTreeLists] = useState({})
   const [activeSpecies, setActiveSpecies] = useState({})
@@ -308,8 +309,8 @@ const Nomination = ({ initValues, isAdminReview }) => {
                 <div className="nomination-review-previewImages">
                   {values.imagePaths.map((img) => (
                     <div className="nomination-previewContainer" key={img.id}>
-                      <a href={`http://localhost:4000/uploads/${img.location}`} target="_blank" rel="noopener noreferrer">
-                        <img className="nomination-previewImage" key={img} src={`http://localhost:4000/uploads/${img.location}`} alt="preview" />
+                      <a href={`${BASE_URL}/uploads/${img.location}`} target="_blank" rel="noopener noreferrer">
+                        <img className="nomination-previewImage" key={img} src={`${BASE_URL}/uploads/${img.location}`} alt="preview" />
                       </a>
                       <button type="button" className="nomination-deleteImage" onClick={deleteImage}>X</button>
                     </div>

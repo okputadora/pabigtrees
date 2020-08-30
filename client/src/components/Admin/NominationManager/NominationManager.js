@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 import { getNominations } from '@/api/nomination'
+import { BASE_URL } from '@/config'
 
 import './nominationManager.scss'
 
@@ -17,7 +18,7 @@ const NominationPreview = ({
 }) => (
   <Link to={`nomination/${id}?newSpecies=${!species}&newGenus=${!genus}`} key={id}>
     <div className="nominationPreview-container">
-      <img className="nominationPreview-image" src={imagePaths[0] ? `http://localhost:4000/uploads/${imagePaths[0]}` : ''} alt="preview" />
+      <img className="nominationPreview-image" src={imagePaths[0] ? `${BASE_URL}/uploads/${imagePaths[0]}` : ''} alt="preview" />
       <div className="nominationPreview-title">
         {(species || genus) ? species.t_common || species.t_species || genus.genus : speciesName || genusName }
       </div>
@@ -57,12 +58,10 @@ const NominationManager = () => {
   useEffect(() => {
     const fetchNominations = async () => {
       const { data: { nominations: dataNoms } } = await getNominations()
-      console.log({ dataNoms })
       setNominations(dataNoms)
     }
     fetchNominations()
   }, [])
-  console.log({ nominations })
   return (
     <div className="nominationManager-container">
       <h1 className="nominationManager-title">Nomination manager</h1>
