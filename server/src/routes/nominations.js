@@ -2,7 +2,7 @@ import { Router } from 'express'
 import multer from 'multer'
 import fs from 'fs'
 import uniqid from 'uniqid'
-// import path from 'path'
+import path from 'path'
 
 import db from '../models'
 import { authenticateToken } from '../middleware/authorization'
@@ -11,6 +11,8 @@ import {
   mapNominationToTree,
 } from '../utils'
 
+console.log(__dirname)
+console.log(path.join(__dirname, '/uploads'))
 const router = Router()
 const storage = multer.diskStorage({
   destination(req, file, cb) {

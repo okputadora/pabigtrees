@@ -19,7 +19,7 @@ const db = {}
 const sequelize = new Sequelize(process.env.JAWSDB_URL,
   {
     dialect: 'mysql',
-    logging: console.log,
+    logging: false,
   })
 
 sequelize

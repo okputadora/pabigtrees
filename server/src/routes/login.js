@@ -30,14 +30,20 @@ router.post('/', validation, async (req, res) => {
     if (!user) {
       res.status(404).send()
     }
+    console.log('there is a user')
     const match = await bcrypt.compare(password, user.password)
+    console.log('password matched')
     if (match) {
+      console.log('was a mach')
       const token = issueToken(user, res)
+      console.log('issued token')
       res.status(200).send({ token })
     } else {
+      console.log('was not a match')
       res.status(401).send('Incorrect Password')
     }
   } catch (err) {
+    console.log({err})
     res.status(500).send(err)
   }
 })

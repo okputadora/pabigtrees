@@ -39,8 +39,11 @@ app.use('/treeImages', express.static(path.join(__dirname, '../treeImages')))
 app.use('/newsImages', express.static(path.join(__dirname, '../newsImages')))
 app.use('/pagesUploads', express.static(path.join(__dirname, '../pagesUploads')))
 
+console.log(process.env.NODE_ENV )
 // Serve react app
-app.use(express.static(path.join(__dirname, '../lib/public')))
+// if (process.env.NODE_ENV !== 'dev') {
+  app.use(express.static(path.join(__dirname, '../lib/public')))
+// }
 
 app.use('/pages', pages)
 app.use('/trees', trees)
