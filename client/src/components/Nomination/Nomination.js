@@ -34,7 +34,7 @@ const nominationSchema = Yup.object().shape({
   nominator: Yup.string().required(),
   address: Yup.string().required(),
   phone: Yup.string().matches(phoneRegExp, 'Phone number is not valid'),
-  email: Yup.string().email(),
+  email: Yup.string().email().required(),
   locationOfTree: Yup.string(),
   lat: Yup.number(),
   lon: Yup.number(),
@@ -49,7 +49,7 @@ const nominationSchema = Yup.object().shape({
   height: Yup.number().required(),
   spread1: Yup.number().required(),
   spread2: Yup.number().required(),
-  comments: Yup.string(),
+  comments: Yup.string().nullable(),
   isPublic: Yup.bool(),
 })
 
@@ -254,7 +254,6 @@ const Nomination = ({ initValues, isAdminReview }) => {
     try {
       const formValues = { ...values, imagePaths: images.map((img) => img.imagePath) }
       await nominateTree({ ...formValues, isNew })
-      alert('Your nomination has been submitted!')
       history.push('/confirmation')
     } catch (err) {
       alert(err)

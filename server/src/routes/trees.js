@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import multer from 'multer'
 
 import models from '../models'
 import { keyMap, mapNominationToTree } from '../utils'
@@ -132,6 +133,43 @@ router.put('/:id', authenticateToken, async (req, res) => {
     res.sendStatus(200)
   } catch (err) {
     res.status(500).send(err)
+  }
+})
+
+const storage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, 'treeImages/')
+  },
+
+  // By default, multer removes file extensions so let's add them back
+  filename(req, file, cb) {
+    cb(null, `${Date.now()}-${file.originalname}`)
+  },
+})
+
+const imageFilter = (req, file, cb) => {
+  // Accept images only
+  if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/)) {
+    req.fileValidationError = 'Only image files are allowed!'
+    // return cb('Only image files are allowed!', false)
+  }
+  return cb(null, true)
+}
+exports.imageFilter = imageFilter
+const upload = multer({ storage, fileFilter: imageFilter })
+
+router.post('/upload/:id', authenticateToken, upload.array('photo', 5), async (req, res) => {
+  if (req.fileValidationError) {
+    // save treeImage to db
+    return res.status(415).send({ message: req.fileValidationError })
+  }
+  try {
+    await Promise.all(req.files.map(img => models.treeImages.create({
+      k_tree: req.params.id, img_location: img.filename, f_active: 1, isTest: 1,
+    })))
+    return res.json(req.files.map(f => f.filename))
+  } catch (err) {
+    res.sendStatus(500)
   }
 })
 

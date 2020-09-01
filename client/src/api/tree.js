@@ -36,7 +36,7 @@ export const updateTree = (id, body) => (
   })
 )
 
-export const uploadImages = (files) => {
+export const uploadImages = (files, treeId) => {
   const formData = new FormData()
   files.forEach((file) => formData.append('photo', file))
   return (
@@ -45,7 +45,7 @@ export const uploadImages = (files) => {
       headers: {
         'content-type': 'multipart/form-data',
       },
-      url: '/trees/upload',
+      url: `/trees/upload/${treeId}`,
       data: formData,
     })
   )

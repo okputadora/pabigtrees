@@ -1,6 +1,10 @@
 .tree-editor {
   max-width: 1100px;
   padding: 20px;
+
+  .tree-images-previewImage {
+    border: 1px solid black;
+  }
 }
 
 .tree-editor-save-button {

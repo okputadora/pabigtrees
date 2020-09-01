@@ -3,7 +3,9 @@ import PropTypes from 'prop-types'
 import { useDropzone } from 'react-dropzone'
 import classNames from 'classnames'
 
-const ImageUpload = ({ images: initialImages, upload, onUpload }) => {
+const ImageUpload = ({
+  images: initialImages, upload, onUpload, resetOnUpload = false,
+}) => {
   const [isUploading, setUploading] = useState(false)
   const [images, setImages] = useState(initialImages)
   const handleDrop = useCallback(async (files, rejectedFiles) => {
@@ -21,8 +23,10 @@ const ImageUpload = ({ images: initialImages, upload, onUpload }) => {
           preview: URL.createObjectURL(file),
           imagePath: uploadedFiles[i],
         })))
-        setImages(newImages)
         onUpload(newImages)
+        if (resetOnUpload) {
+          setImages([])
+        } else setImages(newImages)
       } catch (err) {
         alert(err.message)
       } finally {

@@ -2,7 +2,6 @@ import { Router } from 'express'
 import multer from 'multer'
 import fs from 'fs'
 import uniqid from 'uniqid'
-import path from 'path'
 
 import db from '../models'
 import { authenticateToken } from '../middleware/authorization'
@@ -11,8 +10,6 @@ import {
   mapNominationToTree,
 } from '../utils'
 
-console.log(__dirname)
-console.log(path.join(__dirname, '/uploads'))
 const router = Router()
 const storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -92,20 +89,14 @@ router.post('/upload', upload.array('photo', 5), async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const formattedNomination = formatAndValidateNomination(req.body)
-    db.nominations.create(formattedNomination).then(nom => (
-      Promise.all(formattedNomination.imagePaths.map(
-        img => db.nominationImages.create({
-          location: img,
-          nominationId: nom.toJSON().id,
-        }),
-      ))
-    )).then(() => {
-      res.json({ success: true })
-    }).catch(e => {
-      res.status(500).send(e)
-    })
+    const nom = await db.nominations.create(formattedNomination)
+    await db.nominationImages.bulkCreate(formattedNomination.imagePaths.map(img => ({
+      location: img,
+      nominationId: nom.id,
+    })))
+    res.json({ success: true })
   } catch (e) {
-    res.status(400).send(e)
+    res.status(500).send(e)
   }
 })
 

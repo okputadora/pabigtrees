@@ -43,7 +43,7 @@ const nominationSchema = Yup.object().shape({
   height: Yup.number().required(),
   spread1: Yup.number().required(),
   spread2: Yup.number().required(),
-  comments: Yup.string(),
+  comments: Yup.string().nullable(),
   isPublic: Yup.bool().required(),
 })
 
@@ -338,6 +338,8 @@ Nomination.propTypes = {
     speciesName: PropTypes.string,
     genusName: PropTypes.string,
     commonName: PropTypes.string,
+    county: PropTypes.shape({ id: PropTypes.string }),
+    measuringTechnique: PropTypes.shape({}),
   }).isRequired,
   isAdminReview: PropTypes.bool,
 }

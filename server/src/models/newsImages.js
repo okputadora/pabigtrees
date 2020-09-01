@@ -8,6 +8,7 @@ export default (sequelize) => {
     image_location: { type: Sequelize.STRING },
     f_active: { type: Sequelize.INTEGER },
     create_date: { type: Sequelize.TEXT },
+    isTest: { type: Sequelize.INTEGER },
   }, { timestamps: false })
 
   return NewsImages
