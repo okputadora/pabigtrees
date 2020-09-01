@@ -40,13 +40,12 @@ const TreeEditor = (props) => {
   }, [id])
 
   const [treeImages, setTreeImages] = useState([])
-  const filePaths = useRef(null)
 
   const fetchImages = useCallback(async () => {
     try {
       const { data } = await API.getTreeImages(id)
       if (data && data.length) {
-        setTreeImages(data.map((treeImg) => treeImg.img_location))
+        setTreeImages(data)
       }
     } catch (e) {
       alert(e.message)
@@ -55,6 +54,7 @@ const TreeEditor = (props) => {
   useEffect(() => {
     fetchImages()
   }, [id])
+  console.log({ treeImages })
 
   const handleSubmit = useCallback(async (values) => {
     try {
@@ -68,9 +68,15 @@ const TreeEditor = (props) => {
     }
   }, [id])
 
-  const removeImage = (e) => {
+  const removeImage = useCallback(async (imageId) => {
     // console.log('removing ', e.target.id)
-  }
+    try {
+      await API.removeImage(imageId)
+      await fetchImages()
+    } catch (err) {
+      alert(err)
+    }
+  })
 
   return (
     <div className="tree-editor">
@@ -106,10 +112,10 @@ const TreeEditor = (props) => {
           <div className="tree-images">
             {treeImages.length > 0 && treeImages.map((img) => (
               <div className="tree-images-previewImage">
-                <a href={`${BASE_URL}/treeImages/${img}`} target="_blank" rel="noopener noreferrer" key={img}>
-                  <img key={img} src={`${BASE_URL}/treeImages/${img}`} alt={img} />
+                <a href={`${BASE_URL}/treeImages/${img.img_location}`} target="_blank" rel="noopener noreferrer" key={img.img_location}>
+                  <img src={`${BASE_URL}/treeImages/${img.img_location}`} alt={img.img_location} />
                 </a>
-                <button type="button" onClick={removeImage} id={img}>remove this image</button>
+                <button type="button" onClick={() => removeImage(img.id)} id={img}>remove this image</button>
               </div>
             ))}
           </div>

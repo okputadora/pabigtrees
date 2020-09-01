@@ -50,3 +50,8 @@ export const uploadImages = (files, treeId) => {
     })
   )
 }
+
+export const removeImage = (id) => request({
+  method: 'DELETE',
+  url: `/trees/image/${id}`,
+})

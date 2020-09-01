@@ -169,7 +169,21 @@ router.post('/upload/:id', authenticateToken, upload.array('photo', 5), async (r
     })))
     return res.json(req.files.map(f => f.filename))
   } catch (err) {
-    res.sendStatus(500)
+    res.sendStatus(500).send(err)
+  }
+})
+
+router.delete('/image/:id', authenticateToken, async (req, res) => {
+  try {
+    const treeImage = await models.treeImages.findByPk(req.params.id)
+    if (!treeImage) {
+      res.status(404).send({ err: 'we couldnt find that image' })
+    }
+    treeImage.f_active = 0
+    await treeImage.save()
+    res.sendStatus(200)
+  } catch (err) {
+    res.status(500).send(err)
   }
 })
 
