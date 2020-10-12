@@ -4,6 +4,7 @@ import moment from 'moment'
 
 import { getTreeImages } from '@/api/tree'
 import { BASE_URL } from '@/config'
+import { measuringTechniques } from '@/utils/nomination'
 
 const Tree = ({ tree }) => {
   const [treeImages, setTreeImages] = useState([])
@@ -21,7 +22,6 @@ const Tree = ({ tree }) => {
     }
     fetch()
   }, [tree.id])
-
 
   return (
     <div className="tree-container">
@@ -42,7 +42,7 @@ const Tree = ({ tree }) => {
             <div>{`measuring Crew: ${tree.measuringCrew}`}</div>
             <div>{`Original Nominator: ${tree.originalNominator}`}</div>
             <div>{`Comments: ${tree.comments}`}</div>
-            <div>{`Measuring Technique: ${tree.measuringTechnique}`}</div>
+            <div>{`Measuring Technique: ${measuringTechniques.find((mt) => mt.id === tree.measuringTechnique).name}`}</div>
             <div>{`Year Nominated: ${moment(tree.yearNominated).format('YYYY')}`}</div>
             <div>{`Year Last Measured: ${moment(tree.yearLastMeasured).format('YYYY')}`}</div>
           </div>
