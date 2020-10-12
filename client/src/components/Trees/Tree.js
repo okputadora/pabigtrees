@@ -22,11 +22,10 @@ const Tree = ({ tree }) => {
     }
     fetch()
   }, [tree.id])
-
   return (
     <div className="tree-container">
       <div className="tree-header">
-        <div className="species">{`${tree.genus}, ${tree.species}`}</div>
+        <div className="species">{`${tree.genus} ${tree.species}`}</div>
         <div>{`(${tree.commonName})`}</div>
       </div>
       <div className="sub-container">
@@ -43,6 +42,7 @@ const Tree = ({ tree }) => {
             <div>{`Original Nominator: ${tree.originalNominator}`}</div>
             <div>{`Comments: ${tree.comments}`}</div>
             <div>{`Measuring Technique: ${measuringTechniques.find((mt) => mt.id === tree.measuringTechnique).name}`}</div>
+            <div>{`GPS: ${tree.gps}`}</div>
             <div>{`Year Nominated: ${moment(tree.yearNominated).format('YYYY')}`}</div>
             <div>{`Year Last Measured: ${moment(tree.yearLastMeasured).format('YYYY')}`}</div>
           </div>
