@@ -9,24 +9,21 @@ import Table from './Table'
 import './trees.scss'
 
 // @TODO Move this to utils
-const formatTableData = (rawData) => rawData.map((row) => {
-  console.log({ row })
-  return (
-    {
-      county: row.county ? row.county.county : null,
-      genus: row.species && row.species.genus && row.species.genus.t_genus,
-      species: row.species && row.species.t_species,
-      commonName: row.species && row.species.t_common,
-      spread: row.i_spread_feet,
-      height: row.i_height_feet,
-      circumference: row.i_circum_inchs,
-      points: row.i_points,
-      address: row.t_address,
-      'additional info': [row.f_national_champ, row.f_tallest],
-      id: row.id,
-    }
-  )
-})
+const formatTableData = (rawData) => rawData.map((row) => (
+  {
+    county: row.county ? row.county.county : null,
+    genus: row.species && row.species.genus && row.species.genus.t_genus,
+    species: row.species && row.species.t_species,
+    commonName: row.species && row.species.t_common,
+    spread: row.i_spread_feet,
+    height: row.i_height_feet,
+    circumference: row.i_circum_inchs,
+    points: row.i_points,
+    address: row.t_address,
+    'additional info': [row.f_national_champ, row.f_tallest],
+    id: row.id,
+  }
+))
 
 const formatData = (rawData) => rawData.map((tree) => ({
   county: tree.county ? tree.county.county : null,

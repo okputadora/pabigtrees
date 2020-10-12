@@ -60,7 +60,7 @@ const Table = ({
     </div>
     <div className="tree-data-pagination">
       {/* {filters.page > 1 && <button className="pagination-button" type="button" onClick={getPrevPage}>Prev</button>} */}
-      {new Array(Math.floor(count / filters.pageSize)).fill().map((_, i) => {
+      {new Array(Math.ceil(count / filters.pageSize)).fill().map((_, i) => {
         const className = classNames({
           'pagination-button': true,
           'pagination-button_active': filters.page === i + 1,
