@@ -12,6 +12,7 @@ export default ({ sections }, ...rest) => sections.sort((a, b) => a.order - b.or
     section_type,
     content,
     secondary_content,
+    additional_info,
   } = section
   const sectionTypeMap = {
     paragraph: Paragraph,
@@ -25,7 +26,7 @@ export default ({ sections }, ...rest) => sections.sort((a, b) => a.order - b.or
     return <Comp key={id} src={secondary_content} alt={content} text={content} />
   }
   if (section_type === 'link') {
-    return <Comp key={id} {...rest} href={secondary_content} text={content} />
+    return <Comp key={id} {...rest} href={secondary_content} text={content} inline={additional_info} />
   }
   return <Comp key={id} {...rest}>{content}</Comp>
 })

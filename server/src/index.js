@@ -27,7 +27,6 @@ const corsOptions = {
   credentials: true,
 }
 app.use(cors(corsOptions))
-//   console.log({ clientAddress })
 //   res.header('Access-Control-Allow-Origin', clientAddress)
 //   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
 //   res.header('Access-Control-Allow-Methods', GET,HEAD,PUT,PATCH,POST,DELETE
@@ -39,10 +38,9 @@ app.use('/treeImages', express.static(path.join(__dirname, '../treeImages')))
 app.use('/newsImages', express.static(path.join(__dirname, '../newsImages')))
 app.use('/pagesUploads', express.static(path.join(__dirname, '../pagesUploads')))
 
-console.log(process.env.NODE_ENV )
 // Serve react app
 // if (process.env.NODE_ENV !== 'dev') {
-  app.use(express.static(path.join(__dirname, '../lib/public')))
+app.use(express.static(path.join(__dirname, '../lib/public')))
 // }
 
 app.use('/pages', pages)

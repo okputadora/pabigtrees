@@ -18,7 +18,6 @@ const NominationViewer = ({ match: { params: { id } } }) => {
     }
     fetchNomination()
   }, [])
-  console.log({ nomination })
   return nomination ? (
     <div className="nominationViewer-container">
       <div className="nominationViewer-title">

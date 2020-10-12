@@ -11,9 +11,6 @@ const InputField = ({ name, labelProps, inputProps }) => {
     'inputField-label': true,
     'inputField-label-error': error && touched,
   })
-  if (name === 'species') {
-    console.log(field)
-  }
   return (
     <div>
       <div className="inputField-container">

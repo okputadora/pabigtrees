@@ -7,10 +7,10 @@ export const getTreeImages = (id) => (
   })
 )
 
-export const getTrees = (filters) => (
+export const getTrees = (filters, isAdmin) => (
   request({
     method: 'GET',
-    url: buildTreeQuery(filters),
+    url: buildTreeQuery(filters, isAdmin),
   })
 )
 

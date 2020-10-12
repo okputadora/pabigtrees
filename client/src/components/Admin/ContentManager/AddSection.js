@@ -48,7 +48,7 @@ const AddSection = ({ pageId, onCreateSuccess }) => {
                 name="section_type"
                 items={['paragraph', 'header', 'image', 'link'].map((x) => ({ name: x, id: x }))}
                 labelProps={{ label: 'Section Type' }}
-                activeItem={{ id: values.sectionType, name: values.sectionType }}
+                // activeItem={{ id: values.section_type, name: values.section_type }}
               />
               <InputField name="content" labelProps={{ label: 'Content' }} inputProps={{ textArea: true }} />
               {values.section_type === 'image' ? <ImageUpload upload={uploadImages} onUpload={handleUploadSuccess} /> : <InputField name="secondary_content" labelProps={{ label: 'Secondary Content' }} inputProps={{ textArea: true }} />}

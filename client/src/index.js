@@ -8,7 +8,6 @@ const renderApp = () => {
   ReactDOM.render(<App />, rootEl)
 }
 
-console.log(process.env.NODE_ENV)
 renderApp()
 
 // This checks for local changes and automatically refreshes the browser (hot-reloading)

@@ -21,7 +21,6 @@ class PageData extends Component {
 
   async fetchPage() {
     const { match: { params: { pathName = '/' } } } = this.props
-    console.log(pathName)
     const { data } = await API.getPageData(pathName)
     this.setState({ data })
   }

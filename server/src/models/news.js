@@ -9,6 +9,7 @@ export default (sequelize) => {
     f_display: { type: Sequelize.INTEGER },
     create_date: { type: Sequelize.TEXT },
     last_update: { type: Sequelize.TEXT },
+    isTest: { type: Sequelize.INTEGER },
   }, { timestamps: false })
 
   return News

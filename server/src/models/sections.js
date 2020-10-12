@@ -8,6 +8,7 @@ export default (sequelize) => {
     section_type: { type: Sequelize.STRING },
     content: { type: Sequelize.STRING },
     secondary_content: { type: Sequelize.STRING },
+    additional_info: { type: Sequelize.STRING },
     is_trashed: { type: Sequelize.INTEGER },
   }, { timestamps: false })
 

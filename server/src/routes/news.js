@@ -36,7 +36,6 @@ const imageFilter = (req, file, cb) => {
 }
 
 const upload = multer({ storage, fileFilter: imageFilter })
-
 router.get('/', async (req, res) => {
   try {
     const news = await models.news.findAll({ where: { f_display: 1 }, order: [['create_date', 'DESC']] })

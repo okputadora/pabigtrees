@@ -84,8 +84,10 @@ class Trees extends Component {
 
   fetchTrees = async () => {
     const { filters } = this.state
+    const { isAdmin } = this.props
+    console.log({ isAdmin })
     try {
-      const { data: { trees, count } } = await API.getTrees(filters)
+      const { data: { trees, count } } = await API.getTrees(filters, isAdmin)
       this.setState({ tableData: formatTableData(trees), data: formatData(trees), count })
     } catch (e) {
       alert('Something went wrong! Try again in a few seconds')

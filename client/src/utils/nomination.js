@@ -126,9 +126,7 @@ export const measuringTechniques = [
 ]
 
 export const formatInitialValues = (values) => {
-  console.log({ values })
   const formattedValues = {}
   Object.keys(values).forEach((key) => { formattedValues[key] = values[key] || '' })
-  console.log({ formattedValues })
   return formattedValues
 }

@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import multer from 'multer'
+import jwt from 'jsonwebtoken'
 
 import models from '../models'
 import { keyMap, mapNominationToTree } from '../utils'
@@ -20,6 +21,7 @@ router.get('/', async (req, res) => {
     isMultiStemmedIncluded = 'true',
     isNationalChamp = false,
     isTallestOfSpecies = false,
+    isAdmin = false,
   } = req.query
   let order = [keyMap[sortField], sortOrder]
   if (sortField === 'genus') {
@@ -51,8 +53,23 @@ router.get('/', async (req, res) => {
   const multiStemmedQuery = isMultiStemmedIncluded === 'false' && { f_multistemmed: 0 }
   const champQuery = isNationalChamp === 'true' && { f_national_champ: 1 }
   const tallestQuery = isTallestOfSpecies === 'true' && { f_tallest: 1 }
+
+  // refactor middleware so we dont have to duplicate this
+  let isAdminVerified = false
+  const authHeader = req.headers.cookie
+  const token = authHeader && authHeader.split('user=')[1]
+  if (token) {
+    try {
+      const response = await jwt.verify(token, process.env.SECRET)
+      isAdminVerified = !!response
+    } catch (err) {
+      isAdminVerified = false
+    }
+  }
   const additionalQueries = {
-    where: { ...multiStemmedQuery, ...champQuery, ...tallestQuery },
+    where: {
+      ...multiStemmedQuery, ...champQuery, ...tallestQuery, ...isAdmin !== 'false' && isAdminVerified ? { } : { isPublic: 1 },
+    },
   }
   // @TODO validate the requests
   try {

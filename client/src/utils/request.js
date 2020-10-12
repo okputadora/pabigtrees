@@ -18,12 +18,12 @@ export const buildTreeQuery = ({
   isMultiStemmedIncluded,
   isNationalChamp,
   isTallestOfSpecies,
-}) => {
+}, isAdmin = false) => {
   const { id: speciesId } = activeSpecies
   const { id: genusId } = activeGenus
   const { id: countyId } = activeCounty
   return `/trees?activeSpecies=${speciesId}&activeGenus=${genusId}&activeCounty=${countyId}&sortField=${sortField}&sortOrder=${sortOrder}&page=${page}&pageSize=${pageSize}
-  &isMultiStemmedIncluded=${isMultiStemmedIncluded}&isNationalChamp=${isNationalChamp}&isTallestOfSpecies=${isTallestOfSpecies}`
+  &isMultiStemmedIncluded=${isMultiStemmedIncluded}&isNationalChamp=${isNationalChamp}&isTallestOfSpecies=${isTallestOfSpecies}&isAdmin=${isAdmin}`
 }
 
 export default {}

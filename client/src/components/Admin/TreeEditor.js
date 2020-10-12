@@ -54,7 +54,6 @@ const TreeEditor = (props) => {
   useEffect(() => {
     fetchImages()
   }, [id])
-  console.log({ treeImages })
 
   const handleSubmit = useCallback(async (values) => {
     try {
@@ -69,7 +68,6 @@ const TreeEditor = (props) => {
   }, [id])
 
   const removeImage = useCallback(async (imageId) => {
-    // console.log('removing ', e.target.id)
     try {
       await API.removeImage(imageId)
       await fetchImages()

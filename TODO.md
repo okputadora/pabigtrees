@@ -12,8 +12,8 @@ actually have the images
 11. ~~send image path with sectionUpdate body~~
 12.~~Edit tree has issues with species and genus and county~~...isPublic also doesn't seem to be working
 13. ~~Issue with multiple image upload for nomination and files don't seem to be moved when confirmed~~
-14. Image delete / upload in treeEditor
+14. ~~Image delete / upload in treeEditor~~
 15. Add species/genus in treeEditor
+16. make sure to remove the signup route before going live.
 
-
-Remember to remove isTest from tree creation before going live!
+Remember to remove isTest from tree and treeImage creation before going live!

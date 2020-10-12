@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import Form from '@/components/Forms/Form'
 import InputField from '@/components/Forms/InputField'
 import renderer from '@/utils/renderer'
-import { updateSection } from '@/api/page'
+import { updateSection, uploadImages } from '@/api/page'
 import ImageUpload from '@/components/ImageUpload'
 
 import './sectionEditor.scss'
@@ -36,17 +36,16 @@ const SectionEditor = ({ section, onEditSuccess }) => {
       alert(err)
     }
   }, [section.id])
-
-  const uploadImages = useCallback((values) => {
-    console.log(values)
-  }, [])
-
   return (
     <div className="section-editor">
       <div className="title">{section.section_type}</div>
       {renderer({ sections: [section] })}
       <Formik
-        initialValues={{ content: section.content, secondary_content: section.secondary_content }}
+        initialValues={{
+          content: section.content,
+          secondary_content: section.secondary_content,
+          additional_info: section.additional_info,
+        }}
         onSubmit={handleEdit}
         enableReinitialize
       >
@@ -63,6 +62,7 @@ const SectionEditor = ({ section, onEditSuccess }) => {
                   <InputField name="secondary_content" labelProps={{ label: 'link' }} inputProps={{ textArea: true }} />
 
                 )}
+                {section.section_type === 'link' && <InputField name="additional_info" labelProps={{ label: 'additional_info' }} />}
                 <Button onClick={() => setIsOpen(false)}>Cancel</Button>
                 <Button onClick={handleSubmit} intent={Intent.PRIMARY}>Submit</Button>
               </Form>
