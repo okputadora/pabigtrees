@@ -44,7 +44,7 @@ const Tree = ({ tree }) => {
             <div>{`Measuring Technique: ${measuringTechniques.find((mt) => mt.id === tree.measuringTechnique).name}`}</div>
             <div>{`GPS: ${tree.gps}`}</div>
             <div>{`Year Nominated: ${moment(tree.yearNominated).format('YYYY')}`}</div>
-            <div>{`Year Last Measured: ${moment(tree.yearLastMeasured).format('YYYY')}`}</div>
+            <div>{`Date Last Measured: ${moment(tree.yearLastMeasured).format('YYYY')}`}</div>
           </div>
           <div className="tree-images">
             {treeImages.length > 0 && treeImages.map((img) => (
@@ -79,6 +79,7 @@ Tree.propTypes = {
     measuringTechnique: PropTypes.string.isRequired,
     yearNominated: PropTypes.string.isRequired,
     yearLastMeasured: PropTypes.string.isRequired,
+    gps: PropTypes.string.isRequired,
   }).isRequired,
 }
 export default Tree

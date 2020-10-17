@@ -31,6 +31,8 @@ export default (sequelize) => {
     comments: { type: Sequelize.STRING },
     treeId: { type: Sequelize.UUID },
     isApproved: { type: Sequelize.BOOLEAN },
+    isPending: { type: Sequelize.BOOLEAN },
+    isTrashed: { type: Sequelize.BOOLEAN },
   }, { timestamps: false })
 
   return Nomination

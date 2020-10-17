@@ -46,6 +46,7 @@ router.get('/', authenticateToken, (req, res) => {
   const genusQuery = { model: db.genus }
   let nominations
   db.nominations.findAll({
+    where: { isTrashed: null },
     include: [
       countyQuery,
       genusQuery,
@@ -111,6 +112,7 @@ router.put('/approval/:id', async (req, res) => {
       speciesId,
       genusId,
       commonNameNew,
+      isPending,
     } = req.body
     let newGenus
     let newSpecies = {}
@@ -128,6 +130,10 @@ router.put('/approval/:id', async (req, res) => {
         t_common: commonNameNew,
         test: true,
       })
+    }
+    if (isPending) {
+      await db.nominations.update(req.body, { where: { id: req.params.id } })
+      return res.status(200).send()
     }
     await db.nominations.update({ isApproved: true }, { where: { id: req.params.id } })
 
@@ -147,8 +153,13 @@ router.put('/approval/:id', async (req, res) => {
   }
 })
 
-// router.delete('/:imagePath', async (req, res) => {
-
-// })
+router.delete('/:id', authenticateToken, async (req, res) => {
+  try {
+    db.nominations.update({ isTrashed: true }, { where: { id: req.params.id } })
+    res.status(200).send()
+  } catch (err) {
+    res.status(500).json({ error: err })
+  }
+})
 
 export default router

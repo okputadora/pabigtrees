@@ -40,7 +40,7 @@ const nominationSchema = Yup.object().shape({
   lon: Yup.number(),
   measuringCrew: Yup.string().required(),
   measuringTechnique: Yup.string().required(),
-  dateMeasured: Yup.string().required(),
+  dateMeasured: Yup.date().required().typeError('Date measured must be a valid date (MM/DD/YYYY)'),
   landOwner: Yup.string(),
   ownerAddress: Yup.string(),
   ownerPhone: Yup.string(),
@@ -362,7 +362,7 @@ const Nomination = ({ initValues, isAdminReview }) => {
               />
               <SelectField
                 name="measuringTechnique"
-                items={measuringTechniques}
+                items={measuringTechniques.filter((mt) => mt.id !== 2)}
                 activeItem={initValues ? measuringTechniques.filter((c) => c.id.toString() === initValues.measuringTechnique)[0] : null}
                 labelProps={{ label: 'Measuring Technique*' }}
               />
@@ -418,9 +418,12 @@ Nomination.defaultProps = {
   initValues: initialValues,
   isAdminReview: false,
 }
-
 Nomination.propTypes = {
-  initValues: PropTypes.shape({}),
+  initValues: PropTypes.shape({
+    speciesId: PropTypes.string,
+    county: PropTypes.number,
+    measuringTechnique: PropTypes.number,
+  }),
   isAdminReview: PropTypes.bool,
 }
 

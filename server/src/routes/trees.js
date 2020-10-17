@@ -3,7 +3,7 @@ import multer from 'multer'
 import jwt from 'jsonwebtoken'
 
 import models from '../models'
-import { keyMap, mapNominationToTree } from '../utils'
+import { keyMap } from '../utils'
 import { authenticateToken } from '../middleware/authorization'
 
 
@@ -132,7 +132,7 @@ router.get('/admin/:id', authenticateToken, (req, res) => {
   const countyQuery = { model: models.counties }
   models.trees.findByPk(req.params.id, { include: [speciesQuery, countyQuery] }).then(tree => {
     res.json(tree)
-  }).catch(e => {
+  }).catch(() => {
     res.status(500).send()
   })
 })
@@ -186,7 +186,7 @@ router.post('/upload/:id', authenticateToken, upload.array('photo', 5), async (r
     })))
     return res.json(req.files.map(f => f.filename))
   } catch (err) {
-    res.sendStatus(500).send(err)
+    return res.sendStatus(500).send(err)
   }
 })
 

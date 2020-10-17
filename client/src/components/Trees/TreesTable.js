@@ -39,8 +39,8 @@ const formatData = (rawData) => rawData.map((tree) => ({
   height: tree.i_height_feet,
   measuringCrew: tree.t_measure_crew || '',
   originalNominator: tree.t_original_nominator || '',
-  gps: tree.t_gps || 'N/A',
-  comments: tree.t_comments,
+  gps: tree.t_gps || 'N/A ',
+  comments: tree.t_comments || '',
   measuringTechnique: tree.k_technique,
   yearNominated: tree.d_nominated,
   yearLastMeasured: tree.d_last_measured,
@@ -94,7 +94,6 @@ class Trees extends Component {
     const { isAdmin } = this.props
     try {
       const { data: { trees, count } } = await API.getTrees(filters, isAdmin)
-      console.log({ trees })
       this.setState({ tableData: formatTableData(trees), data: formatData(trees), count })
     } catch (e) {
       alert('Something went wrong! Try again in a few seconds')
@@ -169,7 +168,6 @@ class Trees extends Component {
       count,
     } = this.state
     const { match: { params: { id } } } = this.props
-    console.log(data)
     return (
       !id ? (
         <div className="tree-data-page">
@@ -208,6 +206,10 @@ class Trees extends Component {
   }
 }
 
+Trees.defaultProps = {
+  isAdmin: false,
+}
+
 Trees.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
@@ -216,6 +218,7 @@ Trees.propTypes = {
   }).isRequired,
   history: PropTypes.shape({ push: PropTypes.func.isRequired }).isRequired,
   location: PropTypes.shape({ pathname: PropTypes.string }).isRequired,
+  isAdmin: PropTypes.bool,
 }
 
 export default Trees

@@ -121,7 +121,7 @@ export const measuringTechniques = [
   { id: 2, name: 'UNK' },
   { id: 3, name: 'CLIN@100' },
   { id: 4, name: 'Abney' },
-  { id: 5, name: 'Estimated' },
+  { id: 5, name: 'Estimate' },
   { id: 6, name: 'Other' },
 ]
 

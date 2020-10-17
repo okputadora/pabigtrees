@@ -66,7 +66,10 @@ const NominationManager = () => {
     <div className="nominationManager-container">
       <h1 className="nominationManager-title">Nomination manager</h1>
       <div className="nominationManager-nominations">
-        {nominations.map((nom) => <NominationPreview key={nom.id} {...nom} />)}
+        <h2>New Nominations</h2>
+        {nominations.filter((nom) => !nom.isPending).map((nom) => <NominationPreview key={nom.id} {...nom} />)}
+        <h2>Pending Nominations</h2>
+        {nominations.filter((nom) => nom.isPending).map((nom) => <NominationPreview key={nom.id} {...nom} />)}
       </div>
     </div>
   )

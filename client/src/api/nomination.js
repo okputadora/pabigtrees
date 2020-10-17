@@ -51,3 +51,10 @@ export const uploadFiles = (files) => {
     })
   )
 }
+
+export const deleteNomination = (id) => (
+  request({
+    method: 'DELETE',
+    url: `/nominations/${id}`,
+  })
+)

@@ -7,7 +7,7 @@ import { Formik } from 'formik'
 import { Checkbox } from '@blueprintjs/core'
 import * as Yup from 'yup'
 
-import { confirmNomination, removeImage } from '@/api/nomination'
+import { confirmNomination, removeImage, deleteNomination } from '@/api/nomination'
 
 import { getSpeciesAndGenera } from '@/api/tree'
 import Form from '@/components/Forms/Form'
@@ -35,7 +35,7 @@ const nominationSchema = Yup.object().shape({
   measuringCrew: Yup.string().required(),
   measuringTechnique: Yup.string().required(),
   dateMeasured: Yup.string().required(),
-  landOwner: Yup.string(),
+  landOwner: Yup.string().nullable(),
   ownerAddress: Yup.string().nullable(),
   ownerPhone: Yup.string().nullable(),
   ownerEmail: Yup.string().nullable(),
@@ -146,14 +146,17 @@ const Nomination = ({ initValues, isAdminReview }) => {
   const history = useHistory()
   const params = useParams()
   const [isPublic, setIsPublic] = useState(false)
+  const [isPending, setIsPending] = useState(false)
   const handleSubmit = useCallback(async (values) => {
     try {
-      await confirmNomination(params.id, { ...values, isPublic, isApproved: true })
+      await confirmNomination(params.id, {
+        ...values, isPublic, isPending, isApproved: true,
+      })
       history.push('/admin/confirmation')
     } catch (e) {
       alert('something went wrong!')
     }
-  }, [isPublic])
+  }, [isPublic, isPending])
 
   const deleteImage = useCallback(async (imagePath) => {
     const shouldDelete = window.confirm('Are you sure you want to remove this image? This action cannot be undone, the image will be lost forever')
@@ -166,6 +169,18 @@ const Nomination = ({ initValues, isAdminReview }) => {
     }
   }, [])
 
+  const handleDelete = async () => {
+    const confirmed = confirm('Are you sure you want to delete this nomination?')
+    if (confirmed) {
+      try {
+        await deleteNomination(params.id)
+        alert('This nomination has been deleted')
+        history.push('/admin/nominationManager')
+      } catch (err) {
+        alert(err)
+      }
+    }
+  }
   // const SpeciesField = isAdminReview && newSpecies ? InputField : SelectField
 
   return (
@@ -270,7 +285,7 @@ const Nomination = ({ initValues, isAdminReview }) => {
               />
               <SelectField
                 name="measuringTechnique"
-                items={measuringTechniques}
+                items={measuringTechniques.filter((mt) => mt.id !== 2)} // No longer allow UNK option (this is covered by "Other")
                 activeItem={initValues ? measuringTechniques.filter((c) => c.id.toString() === initValues.measuringTechnique)[0] : null}
                 labelProps={{ label: 'Measuring Technique*' }}
               />
@@ -306,6 +321,7 @@ const Nomination = ({ initValues, isAdminReview }) => {
               />
               <>
                 <div className="nomination-checkbox"><Checkbox labelElement={<span className="white">public</span>} checked={isPublic} onChange={() => setIsPublic(!isPublic)} /></div>
+                <div className="nomination-checkbox"><Checkbox labelElement={<span className="white">pending</span>} checked={isPending} onChange={() => setIsPending(!isPending)} /></div>
                 <div className="nomination-review-previewImages">
                   {values.imagePaths.map((img) => (
                     <div className="nomination-previewContainer" key={img.id}>
@@ -317,6 +333,7 @@ const Nomination = ({ initValues, isAdminReview }) => {
                   ))}
                 </div>
                 <button className="nomination-submit" type="submit" onClick={handleFormikSubmit}>Approve Nomination</button>
+                <button className="nomination-submit" style={{ background: 'red' }} type="button" onClick={handleDelete}>Delete Nomination</button>
               </>
             </Form>
           )}
@@ -338,7 +355,7 @@ Nomination.propTypes = {
     speciesName: PropTypes.string,
     genusName: PropTypes.string,
     commonName: PropTypes.string,
-    county: PropTypes.shape({ id: PropTypes.string }),
+    county: PropTypes.shape({ id: PropTypes.number }),
     measuringTechnique: PropTypes.shape({}),
   }).isRequired,
   isAdminReview: PropTypes.bool,
