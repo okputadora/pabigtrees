@@ -6,7 +6,7 @@ import Image from '@/components/Common/Image'
 import Link from '@/components/Common/Link'
 import Header from '@/components/Common/Header'
 
-export default ({ sections }, ...rest) => sections.sort((a, b) => a.order - b.order).map((section) => {
+export default ({ sections }, ...rest) => sections.sort((a, b) => a.order - b.order).map((section, i) => {
   const {
     id,
     section_type,
@@ -22,11 +22,14 @@ export default ({ sections }, ...rest) => sections.sort((a, b) => a.order - b.or
     header: Header,
   }
   const Comp = sectionTypeMap[section_type]
+  // If the previous or next element is inline
+  const isNextInline = sections[i + 1] && sections[i + 1].additional_info === 'inline'
+  const isPreviousInline = sections[i - 1] && sections[i - 1].additional_info === 'inline'
   if (section_type === 'image') {
     return <Comp key={id} src={secondary_content} alt={content} text={content} />
   }
   if (section_type === 'link') {
-    return <Comp key={id} {...rest} href={secondary_content} text={content} inline={additional_info} />
+    return <Comp key={id} {...rest} href={secondary_content} text={content} inline={additional_info === 'inline'} />
   }
-  return <Comp key={id} {...rest}>{content}</Comp>
+  return <Comp key={id} isNextInline={isNextInline} isPreviousInline={isPreviousInline} {...rest}>{content}</Comp>
 })

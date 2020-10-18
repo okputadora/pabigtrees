@@ -147,9 +147,9 @@ router.put('/approval/:id', async (req, res) => {
         res.json({ success: false, message: `The Nomination was approved, the tree was created, but we ran into an issue moving the images to the "trees" directory, ask Mike to look for the following images ${req.body.imagePaths.join(' , ')}` })
       }
     }
-    res.json({ success: true, tree })
+    return res.json({ success: true, tree })
   } catch (err) {
-    res.status(500).json({ error: err })
+    return res.status(500).json({ error: err })
   }
 })
 

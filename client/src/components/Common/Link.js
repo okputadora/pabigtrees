@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 const CustomLink = ({
   text, href, inline,
 }) => {
-  if (inline) return <span><Link to={href}>{text}</Link></span>
+  if (inline) return <span style={{ fontSize: 18 }}><Link to={href}>{text}</Link></span>
   return <Link to={href}>{text}</Link>
 }
 

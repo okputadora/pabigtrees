@@ -2,28 +2,34 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
-import EditableText from './EditableText'
-
 import './paragraph.scss'
 
 const Paragraph = (props) => {
-  const { className, children, isAdmin } = props
+  const {
+    className,
+    children,
+    isPreviousInline,
+    isNextInline,
+  } = props
   const pClasses = classNames({
     paragraph: true,
     [className]: true,
+    inline: isPreviousInline || isNextInline,
   })
-  return (isAdmin ? <EditableText multiline {...props} /> : <p className={pClasses}>{children}</p>)
+  return <p className={pClasses}>{`${children}${isNextInline ? ' ' : ''}`}</p>
 }
 
 Paragraph.defaultProps = {
   className: null,
-  isAdmin: false,
+  isNextInline: false,
+  isPreviousInline: false,
 }
 
 Paragraph.propTypes = {
   children: PropTypes.string.isRequired,
   className: PropTypes.string,
-  isAdmin: PropTypes.bool,
+  isNextInline: PropTypes.bool,
+  isPreviousInline: PropTypes.bool,
 }
 
 export default Paragraph
