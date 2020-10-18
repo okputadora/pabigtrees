@@ -46,7 +46,7 @@ const AddSection = ({ pageId, onCreateSuccess }) => {
             <Form>
               <SelectField
                 name="section_type"
-                items={['paragraph', 'header', 'image', 'link'].map((x) => ({ name: x, id: x }))}
+                items={['paragraph', 'header', 'image', 'link', 'card', 'bigtext'].map((x) => ({ name: x, id: x }))}
                 labelProps={{ label: 'Section Type' }}
                 // activeItem={{ id: values.section_type, name: values.section_type }}
               />

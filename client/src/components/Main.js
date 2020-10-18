@@ -9,7 +9,6 @@ import Trees from './Trees/TreesTable'
 import Nomination from './Nomination/Nomination'
 import Confirmation from './Common/Confirmation'
 import News from './News/News'
-import Homepage from './Pages/Homepage'
 
 import './main.scss'
 
@@ -47,10 +46,10 @@ const Main = () => (
               (props) => <PageData {...props}>{(pageProps) => <Page {...props} {...pageProps} />}</PageData>
             }
           />
-          <Route
+          {/* <Route
             path="/"
             component={Homepage}
-          />
+          /> */}
           <Route
             path="/"
             render={

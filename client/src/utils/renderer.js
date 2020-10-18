@@ -5,6 +5,8 @@ import Section from '@/components/Common/Section'
 import Image from '@/components/Common/Image'
 import Link from '@/components/Common/Link'
 import Header from '@/components/Common/Header'
+import Card from '@/components/Common/Card'
+import BigText from '@/components/Common/BigText'
 
 export default ({ sections }, ...rest) => sections.sort((a, b) => a.order - b.order).map((section, i) => {
   const {
@@ -20,6 +22,8 @@ export default ({ sections }, ...rest) => sections.sort((a, b) => a.order - b.or
     image: Image,
     link: Link,
     header: Header,
+    card: Card,
+    bigtext: BigText,
   }
   const Comp = sectionTypeMap[section_type]
   // If the previous or next element is inline
@@ -30,6 +34,8 @@ export default ({ sections }, ...rest) => sections.sort((a, b) => a.order - b.or
   }
   if (section_type === 'link') {
     return <Comp key={id} {...rest} href={secondary_content} text={content} inline={additional_info === 'inline'} />
+  } if (section_type === 'card') {
+    return <Comp key={id} title={content} {...rest}>{secondary_content}</Comp>
   }
   return <Comp key={id} isNextInline={isNextInline} isPreviousInline={isPreviousInline} {...rest}>{content}</Comp>
 })

@@ -59,7 +59,7 @@ const SectionEditor = ({ section, onEditSuccess }) => {
               <Form>
                 <InputField name="content" labelProps={{ label: 'content' }} inputProps={{ textArea: true }} />
                 {section.section_type === 'image' ? (<ImageUpload upload={uploadImages} />) : (
-                  <InputField name="secondary_content" labelProps={{ label: 'link' }} inputProps={{ textArea: true }} />
+                  <InputField name="secondary_content" labelProps={{ label: 'secondary content' }} inputProps={{ textArea: true }} />
 
                 )}
                 {section.section_type === 'link' && <InputField name="additional_info" labelProps={{ label: 'additional_info' }} />}
@@ -93,6 +93,7 @@ SectionEditor.propTypes = {
     id: PropTypes.number.isRequired,
     content: PropTypes.string,
     secondary_content: PropTypes.string,
+    additional_info: PropTypes.string,
   }).isRequired,
   onEditSuccess: PropTypes.func.isRequired,
 }
