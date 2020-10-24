@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import multer from 'multer'
 import jwt from 'jsonwebtoken'
+import { Parser } from 'json2csv'
 
 import models from '../models'
 import { keyMap } from '../utils'
@@ -86,6 +87,34 @@ router.get('/', async (req, res) => {
     res.json({ count, trees })
   } catch (error) {
     res.status(500).json({ error })
+  }
+})
+
+router.get('/csv', authenticateToken, async (req, res) => {
+  try {
+    const genusQuery = { model: models.genus }
+    const speciesQuery = {
+      model: models.species,
+      required: true,
+      include: [genusQuery],
+    }
+    const countyQuery = { model: models.counties }
+    const { rows: trees } = await models.trees.findAndCountAll({ include: [speciesQuery, countyQuery] })
+    const currentDate = Date.now()
+    const fileName = `${currentDate}.csv`
+    const opts = { fields: [...Object.keys(trees[0].dataValues), 'commonName', 'genus'] }
+    const parser = new Parser(opts)
+    const csv = parser.parse(trees.map(t => ({
+      ...t.dataValues,
+      species: t.dataValues.species.dataValues.t_species,
+      genus: t.dataValues.species.dataValues.genus.dataValues.t_genus,
+      commonName: t.dataValues.species.dataValues.t_common,
+    })))
+    res.setHeader('Content-Disposition', `attachment; filename=${fileName}`)
+    res.set('Content-Type', 'text/csv')
+    res.send(csv)
+  } catch (err) {
+    res.status(500).send(err)
   }
 })
 
@@ -203,5 +232,6 @@ router.delete('/image/:id', authenticateToken, async (req, res) => {
     res.status(500).send(err)
   }
 })
+
 
 export default router

@@ -26,6 +26,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.11.0",
     "react-addons-css-transition-group": "^15.6.2",
+    "react-csv": "^2.0.3",
     "react-dom": "^16.11.0",
     "react-dropzone": "^10.2.1",
     "react-router": "^5.1.2",
@@ -36,7 +37,7 @@
     "yup": "^0.27.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.7.0",
+    "@babel/cli": "^7.12.1",
     "@babel/core": "^7.7.2",
     "@babel/plugin-proposal-class-properties": "^7.7.0",
     "@babel/plugin-proposal-export-namespace-from": "^7.5.2",

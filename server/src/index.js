@@ -37,7 +37,6 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
 app.use('/treeImages', express.static(path.join(__dirname, '../treeImages')))
 app.use('/newsImages', express.static(path.join(__dirname, '../newsImages')))
 app.use('/pagesUploads', express.static(path.join(__dirname, '../pagesUploads')))
-
 // Serve react app
 // if (process.env.NODE_ENV !== 'dev') {
 app.use(express.static(path.join(__dirname, '../lib/public')))

@@ -55,3 +55,8 @@ export const removeImage = (id) => request({
   method: 'DELETE',
   url: `/trees/image/${id}`,
 })
+
+export const getCSV = () => request({
+  method: 'GET',
+  url: '/trees/csv',
+})
