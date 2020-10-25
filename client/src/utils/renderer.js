@@ -1,5 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
+import ReactMarkDown from 'react-markdown'
+
 import Paragraph from '@/components/Common/Paragraph'
 import Section from '@/components/Common/Section'
 import Image from '@/components/Common/Image'
@@ -35,7 +37,7 @@ export default ({ sections }, ...rest) => sections.sort((a, b) => a.order - b.or
   if (section_type === 'link') {
     return <Comp key={id} {...rest} href={secondary_content} text={content} inline={additional_info === 'inline'} />
   } if (section_type === 'card') {
-    return <Comp key={id} title={content} {...rest}>{secondary_content}</Comp>
+    return <Comp key={id} title={content} {...rest}><ReactMarkDown>{secondary_content}</ReactMarkDown></Comp>
   }
-  return <Comp key={id} isNextInline={isNextInline} isPreviousInline={isPreviousInline} {...rest}>{content}</Comp>
+  return <Comp key={id} isNextInline={isNextInline} isPreviousInline={isPreviousInline} {...rest}><ReactMarkDown>{content}</ReactMarkDown></Comp>
 })

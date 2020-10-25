@@ -16,7 +16,12 @@ const Paragraph = (props) => {
     [className]: true,
     inline: isPreviousInline || isNextInline,
   })
-  return <p className={pClasses}>{`${children}${isNextInline ? ' ' : ''}`}</p>
+  return (
+    <p className={pClasses}>
+      {children}
+      {isNextInline ? ' ' : ''}
+    </p>
+  )
 }
 
 Paragraph.defaultProps = {
@@ -26,7 +31,7 @@ Paragraph.defaultProps = {
 }
 
 Paragraph.propTypes = {
-  children: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
   className: PropTypes.string,
   isNextInline: PropTypes.bool,
   isPreviousInline: PropTypes.bool,
