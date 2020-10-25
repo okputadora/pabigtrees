@@ -9,7 +9,7 @@ const Navabr = () => {
     { name: 'tree listings', path: '/tree-listings' },
     { name: 'measurement', path: '/measurement' },
     { name: 'News/Updates', path: '/news' },
-    { name: 'Links/Resources', path: '/links-resource' },
+    { name: 'Links/Resources', path: '/linksAndResources' },
     { name: 'Nomination Form', path: '/nomination-form' },
     { name: 'About', path: '/about' },
   ]

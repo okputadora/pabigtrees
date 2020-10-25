@@ -7,6 +7,9 @@ import renderer from '@/utils/renderer'
 
 const Page = (props) => {
   const { isAdmin, handleEdit, data } = props
+  if (data) {
+    console.log(data.page.title)
+  }
   const isHomepage = data && data.page.title === 'homepage'
   if (isHomepage) return <Homepage>{renderer(data, isAdmin, handleEdit)}</Homepage>
   return data ? <div className="page">{renderer(data, isAdmin, handleEdit)}</div> : <div>loading</div>
