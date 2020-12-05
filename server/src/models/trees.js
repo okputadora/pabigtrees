@@ -9,7 +9,7 @@ export default (sequelize) => {
     k_technique: { type: Sequelize.INTEGER },
     d_nominated: { type: Sequelize.STRING },
     d_last_measured: { type: Sequelize.STRING },
-    i_circum_inchs: { type: Sequelize.DOUBLE },
+    i_circum_inches: { type: Sequelize.DOUBLE },
     i_height_feet: { type: Sequelize.DOUBLE },
     i_spread_feet: { type: Sequelize.DOUBLE },
     i_points: { type: Sequelize.DOUBLE },

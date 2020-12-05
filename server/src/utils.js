@@ -56,7 +56,7 @@ export const mapNominationToTree = (nomination, newSpecies) => ({
   k_technique: nomination.measuringTechnique,
   d_nominated: nomination.createdAt && nomination.createdAt.toString(),
   d_last_measured: nomination.dateMeasured,
-  i_circum_inchs: nomination.circumference ? parseInt(nomination.circumference, 10) : null,
+  i_circum_inches: nomination.circumference ? parseInt(nomination.circumference, 10) : null,
   i_height_feet: nomination.height ? parseInt(nomination.height, 10) : null,
   i_spread_feet: (parseInt(nomination.spread1, 10) + parseInt(nomination.spread2, 10)) / 2,
   i_points: calculatePoints(nomination.circumference, nomination.height, nomination.spread1, nomination.spread2),
