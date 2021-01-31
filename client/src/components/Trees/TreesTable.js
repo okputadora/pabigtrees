@@ -6,8 +6,10 @@ import Tree from './Tree'
 import * as API from '@/api/tree'
 import Filters from './Filters'
 import Table from './Table'
+import { formatData } from '@/utils/tree'
 import './trees.scss'
 
+const MAP_URL = 'https://www.google.com/maps/d/embed?mid=1La6-BnwentXnVHErI39FQrIjyaroGVu1'
 // @TODO Move this to utils
 const formatTableData = (rawData) => rawData.map((row) => (
   {
@@ -24,27 +26,6 @@ const formatTableData = (rawData) => rawData.map((row) => (
     id: row.id,
   }
 ))
-
-const formatData = (rawData) => rawData.map((tree) => ({
-  county: tree.county ? tree.county.county : '',
-  genus: tree.species && tree.species.genus && tree.species.genus.t_genus,
-  species: tree.species && tree.species.t_species,
-  commonName: tree.species && tree.species.t_common,
-  points: tree.i_points,
-  address: tree.t_address || '',
-  id: tree.id,
-  circumference: tree.i_circum_inches,
-  isMultiStemmed: tree.f_multistemmed === 1,
-  spread: tree.i_spread_feet,
-  height: tree.i_height_feet,
-  measuringCrew: tree.t_measure_crew || '',
-  originalNominator: tree.t_original_nominator || '',
-  gps: tree.t_gps || 'N/A ',
-  comments: tree.t_comments || '',
-  measuringTechnique: tree.k_technique,
-  yearNominated: tree.d_nominated,
-  yearLastMeasured: tree.d_last_measured,
-}))
 
 const initialFilters = {
   activeGenus: { name: 'All', id: 'All' },
@@ -184,7 +165,7 @@ class Trees extends Component {
           )}
           {isShowingMap ? (
             <div className="map-container">
-              <iframe title="map" src="https://www.google.com/maps/d/u/0/embed?mid=1YN9lv0OQQKbhT4QQEG2kiV7L0rHjsU6j&z=7" width="100%" height="600" />
+              <iframe title="map" src={MAP_URL} width="100%" height="600" />
             </div>
           )
             : tableData && (

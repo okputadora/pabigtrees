@@ -13,7 +13,7 @@ import {
 const router = Router()
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, 'uploads/')
+    cb(null, 'public/uploads/')
   },
 
   // By default, multer removes file extensions so let's add them back
@@ -23,7 +23,7 @@ const storage = multer.diskStorage({
 })
 
 const moveToTreeImages = imagePaths => Promise.all(imagePaths.map(img => new Promise((resolve, reject) => {
-  fs.rename(`uploads/${img.location}`, `treeImages/${img.location}`, (err) => {
+  fs.rename(`public/uploads/${img.location}`, `public/treeImages/${img.location}`, (err) => {
     if (err) reject(err)
     else resolve()
   })

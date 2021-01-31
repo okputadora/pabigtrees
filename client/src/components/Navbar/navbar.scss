@@ -7,13 +7,14 @@
   justify-content: center;
   z-index: 10;
   box-shadow: 0 15px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  overflow-x: auto;
 }
 
 .navigation {
   display: flex;
   width: 100%;
   max-width: 1100px;
-  justify-content: space-evenly;
+  // justify-content: space-evenly;
   color: white;
   padding-top: 2px;
 }

@@ -3,9 +3,10 @@ error.log
 combined.log
 .env
 
-# treeImages
-# uploads
-# newsImages
 lib
 realTreeImages
 realNewsImages
+/newsImages
+/treeImages
+/images 
+/uploads

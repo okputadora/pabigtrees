@@ -2,12 +2,12 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --exec babel-node ./src/index.js",
-    "build": "babel './src' -s -D -d lib",
-    "start": "node ./lib"
+    "dev": "nodemon --exec babel-node ./src/app.js",
+    "build": "babel ./src -s -D -d lib",
+    "start": "node app.js"
   },
   "author": "",
   "events": {

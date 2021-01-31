@@ -11,17 +11,17 @@ const validation = validateRequest({
   password: Joi.string().required(),
 })
 
-router.post('/signup', validation, async (req, res) => {
-  try {
-    const { username, password } = req.body
-    const hashedPassword = await bcrypt.hash(password, 8)
-    const user = models.create({ username, password: hashedPassword })
-    res.json({ user })
-  } catch (e) {
-    throw new Error(e)
-  }
-  res.json({ success: true })
-})
+// @TODO HIDE THIS IN PRODUCTION
+// router.post('/signup', async (req, res) => {
+//   try {
+//     const { username, password } = req.body
+//     const hashedPassword = await bcrypt.hash(password, 8)
+//     const user = await models.users.create({ username, password: hashedPassword })
+//     res.json({ user })
+//   } catch (e) {
+//     res.status(500).send()
+//   }
+// })
 
 router.post('/', validation, async (req, res) => {
   try {

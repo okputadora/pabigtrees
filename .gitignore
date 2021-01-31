@@ -1,2 +1,6 @@
 /node_modules/
 /server/lib
+/server/src/public
+# /src/public
+/server/images.zip
+/server/src/public.zip
