@@ -3,7 +3,7 @@ export const BASE_URL = (() => {
     case 'development':
       return 'http://localhost:4000'
     case 'production':
-      return 'https://bigtrees.herokuapp.com'
+      return 'http://pabigtre.wwwmi3-ss55.a2hosted.com'
     default:
       return 'https://bigtrees.herokuapp.com'
   }

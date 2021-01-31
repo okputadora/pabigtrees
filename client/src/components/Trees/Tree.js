@@ -1,18 +1,26 @@
 import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
-import { getTreeImages } from '@/api/tree'
+import { getTreeImages, getTreeById } from '@/api/tree'
 import { BASE_URL } from '@/config'
 import { measuringTechniques } from '@/utils/nomination'
+import { formatData } from '@/utils/tree'
 
-const Tree = ({ tree }) => {
+const Tree = ({ tree: treeData = {} }) => {
   const [treeImages, setTreeImages] = useState([])
+  const [tree, setTree] = useState(treeData)
+  const { id } = useParams()
 
   useEffect(() => {
     async function fetch() {
       try {
-        const { data } = await getTreeImages(tree.id)
+        if (!tree.id) {
+          const { data } = await getTreeById(id) // if the user is not coming directly from the previous page, the tree will not be loaded
+          setTree(formatData([data])[0])
+        }
+        const { data } = await getTreeImages(id)
         if (data && data.length) {
           setTreeImages(data.map((treeImg) => treeImg.img_location))
         }
@@ -21,7 +29,8 @@ const Tree = ({ tree }) => {
       }
     }
     fetch()
-  }, [tree.id])
+  }, [treeData.id])
+
   return (
     <div className="tree-container">
       <div className="tree-header">
@@ -41,7 +50,7 @@ const Tree = ({ tree }) => {
             <div>{`measuring Crew: ${tree.measuringCrew}`}</div>
             <div>{`Original Nominator: ${tree.originalNominator}`}</div>
             <div>{`Comments: ${tree.comments}`}</div>
-            <div>{`Measuring Technique: ${measuringTechniques.find((mt) => mt.id === tree.measuringTechnique).name}`}</div>
+            <div>{`Measuring Technique: ${tree.measuringTechnique && measuringTechniques.find((mt) => mt.id === tree.measuringTechnique).name}`}</div>
             <div>{`GPS: ${tree.gps}`}</div>
             <div>{`Year Nominated: ${moment(tree.yearNominated).format('YYYY')}`}</div>
             <div>{`Date Last Measured: ${moment(tree.yearLastMeasured).format('YYYY')}`}</div>
@@ -76,7 +85,7 @@ Tree.propTypes = {
     measuringCrew: PropTypes.string.isRequired,
     originalNominator: PropTypes.string.isRequired,
     comments: PropTypes.string.isRequired,
-    measuringTechnique: PropTypes.string.isRequired,
+    measuringTechnique: PropTypes.number.isRequired,
     yearNominated: PropTypes.string.isRequired,
     yearLastMeasured: PropTypes.string.isRequired,
     gps: PropTypes.string.isRequired,

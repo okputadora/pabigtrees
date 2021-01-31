@@ -7,6 +7,9 @@ export const {
   SERVER_ADDRESS,
   PORT,
   SECRET,
+  PROD_DB_USERNAME,
+  PROD_DB_NAME,
+  PROD_DB_PW,
 } = process.env
 
 export const IS_DEV = NODE_ENV === 'dev'
@@ -16,14 +19,19 @@ export default {
   default: {
     // Core related settings
     // Server / Cors / Node Version
+    db: {
+      username: PROD_DB_USERNAME,
+      name: PROD_DB_NAME,
+      password: PROD_DB_PW,
+    },
+
     core: {
       address: SERVER_ADDRESS || '0.0.0.0',
       port: PORT || '4000',
       engine: 10.16,
       env: NODE_ENV,
-      clientAddress: IS_DEV ? 'http://localhost:3000' : '', // @TODO prod url
-      serverAddress: IS_DEV ? 'http://localhost:4000' : '',
-
+      clientAddress: IS_DEV ? 'http://localhost:3000' : 'http://pabigtrees.com', // @TODO prod url
+      serverAddress: IS_DEV ? 'http://localhost:4000' : 'http://pagbigtrees.com',
       // CORS
       cors: {
         origin: '*',

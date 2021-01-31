@@ -12,15 +12,25 @@ import newsImages from './newsImages'
 import pages from './pages'
 import sections from './sections'
 import users from './users'
+import logger from '../logger'
+
+import config, { IS_PROD } from '../config'
+
+const { default: { db: { name, username, password } } } = config
 // const env = process.env.NODE_ENV || 'development'
 // const config = require(`${__dirname}/../config/config.js`)[env]
 const db = {}
 
-const sequelize = new Sequelize(process.env.JAWSDB_URL,
-  {
-    dialect: 'mysql',
-    logging: false,
-  })
+logger.info('is prod')
+logger.info(IS_PROD)
+const sequelize = !IS_PROD
+  ? new Sequelize(process.env.JAWSDB_URL, { dialect: 'mysql', logging: false })
+  : new Sequelize(name, username, password,
+    {
+      host: 'localhost',
+      dialect: 'mysql',
+      logging: false,
+    })
 
 sequelize
   .authenticate()

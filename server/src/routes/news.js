@@ -10,7 +10,7 @@ const router = Router()
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, 'newsUploads/')
+    cb(null, 'public/newsUploads/')
   },
 
   // By default, multer removes file extensions so let's add them back
@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
 })
 
 const moveNewsImages = imagePaths => Promise.all(imagePaths.map(img => new Promise((resolve, reject) => {
-  fs.rename(`newsUploads/${img}`, `newsImages/${img}`, (err) => {
+  fs.rename(`public/newsUploads/${img}`, `public/newsImages/${img}`, (err) => {
     if (err) reject(err)
     else resolve()
   })
@@ -38,7 +38,7 @@ const imageFilter = (req, file, cb) => {
 const upload = multer({ storage, fileFilter: imageFilter })
 router.get('/', async (req, res) => {
   try {
-    const news = await models.news.findAll({ where: { f_display: 1 }, order: [['create_date', 'DESC']] })
+    const news = await models.news.findAll({ where: { f_display: 1 }, order: [['i_id', 'DESC']] })
     const newsImages = await models.newsImages.findAll()
     const normalizedNewsImages = {}
     newsImages.forEach(image => { normalizedNewsImages[image.k_news] = image })

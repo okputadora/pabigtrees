@@ -118,6 +118,7 @@ router.get('/csv', authenticateToken, async (req, res) => {
   }
 })
 
+
 router.get('/image/:id', (req, res) => {
   const { id } = req.params
   models.treeImages.findAll({ where: { k_tree: id, f_active: 1 } }).then((treeImages) => {
@@ -166,6 +167,20 @@ router.get('/admin/:id', authenticateToken, (req, res) => {
   })
 })
 
+router.get('/:id', async (req, res) => {
+  const genusQuery = { model: models.genus }
+  const speciesQuery = {
+    model: models.species,
+    required: true,
+    include: [genusQuery],
+  }
+  const countyQuery = { model: models.counties }
+  models.trees.findByPk(req.params.id, { include: [speciesQuery, countyQuery] }).then(tree => {
+    res.json(tree)
+  }).catch(() => {
+    res.status(500).send()
+  })
+})
 router.put('/:id', authenticateToken, async (req, res) => {
   try {
     const { body, params: { id } } = req
@@ -184,7 +199,7 @@ router.put('/:id', authenticateToken, async (req, res) => {
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    cb(null, 'treeImages/')
+    cb(null, 'public/treeImages/')
   },
 
   // By default, multer removes file extensions so let's add them back

@@ -14,6 +14,13 @@ export const getTrees = (filters, isAdmin) => (
   })
 )
 
+export const getTreeById = (id) => (
+  request({
+    method: 'GET',
+    url: `trees/${id}`,
+  })
+)
+
 export const getSpeciesAndGenera = () => (
   request({
     method: 'GET',

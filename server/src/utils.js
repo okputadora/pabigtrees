@@ -17,7 +17,7 @@ export const issueToken = (user, res) => {
   })
   res.cookie('user', token, {
     httpOnly: true,
-    secure: IS_PROD,
+    secure: false,
     maxAge: 1000 * 60 * 60 * 24 * 2,
   })
   return token

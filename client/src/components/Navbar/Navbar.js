@@ -14,11 +14,11 @@ const Navabr = () => {
     { name: 'About', path: '/about' },
   ]
   return (
-    <nav className="nav-container">
-      <ul className="navigation">
+    <div className="nav-container">
+      <div className="navigation">
         {links.map((link) => <Link key={link.name} className="nav-item" to={link.path}>{link.name}</Link>)}
-      </ul>
-    </nav>
+      </div>
+    </div>
   )
 }
 
