@@ -23,7 +23,9 @@ const ImageUpload = ({
           preview: URL.createObjectURL(file),
           imagePath: uploadedFiles[i],
         })))
-        onUpload(newImages)
+        if (onUpload) {
+          onUpload(newImages)
+        }
         if (resetOnUpload) {
           setImages([])
         } else setImages(newImages)

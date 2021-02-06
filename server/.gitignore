@@ -6,7 +6,9 @@ combined.log
 lib
 realTreeImages
 realNewsImages
-/newsImages
+/src/public
+/pagesUploads
 /treeImages
-/images 
+/images
 /uploads
+/public
