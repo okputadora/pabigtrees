@@ -71,7 +71,7 @@ router.post('/upload', authenticateToken, upload.array('photo', 1), async (req, 
     return res.status(415).send({ message: req.fileValidationError })
   }
   // @TODO all file mapping should include that path...right now its being hard coded on the FE
-  return res.json(req.files.map(f => `public/pagesUploads/${f.filename}`))
+  return res.json(req.files.map(f => `pagesUploads/${f.filename}`))
 })
 
 export default router
