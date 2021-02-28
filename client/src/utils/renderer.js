@@ -5,7 +5,7 @@ import ReactMarkDown from 'react-markdown'
 import Paragraph from '@/components/Common/Paragraph'
 import Section from '@/components/Common/Section'
 import Image from '@/components/Common/Image'
-import Link from '@/components/Common/Link'
+import ExternalLink from '@/components/Common/ExternalLink'
 import Header from '@/components/Common/Header'
 import Card from '@/components/Common/Card'
 import BigText from '@/components/Common/BigText'
@@ -22,7 +22,7 @@ export default ({ sections }, ...rest) => sections.sort((a, b) => a.order - b.or
     paragraph: Paragraph,
     section: Section,
     image: Image,
-    link: Link,
+    link: ExternalLink,
     header: Header,
     card: Card,
     bigtext: BigText,
