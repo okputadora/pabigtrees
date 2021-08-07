@@ -15,7 +15,7 @@ import {
   news,
 } from './routes'
 
-const { port, clientAddress } = config.default.core
+const { port, clientAddresses } = config.default.core
 const app = express()
 
 app.use(bodyParser.json())
@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 // CORS
 const corsOptions = {
-  origin: clientAddress,
+  origin: clientAddresses,
   credentials: true,
 }
 app.use(cors(corsOptions))
