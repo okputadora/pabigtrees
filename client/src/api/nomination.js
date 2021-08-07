@@ -3,7 +3,7 @@ import { request } from '@/utils/request'
 export const getNominations = () => (
   request({
     method: 'GET',
-    url: '/nominations',
+    url: '/nominations', // add filter query for fetching isApproved
   })
 )
 

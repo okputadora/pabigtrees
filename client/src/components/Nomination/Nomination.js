@@ -265,7 +265,7 @@ const Nomination = ({ initValues, isAdminReview }) => {
       {!isAdminReview && (
       <div className="nomination-title">
         <Header>Tree Nomination Form</Header>
-        <p className="nomination-prompt">Your help is needed to locate, document, and preserve outstanding trees in Pennsylvania. If you know of a potential Champion Tree, please bring it to our attention using use our nomination form below.</p>
+        <p className="nomination-prompt">Your help is needed to locate, document, and preserve outstanding trees in Pennsylvania. If you know of a potential Champion Tree, please bring it to our attention using our nomination form below.</p>
       </div>
       )}
       <div className="nomination-container">
