@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import { Button } from '@blueprintjs/core'
 
 import { getNominations } from '@/api/nomination'
 import { BASE_URL } from '@/config'
@@ -57,19 +58,30 @@ const NominationManager = () => {
   const [nominations, setNominations] = useState([])
   useEffect(() => {
     const fetchNominations = async () => {
+      // @TODO only fetch non approved nominations initially
       const { data: { nominations: dataNoms } } = await getNominations()
       setNominations(dataNoms)
     }
     fetchNominations()
   }, [])
+
+  const [isShowingApprovedNominations, setIsShowingApprovedNominations] = useState(false)
+
   return (
     <div className="nominationManager-container">
       <h1 className="nominationManager-title">Nomination manager</h1>
       <div className="nominationManager-nominations">
         <h2>New Nominations</h2>
-        {nominations.filter((nom) => !nom.isPending).map((nom) => <NominationPreview key={nom.id} {...nom} />)}
+        {nominations.filter((nom) => !nom.isPending && !nom.isApproved).map((nom) => <NominationPreview key={nom.id} {...nom} />)}
         <h2>Pending Nominations</h2>
         {nominations.filter((nom) => nom.isPending).map((nom) => <NominationPreview key={nom.id} {...nom} />)}
+        <h2>Approved Nominations</h2>
+        <Button onClick={() => setIsShowingApprovedNominations(!isShowingApprovedNominations)}>
+          {isShowingApprovedNominations ? 'Collapse Approved Nominations' : 'Expand Approved Nominations'}
+        </Button>
+        {isShowingApprovedNominations && (
+          nominations.filter((nom) => nom.isApproved).map((nom) => <NominationPreview key={nom.id} {...nom} />)
+        )}
       </div>
     </div>
   )
