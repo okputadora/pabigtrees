@@ -30,7 +30,7 @@ export default {
       port: PORT || '4000',
       engine: 10.16,
       env: NODE_ENV,
-      clientAddresses: IS_DEV ? ['http://localhost:3000'] : ['https://pabigtrees.com', 'https://www.pabigtrees.com'], // @TODO prod url
+      clientAddresses: IS_DEV ? ['http://localhost:3000'] : ['https://pabigtrees.com', 'https://www.pabigtrees.com'],
       serverAddress: IS_DEV ? 'http://localhost:4000' : 'http://pagbigtrees.com',
       // CORS
       cors: {
