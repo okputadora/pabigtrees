@@ -3,13 +3,13 @@ import React, {
   useEffect,
   useState,
   useCallback,
-  useRef,
 } from 'react'
 import PropTypes from 'prop-types'
 import { Formik } from 'formik'
 import omit from 'lodash/omit'
 
 import * as API from '@/api/tree'
+import { addSpecies, addSpeciesAndGenus } from '@/api/classification'
 import ImageUpload from '@/components/ImageUpload'
 import InputField from '@/components/Forms/InputField'
 import Form from '@/components/Forms/Form'
@@ -76,6 +76,33 @@ const TreeEditor = (props) => {
     }
   })
 
+  const handleSpeciesSave = async (vals, setFieldValue) => {
+    const {
+      activeSpecies: {
+        id: speciesId,
+        name: speciesName,
+      },
+      activeGenus: {
+        id: genusId,
+        name: genusName,
+      },
+      activeCommonName: {
+        name: commonNameName,
+      },
+    } = vals
+    if (speciesId === 'NEW') {
+      if (genusId === 'NEW') {
+        const { data: { createdSpecies } } = await addSpeciesAndGenus(speciesName, genusName, commonNameName)
+        setFieldValue('k_species', createdSpecies.id)
+      } else {
+        const { data: { createdSpecies } } = await addSpecies(speciesName, genusId, commonNameName)
+        setFieldValue('k_species', createdSpecies.id)
+      }
+      // setFieldTouched('k_species')
+      // create new species
+    }
+    setFieldValue('k_species', speciesId)
+  }
   return (
     <div className="tree-editor">
       {editableTree && (
@@ -89,7 +116,10 @@ const TreeEditor = (props) => {
               handleSubmit: handleFormikSubmit, dirty, setFieldValue,
             }) => (
               <Form>
-                <SpeciesManager currentSpecies={editableTree.species} onSave={({ activeSpecies: { id: speciesId } }) => setFieldValue('k_species', speciesId)} />
+                <SpeciesManager
+                  currentSpecies={editableTree.species}
+                  onSave={(vals) => handleSpeciesSave(vals, setFieldValue, setFieldValue)}
+                />
                 {Object.keys(editableTree).map((key) => {
                   if (key === 'k_county') {
                     return (

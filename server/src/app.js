@@ -7,6 +7,7 @@ import config from './config'
 import logger from './logger'
 
 import {
+  classification,
   login,
   logout,
   pages,
@@ -42,6 +43,7 @@ app.use('/pagesUploads', express.static(path.join(__dirname, './public/pagesUplo
 app.use(express.static(path.join(__dirname, '/public')))
 // }
 
+app.use('/classification', classification)
 app.use('/pages', pages)
 app.use('/trees', trees)
 app.use('/pages', pages)
