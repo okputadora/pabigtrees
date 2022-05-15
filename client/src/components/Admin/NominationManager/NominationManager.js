@@ -16,19 +16,30 @@ const NominationPreview = ({
   speciesName,
   genusName,
   id,
-}) => (
-  <Link to={`nomination/${id}?newSpecies=${!species}&newGenus=${!genus}`} key={id}>
-    <div className="nominationPreview-container">
-      <img className="nominationPreview-image" src={imagePaths[0] ? `${BASE_URL}/uploads/${imagePaths[0]}` : ''} alt="preview" />
-      <div className="nominationPreview-title">
-        {(species || genus) ? species.t_common || species.t_species || genus.genus : speciesName || genusName }
+}) => {
+  console.log({ species })
+  let sName = speciesName
+  let gName = genusName
+  if (species) {
+    if (species.t_common) sName = species.t_common
+    else if (species.t_species) sName = species.t_species
+  } else if (genus) {
+    gName = genus.genus
+  }
+  return (
+    <Link to={`nomination/${id}?newSpecies=${!species}&newGenus=${!genus}`} key={id}>
+      <div className="nominationPreview-container">
+        <img className="nominationPreview-image" src={imagePaths[0] ? `${BASE_URL}/uploads/${imagePaths[0]}` : ''} alt="preview" />
+        <div className="nominationPreview-title">
+          {sName || gName }
+        </div>
+        <div className="nominationPreview-subtitle">
+          {nominator}
+        </div>
       </div>
-      <div className="nominationPreview-subtitle">
-        {nominator}
-      </div>
-    </div>
-  </Link>
-)
+    </Link>
+  )
+}
 
 NominationPreview.defaultProps = {
   species: null,
